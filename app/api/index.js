@@ -1692,11 +1692,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            specialApps.remove({_id: idToDelete}, function (err, wres) {
+            Pathologies.update({}, {$pull: {specialApps: idToDelete}}, {multi: true}, function (err, wres) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res, wres);
+                    specialApps.remove({_id: idToDelete}, function (err, wres) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, wres);
+                        }
+                    });
                 }
             });
         });
