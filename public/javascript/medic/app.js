@@ -526,7 +526,23 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ProductPageMenu'
         })
         .state('productList', {
-            url: '/productList',
+            abstract: true,
+            url: '/pathologyProducts',
+            templateUrl: '/partials/medic/groupFeatures/specialProdListTemplate.ejs'
+        })
+        .state('productList.all',{
+            url: '/list',
+            templateUrl: 'partials/medic/filterByPathology.html',
+            controller: 'PathologiesController',
+            params: {
+                navigateToState: 'productList'
+            },
+            resolve: {
+                loadDeps: loadStateDeps(['PathologiesFilter'])
+            }
+        })
+        .state('productList.all.groupedByPathology', {
+            url: '/pathology/:idArea',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_List.html',
             controller: 'ProductPageList',
             resolve: {

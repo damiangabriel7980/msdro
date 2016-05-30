@@ -3,15 +3,11 @@
  */
 app.controllerProvider.register('ProductPageList', ['$scope', '$stateParams', 'specialProductService', 'Success', 'Error', 'FirstLetterService', 'concatService', '$state', function($scope, $stateParams, specialProductService, Success, Error, FirstLetterService, concatService, $state){
 
-    $scope.getProducts = function (letter) {
+    $scope.getProducts = function () {
         specialProductService.SpecialProduct.query({
-            firstLetter: letter
+            idPathology: $stateParams.idArea
         }).$promise.then(function(resp){
             $scope.pathologiesAndProducts = Success.getObject(resp);
-            if(!letter){
-                var arrayToUseForFilter = concatService.concatArrayProperties($scope.pathologiesAndProducts, 'associated_items');
-                $scope.firstLetters = FirstLetterService.firstLetters(arrayToUseForFilter, 'product_name');
-            }
         });
 
     };

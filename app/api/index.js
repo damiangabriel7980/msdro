@@ -4030,9 +4030,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         product_name: 1
                     }
                 };
-                if(req.query.firstLetter)
-                    itemQParams.query.product_name = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                getPathologiesWithItems(specialProduct, itemQParams).then(
+                var queryPathObject = {
+                    enabled: true
+                };
+                if(req.query.idPathology && req.query.idPathology != 0)
+                    queryPathObject._id = req.query.idPathology;
+                getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
                     function (success) {
                         handleSuccess(res,success);
                     },
