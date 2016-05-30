@@ -7,7 +7,8 @@ var schema		= new Schema({
     name: String,
     url:   String,
     isEnabled: Boolean,
-    groups: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}]
+    groups: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
+    code: String
 });
 
 schema.plugin(deepPopulate, {
