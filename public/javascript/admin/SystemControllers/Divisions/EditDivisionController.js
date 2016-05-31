@@ -2,6 +2,7 @@ controllers.controller('EditDivisionController', ['$scope', '$modalInstance', 'S
     $scope.division = division;
     $scope.closeModal = closeModal;
     $scope.updateDivision = updateDivision;
+    $scope.changeCode = {};
     var resetAlert = function (type, text) {
         $scope.alert = {
             type: type?type:"danger",
@@ -10,10 +11,10 @@ controllers.controller('EditDivisionController', ['$scope', '$modalInstance', 'S
         }
     };
     function updateDivision(division) {
-        if(!(division.code && division.confirmCode)) {
+        if(!($scope.changeCode.code && $scope.changeCode.confirmCode)) {
             resetAlert("danger", "Toate campurile sunt obligatorii");
         }
-        else if(division.code != division.confirmCode){
+        else if($scope.changeCode.code != $scope.changeCode.confirmCode){
             resetAlert("danger", "Codurile nu corespund");
         }
         else {
