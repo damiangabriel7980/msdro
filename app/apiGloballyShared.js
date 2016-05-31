@@ -5,6 +5,8 @@ var Roles=require('./models/roles');
 var Professions = require('./models/professions');
 var Counties = require('./models/counties');
 var Parameters = require('./models/parameters');
+var Divisions = require('./models/divisions/divisions');
+var Speciality = require('./models/specialty');
 
 var mongoose = require('mongoose');
 var validator = require('validator');
@@ -148,7 +150,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         try{
             var activation = req.body.activation || {};
             //make sure only the info provided in the form is updated
-            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
+            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty']);
             var userData = req.body.user;
             userData.groupsID = userData.groupsID || [];
 
@@ -197,13 +199,27 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                         next();
                                     }else if(activation.type === "code"){
                                         //validate code
-                                        ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
-                                            if(err || !code){
-                                                handleError(res, err);
+                                        //ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
+                                        //    if(err || !code){
+                                        //        handleError(res, err);
+                                        //    }else{
+                                        //        if(!activation.value || (SHA512(activation.value).toString() !== code.value)){
+                                        //            handleError(res, null, 403, 351);
+                                        //        }else{
+                                        //            staywellUser.state = "ACCEPTED";
+                                        //            req.staywellUser = mergeKeys(staywellUser, userData);
+                                        //            next();
+                                        //        }
+                                        //    }
+                                        //});
+                                        Divisions.findOne({code: SHA512(activation.value).toString()}).exec(function (err, division) {
+                                            if(err || !division){
+                                                handleError(res ,null, 400, 351);
                                             }else{
-                                                if(!activation.value || (SHA512(activation.value).toString() !== code.value)){
+                                                if(!activation.value || (SHA512(activation.value).toString() !== division.code)){
                                                     handleError(res, null, 403, 351);
                                                 }else{
+                                                    staywellUser.division = division;
                                                     staywellUser.state = "ACCEPTED";
                                                     req.staywellUser = mergeKeys(staywellUser, userData);
                                                     next();
@@ -435,6 +451,16 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     handleError(res, err);
                 }else{
                     handleSuccess(res, professions);
+                }
+            });
+        });
+    router.route('/accountActivation/specialty')
+        .get(function (req, res) {
+            Speciality.find({}).exec(function (err, specialities) {
+                if (err) {
+                    handleError(res, err, 500)
+                } else {
+                    handleSuccess(res, specialities);
                 }
             });
         });

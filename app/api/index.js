@@ -1,5 +1,6 @@
 var Content     = require('../models/articles');
 var Products    = require('../models/products');
+var Divisions   = require('../models/divisions/divisions');
 var Therapeutic_Area = require('../models/therapeutic_areas');
 var UserGroup = require('../models/userGroup');
 var Events = require('../models/events');
@@ -112,7 +113,7 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
     var pathologiesToSend = [];
     var queryPathology = pathQParams ? pathQParams : { enabled: true };
     //get pathologies and for each get list of products
-    Pathologies.find(queryPathology).sort('display_name').exec(function(err, pathologies){
+    Pathologies.find(queryPathology).sort('display_name').populate('specialApps').exec(function(err, pathologies){
         if(err)
         {
             deferred.reject(err);
@@ -129,7 +130,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 _id: pathology._id,
                                 display_name: pathology.display_name,
                                 description: pathology.description,
-                                header_image: pathology.header_image
+                                header_image: pathology.header_image,
+                                specialApps: pathology.specialApps
                             };
                             objectToPush['associated_items'] = associated;
                             pathologiesToSend.push(objectToPush);
@@ -478,7 +480,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/pathologies')
         .get(function(req, res) {
             if(req.query.id){
-                Pathologies.findOne({_id:req.query.id}, function(err, pathology) {
+                Pathologies.findOne({_id:req.query.id}).populate('specialApps').exec(function(err, pathology) {
                     if(err) {
                         handleError(res,err,500);
                     }else{
@@ -1102,6 +1104,85 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+
+    router.route('/admin/divisions')
+        .get(function (req, res) {
+            if (req.query.id) {
+                Divisions.findOne({_id: req.query.id}).exec(function (err, division) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, division);
+                    }
+                })
+            }
+            else {
+                Divisions.find({}).exec(function (err, divisions) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    }
+                    else {
+                        handleSuccess(res, divisions);
+                    }
+                })
+            }
+        })
+        .post(function (req, res) {
+            var division = new Divisions({
+                name: 'Untitled'
+            });
+            division.save(function (err, saved) {
+                if (err) {
+                    handleError(res, err, 500)
+                }
+                else {
+                    handleSuccess(res, {saved: saved}, 2);
+                }
+            })
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            Divisions.findOne({_id: idToUpdate}).exec(function (err, division) {
+                if (err || !division) {
+                    handleError(res, err)
+                }
+                else {
+                    Divisions.update({_id: idToUpdate}, {
+                        $set: {
+                            name: req.body.name,
+                            code: SHA512(req.body.code).toString(),
+                            lastUpdated: new Date()
+                        }
+                    }, function (err, updated) {
+                        if (err) {
+                            handleError(res, err);
+                        }
+                        else {
+                            handleSuccess(res, updated, 3)
+                        }
+                    })
+                }
+            })
+        })
+        .delete(function (req, res) {
+            var id = req.query.id;
+            Divisions.findOne({_id: id}, function (err, division) {
+                if (err) {
+                    handleError(res, err, 500);
+                }
+                if (division) {
+                    Divisions.remove({_id: id}).exec(function (err, div) {
+                        if (err) {
+                            handleError(res, err, 500);
+                        }
+                        else {
+                            handleSuccess(res, {division: div}, 4);
+                        }
+                    })
+                }
+            })
+        });
+
     router.route('/admin/products')
         .get(function(req, res) {
             if(req.query.id){
@@ -1692,11 +1773,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            specialApps.remove({_id: idToDelete}, function (err, wres) {
+            Pathologies.update({}, {$pull: {specialApps: idToDelete}}, {multi: true}, function (err, wres) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res, wres);
+                    specialApps.remove({_id: idToDelete}, function (err, wres) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, wres);
+                        }
+                    });
                 }
             });
         });
@@ -3585,7 +3672,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .put(function (req, res) {
             var updated = req.body.specialty;
             updated.lastUpdated = new Date();
-            Speciality.update({_id: updated._id},(function (err, updatedSpecialty) {
+            Speciality.update({_id: updated._id},{$set: updated},(function (err, updatedSpecialty) {
                 if (err) {
                     handleError(res, err);
                 } else {
@@ -4086,9 +4173,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         product_name: 1
                     }
                 };
-                if(req.query.firstLetter)
-                    itemQParams.query.product_name = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                getPathologiesWithItems(specialProduct, itemQParams).then(
+                var queryPathObject = {
+                    enabled: true
+                };
+                if(req.query.idPathology && req.query.idPathology != 0)
+                    queryPathObject._id = req.query.idPathology;
+                getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
                     function (success) {
                         handleSuccess(res,success);
                     },

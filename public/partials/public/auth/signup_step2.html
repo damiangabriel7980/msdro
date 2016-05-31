@@ -4,32 +4,37 @@
         <select ng-model="user.profession" class="form-control" ng-change="selectProfession()"
                 ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
     </div>
-    <div class="col-md-6 noPadding" ng-show="proofRequired">
-        <div class="form-group-sm col-md-6 showOnD">
-            <input type="radio" ng-model="user.temp.proofType" value="file"><label>&nbsp;Dovada:</label>
-            <a class="btn btn-default form-control" type="file" ngf-select ngf-change="proofSelected($files, $event)"
-                    multiple="false" ng-disabled="user.temp.proofType!='file'" popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="bottom"
-                    style="visibility: visible; display: block">
-                <i class="glyphicon glyphicon-file"></i>&nbsp;{{user.temp.proofFile?user.temp.proofFile.name:"Incarca dovada"}}
-            </a>
-        </div>
-        <div class="form-group-sm col-md-6 showOnPT">
-            <input type="radio" ng-model="user.temp.proofType" value="file">
-            <label>&nbsp;Dovada:&nbsp;<i class="glyphicon glyphicon-info-sign pointer" ng-click="proofAlert()"></i></label>
-            <a class="btn btn-default form-control" type="file" ngf-select ngf-change="proofSelected($files, $event)"
-                    multiple="false" ng-disabled="user.temp.proofType!='file'" style="visibility: visible; display: block">
-                <i class="glyphicon glyphicon-file"></i>&nbsp;{{user.temp.proofFile?user.temp.proofFile.name:"Incarca dovada"}}
-            </a>
-        </div>
-        <div class="form-group-sm col-md-6">
-            <input type="radio" ng-model="user.temp.proofType" value="code"><label>&nbsp;Cod de activare:</label>
-            <input id="code" type="text" ng-model="user.temp.activationCode" class="form-control" ng-disabled="user.temp.proofType!='code'">
-        </div>
+    <div class="form-group-sm col-md-6">
+        <label>&nbsp;Cod de activare:</label>
+        <input id="code" type="text" ng-model="user.temp.activationCode" class="form-control">
     </div>
-    <div class="form-group-sm col-md-6" ng-if="groups.length > 0">
-        <label for="group">Specialitate<sup>*</sup>:</label>
-        <select ng-model="user.groupsID" class="form-control"
-                ng-options="group._id as group.display_name for group in groups" id="group"></select>
+    <!--<div class="col-md-6 noPadding" ng-show="proofRequired">-->
+        <!--<div class="form-group-sm col-md-6 showOnD">-->
+            <!--<input type="radio" ng-model="user.temp.proofType" value="file"><label>&nbsp;Dovada:</label>-->
+            <!--<a class="btn btn-default form-control" type="file" ngf-select ngf-change="proofSelected($files, $event)"-->
+                    <!--multiple="false" ng-disabled="user.temp.proofType!='file'" popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="bottom"-->
+                    <!--style="visibility: visible; display: block">-->
+                <!--<i class="glyphicon glyphicon-file"></i>&nbsp;{{user.temp.proofFile?user.temp.proofFile.name:"Incarca dovada"}}-->
+            <!--</a>-->
+        <!--</div>-->
+        <!--<div class="form-group-sm col-md-6 showOnPT">-->
+            <!--<input type="radio" ng-model="user.temp.proofType" value="file">-->
+            <!--<label>&nbsp;Dovada:&nbsp;<i class="glyphicon glyphicon-info-sign pointer" ng-click="proofAlert()"></i></label>-->
+            <!--<a class="btn btn-default form-control" type="file" ngf-select ngf-change="proofSelected($files, $event)"-->
+                    <!--multiple="false" ng-disabled="user.temp.proofType!='file'" style="visibility: visible; display: block">-->
+                <!--<i class="glyphicon glyphicon-file"></i>&nbsp;{{user.temp.proofFile?user.temp.proofFile.name:"Incarca dovada"}}-->
+            <!--</a>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="form-group-sm col-md-6" ng-if="groups.length > 0">-->
+        <!--<label for="group">Specialitate<sup>*</sup>:</label>-->
+        <!--<select ng-model="user.groupsID" class="form-control"-->
+                <!--ng-options="group._id as group.display_name for group in groups" id="group"></select>-->
+    <!--</div>-->
+    <div class="form-group-sm col-md-6" ng-if="specialties.length > 0">
+        <label for="specialty">Specialitate<sup>*</sup>:</label>
+        <select ng-model="user.specialty" class="form-control"
+                ng-options="specialty._id as specialty.name for specialty in specialties" id="specialty"></select>
     </div>
     <div class="form-group-sm col-md-6">
         <label>Tip de practica:</label>

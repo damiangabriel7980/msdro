@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesService','$modalInstance','$state','AmazonService', 'idToEdit', 'Success', 'Error', function($scope,$rootScope,PathologiesService,$modalInstance,$state,AmazonService,idToEdit,Success,Error){
+controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesService','$modalInstance','$state','AmazonService', 'idToEdit', 'Success', 'Error', 'SpecialAppsService', function($scope,$rootScope,PathologiesService,$modalInstance,$state,AmazonService,idToEdit,Success,Error, SpecialAppsService){
 
     $scope.pathology = {};
 
@@ -25,10 +25,18 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
         $scope[alertBoxName].newAlert = status;
     };
 
+    $scope.myApps = {
+        selectedApps: null
+    };
+
     PathologiesService.pathologies.query({id: idToEdit}).$promise.then(function(response){
         $scope.pathology = Success.getObject(response);
         if($scope.pathology.header_image)
             $scope.header_image = $rootScope.pathAmazonDev + $scope.pathology.header_image;
+        $scope.myApps.selectedApps = $scope.pathology.specialApps;
+        SpecialAppsService.apps.query().$promise.then(function (resp) {
+            $scope.apps = Success.getObject(resp);
+        });
         $scope.$applyAsync();
     }).catch(function(err){
         showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
@@ -92,6 +100,11 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
 
     $scope.updatePathology = function(closeModal){
         $scope.pathology.last_updated = Date.now();
+        var id_apps = [];
+        for(var j=0;j<$scope.myApps.selectedApps.length;j++){
+            id_apps.push($scope.myApps.selectedApps[j]._id);
+        }
+        $scope.pathology.specialApps = id_apps;
         PathologiesService.pathologies.update({id: idToEdit}, $scope.pathology).$promise.then(function (resp) {
             if(closeModal){
                 $scope.closeModal();

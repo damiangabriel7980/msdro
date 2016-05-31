@@ -17,7 +17,7 @@ controllers.controller('EditSpecialtyController', ['$scope', '$modalInstance', '
             ManageSpecialtyService.specialty.update({specialty: specialty}).$promise.then(function(res){
                 resetAlert("success", "Specializarea a fost modificata");
             }).catch(function(err){
-                cresetAlert("danger", "Eroare la schimbarea specializarii")
+                resetAlert("danger", "Eroare la schimbarea specializarii")
             })
         }
     }

@@ -15,6 +15,10 @@
             <label>Url:</label>
             <input ng-model="app.url" type="text" class="form-control">
         </div>
+        <div class="col-md-12">
+            <label>Cod:</label>
+            <input ng-model="app.code" type="text" class="form-control">
+        </div>
         <div class="col-md-12 form-group">
             <label>Grupuri speciale:</label>
             <my-multiple-select all-objects="specialGroups" selected-objects="app.groups" track-by="_id" display-by="display_name"

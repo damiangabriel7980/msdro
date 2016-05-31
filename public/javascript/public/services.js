@@ -168,6 +168,7 @@ services.factory('ContentService', ['$resource', function($resource){
 services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', function($resource, Utils, Error, Success){
     var getFormData = function (thiz) {
         var temp = thiz.user.temp;
+        temp.proofType = 'code';
         var data = {
             user: thiz.user || {},
             nonUser: thiz.nonUser || {},
@@ -220,6 +221,8 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
             callback("Va rugam incarcati dovada");
         }else if(!user.groupsID && options.groupRequired){
             callback("Va rugam selectati un grup preferat");
+        }else if(!user.specialty){
+            callback("Va rugam selectati o specializare");
         }else if(!user.address){
             callback("Va rugam introduceti o adresa");
         }else if(!county){
@@ -317,6 +320,10 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         }),
         cities: $resource('apiGloballyShared/accountActivation/cities', {}, {
             query: { method: 'GET', isArray: false }
+        }),
+        specialty: $resource('apiGloballyShared/accountActivation/specialty',{},{
+            query: { method: 'GET', isArray: false }
+
         }),
         createAccount: function (thiz, callback) {
             var formData = getFormData(thiz);

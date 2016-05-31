@@ -4,6 +4,7 @@ controllers.controller('DisplayFeatures', ['$scope', '$rootScope', '$stateParams
     SpecialFeaturesService.specialApps.query({id: $stateParams.specialApp}).$promise.then(function (resp) {
         if(Success.getObject(resp)){
             $scope.featureSrc = $sce.trustAsResourceUrl(Success.getObject(resp).url);
+            $scope.code = Success.getObject(resp).code;
         }
     });
 

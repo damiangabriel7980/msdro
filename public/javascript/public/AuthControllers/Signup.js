@@ -60,6 +60,10 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
     $scope.infoSource = {
         type: {}
     };
+    //============================================================================================== specialty
+    AuthService.specialty.query({}).$promise.then(function(specialties) {
+        $scope.specialties =  Success.getObject(specialties);
+    });
 
     //============================================================================================== profession / group
 
@@ -74,7 +78,7 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
     AuthService.professions.query().$promise.then(function (response) {
         response = Success.getObject(response);
         $scope.professions = response;
-        $scope.user.profession = response[0]._id;
+        $scope.user.profession = response.length ? response[0]._id : null
         $scope.selectProfession();
     });
 
