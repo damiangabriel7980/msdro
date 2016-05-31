@@ -53,27 +53,7 @@ controllers.controller('brochureEdit', ['$scope','$rootScope' ,'brochureService'
                     $scope.$apply();
                 } else {
                     //update database as well
-                    var objectWithUpdates = {
-                        title_image: key
-                    };
-                    if(sideImage){
-                        delete objectWithUpdates.title_image;
-                        objectWithUpdates.side_image = key;
-                    }
-                    brochureService.brochureSections.update({id:$scope.section._id},objectWithUpdates).$promise.then(function (resp) {
-                        showAlertMessage('uploadAlert', 'success', "Image upload complete!", true);
-                        console.log("Upload complete");
-                        if(sideImage){
-                            $scope.side_image = $rootScope.pathAmazonDev + key;
-                            $scope.section.side_image = key;
-                        } else {
-                            $scope.title_image = $rootScope.pathAmazonDev + key;
-                            $scope.section.title_image = key;
-                        }
-                        $scope.$applyAsync();
-                    }).catch(function(err){
-                        showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
-                    });
+                    updateImgLinkInDB(sideImage, key);
                 }
             });
             req.on('httpUploadProgress', function (evt) {
@@ -84,6 +64,29 @@ controllers.controller('brochureEdit', ['$scope','$rootScope' ,'brochureService'
             });
         });
     };
+
+    function updateImgLinkInDB(sideImage, key) {
+        var objectWithUpdates = {
+            title_image: key ? key : null
+        };
+        if(sideImage){
+            delete objectWithUpdates.title_image;
+            objectWithUpdates.side_image = key ? key : null;
+        }
+        brochureService.brochureSections.update({id:$scope.section._id},objectWithUpdates).$promise.then(function (resp) {
+            showAlertMessage('uploadAlert', 'success', key ? "Image upload complete!" : "Image deleted successfully!", true);
+            if(sideImage){
+                $scope.side_image = key ? $rootScope.pathAmazonDev + key : null;
+                $scope.section.side_image = key ? key : null;
+            } else {
+                $scope.title_image = key ? $rootScope.pathAmazonDev + key : null;
+                $scope.section.title_image = key ? key : null;
+            }
+            $scope.$applyAsync();
+        }).catch(function(err){
+            showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
+        });
+    }
 
     $scope.fileSelected = function($files, $event, sideImage){
         //make sure group data is loaded. we need to access it to form the amazon key
@@ -119,6 +122,16 @@ controllers.controller('brochureEdit', ['$scope','$rootScope' ,'brochureService'
             }
         }).catch(function(err){
             showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
+        });
+    };
+
+    $scope.removeImage = function (imagePath, sideImage) {
+        AmazonService.deleteFile(imagePath,function(err, success){
+            if(err){
+                showAlertMessage('uploadAlert', 'error', "Eroare la stergerea imaginii!", true);
+            }else{
+                updateImgLinkInDB(sideImage);
+            }
         });
     };
 

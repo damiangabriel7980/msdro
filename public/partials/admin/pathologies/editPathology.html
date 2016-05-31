@@ -30,6 +30,13 @@
                     <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                 </div>
             </div>
+            <div class="col-md-12 noPadding">
+                <div class="form-group">
+                    <label>Aplicatii asociate:</label>
+                    <my-multiple-select all-objects="apps" selected-objects="myApps.selectedApps" track-by="_id" display-by="name"
+                                output="notUsed"></my-multiple-select>
+                </div>
+            </div>
             <div class="col-xs-12 noPadding" ng-if="pathology.associated_multimedia">
                     <div class="col-md-12 noPadding">
                         <enhanced-S3-Upload-Manager label="multimedia asociat" on-complete-function="onMultimediaUpdate(key)"

@@ -22,6 +22,9 @@ app.controllerProvider.register('PathologiesController', ['$scope', 'Pathologies
             case 'multimedia' :
                 $state.go('elearning.multimedia.multimediaByArea', {idArea: id});
                 break;
+            case 'productList':
+                $state.go('productList.all.groupedByPathology', {idArea: id});
+                break;
         }
     };
 

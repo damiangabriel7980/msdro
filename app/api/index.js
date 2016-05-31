@@ -111,7 +111,7 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
     var pathologiesToSend = [];
     var queryPathology = pathQParams ? pathQParams : { enabled: true };
     //get pathologies and for each get list of products
-    Pathologies.find(queryPathology).sort('display_name').exec(function(err, pathologies){
+    Pathologies.find(queryPathology).sort('display_name').populate('specialApps').exec(function(err, pathologies){
         if(err)
         {
             deferred.reject(err);
@@ -128,7 +128,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 _id: pathology._id,
                                 display_name: pathology.display_name,
                                 description: pathology.description,
-                                header_image: pathology.header_image
+                                header_image: pathology.header_image,
+                                specialApps: pathology.specialApps
                             };
                             objectToPush['associated_items'] = associated;
                             pathologiesToSend.push(objectToPush);
@@ -477,7 +478,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/pathologies')
         .get(function(req, res) {
             if(req.query.id){
-                Pathologies.findOne({_id:req.query.id}, function(err, pathology) {
+                Pathologies.findOne({_id:req.query.id}).populate('specialApps').exec(function(err, pathology) {
                     if(err) {
                         handleError(res,err,500);
                     }else{
@@ -1691,11 +1692,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
-            specialApps.remove({_id: idToDelete}, function (err, wres) {
+            Pathologies.update({}, {$pull: {specialApps: idToDelete}}, {multi: true}, function (err, wres) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res, wres);
+                    specialApps.remove({_id: idToDelete}, function (err, wres) {
+                        if(err){
+                            handleError(res,err,500);
+                        }else{
+                            handleSuccess(res, wres);
+                        }
+                    });
                 }
             });
         });
@@ -4023,9 +4030,12 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         product_name: 1
                     }
                 };
-                if(req.query.firstLetter)
-                    itemQParams.query.product_name = UtilsModule.regexes.startsWithLetter(req.query.firstLetter);
-                getPathologiesWithItems(specialProduct, itemQParams).then(
+                var queryPathObject = {
+                    enabled: true
+                };
+                if(req.query.idPathology && req.query.idPathology != 0)
+                    queryPathObject._id = req.query.idPathology;
+                getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
                     function (success) {
                         handleSuccess(res,success);
                     },
