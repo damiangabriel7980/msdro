@@ -39,9 +39,9 @@
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" ng-if="specialProductPage.pathologiesID[0].description && specialProductPage.pathologiesID[0].description.length" class="parent" ui-sref="pathologies({pathology_id: specialProductPage.pathologiesID[0]._id})">
+            <accordion-group is-open="status.isFirstOpen" ng-repeat="pathology in specialProductPage.pathologiesID" ng-if="pathology.description" class="parent" ui-sref="pathologies({pathology_id: pathology._id})">
                 <accordion-heading>
-                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Inapoi la {{specialProductPage.pathologiesID[0].display_name}}</div>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Inapoi la {{pathology.display_name}}</div>
                 </accordion-heading>
             </accordion-group>
             <accordion-group is-open="status.isFirstOpen" class="parent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
