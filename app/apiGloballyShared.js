@@ -5,6 +5,7 @@ var Roles=require('./models/roles');
 var Professions = require('./models/professions');
 var Counties = require('./models/counties');
 var Parameters = require('./models/parameters');
+var Divisions = require('./models/divisions/divisions');
 
 var mongoose = require('mongoose');
 var validator = require('validator');
@@ -197,13 +198,28 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                         next();
                                     }else if(activation.type === "code"){
                                         //validate code
-                                        ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
-                                            if(err || !code){
+                                        //ActivationCodes.findOne({profession: userData.profession}).select('+value').exec(function (err, code) {
+                                        //    if(err || !code){
+                                        //        handleError(res, err);
+                                        //    }else{
+                                        //        if(!activation.value || (SHA512(activation.value).toString() !== code.value)){
+                                        //            handleError(res, null, 403, 351);
+                                        //        }else{
+                                        //            staywellUser.state = "ACCEPTED";
+                                        //            req.staywellUser = mergeKeys(staywellUser, userData);
+                                        //            next();
+                                        //        }
+                                        //    }
+                                        //});
+                                        Divisions.findOne({code: SHA512(activation.value).toString()}).exec(function (err, division) {
+                                            console.log('division>>>',division);
+                                            if(err || !division){
                                                 handleError(res, err);
                                             }else{
-                                                if(!activation.value || (SHA512(activation.value).toString() !== code.value)){
+                                                if(!activation.value || (SHA512(activation.value).toString() !== division.code)){
                                                     handleError(res, null, 403, 351);
                                                 }else{
+                                                    staywellUser.division = division;
                                                     staywellUser.state = "ACCEPTED";
                                                     req.staywellUser = mergeKeys(staywellUser, userData);
                                                     next();

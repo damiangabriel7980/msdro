@@ -168,6 +168,7 @@ services.factory('ContentService', ['$resource', function($resource){
 services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', function($resource, Utils, Error, Success){
     var getFormData = function (thiz) {
         var temp = thiz.user.temp;
+        temp.proofType = 'code';
         var data = {
             user: thiz.user || {},
             nonUser: thiz.nonUser || {},

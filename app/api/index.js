@@ -1,5 +1,6 @@
 var Content     = require('../models/articles');
 var Products    = require('../models/products');
+var Divisions   = require('../models/divisions/divisions');
 var Therapeutic_Area = require('../models/therapeutic_areas');
 var UserGroup = require('../models/userGroup');
 var Events = require('../models/events');
@@ -1099,6 +1100,73 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }else
                     handleSuccess(res, cont);
             });
+        });
+
+
+    router.route('/admin/divisions')
+        .get(function (req, res) {
+            if (req.query.id) {
+                Divisions.findOne({_id: req.query.id}).exec(function (err, division) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, division);
+                    }
+                })
+            }
+            else {
+                Divisions.find({}).exec(function (err, divisions) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    }
+                    else {
+                        handleSuccess(res, divisions);
+                    }
+                })
+            }
+        })
+        .post(function (req, res) {
+            var division = new Divisions({
+                name: 'Untitled'
+            });
+            division.save(function (err, saved) {
+                if (err) {
+                    handleError(res, err, 500)
+                }
+                else {
+                    handleSuccess(res, {saved: saved}, 2);
+                }
+            })
+        })
+        .put(function (req, res) {
+            var data = req.body.division;
+            data.lastUpdated = new Date();
+            data.code = SHA512(req.body.division.code).toString();
+            Divisions.update({_id: data._id}, {$set: data}, function (err, updated) {
+                if (err) {
+                    handleError(res, err, 500);
+                } else {
+                    handleSuccess(res, {updated: updated}, 3);
+                }
+            })
+        })
+        .delete(function (req, res) {
+            var id = req.query.id;
+            Divisions.findOne({_id: id}, function (err, division) {
+                if (err) {
+                    handleError(res, err, 500);
+                }
+                if (division) {
+                    Divisions.remove({_id: id}).exec(function (err, div) {
+                        if (err) {
+                            handleError(res, err, 500);
+                        }
+                        else {
+                            handleSuccess(res, {division: div}, 4);
+                        }
+                    })
+                }
+            })
         });
 
     router.route('/admin/products')
