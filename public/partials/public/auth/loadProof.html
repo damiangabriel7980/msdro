@@ -28,12 +28,12 @@
                 <select ng-model="selectedSpecialGroup" class="form-control" ng-change="selectSpecial()" ng-disabled="saveSuccess"
                         ng-options="group as group.display_name for group in groups" id="group"></select>
             </div>
-            <div class="form-group col-md-6">
-                <label for="proof">Dovada:</label>&nbsp;&nbsp;<span>{{fileName}}</span>
-                <br>
-                <a class="btn btn-default form-control" type="file" ngf-select ngf-change="fileSelected($files, $event)" id="proof"
-                   ngf-multiple="false" ngf-accept="'.jpg,.png,.pdf'" ng-disabled="saveSuccess"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o fotografie</a>
-            </div>
+            <!--<div class="form-group col-md-6">-->
+                <!--<label for="proof">Dovada:</label>&nbsp;&nbsp;<span>{{fileName}}</span>-->
+                <!--<br>-->
+                <!--<a class="btn btn-default form-control" type="file" ngf-select ngf-change="fileSelected($files, $event)" id="proof"-->
+                   <!--ngf-multiple="false" ngf-accept="'.jpg,.png,.pdf'" ng-disabled="saveSuccess"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o fotografie</a>-->
+            <!--</div>-->
         </div>
     </div>
     <div class="modal-footer">

@@ -395,6 +395,16 @@ services.factory('ProductService', ['$resource', function($resource){
         })
     }
 }]);
+services.factory('DivisionsService', ['$resource', function($resource){
+    return {
+        divisions: $resource('api/admin/divisions', {}, {
+            query: { method: 'GET', isArray: false },
+            create: {method: 'POST', isArray: false},
+            update: {method: 'PUT', isArray:false},
+            delete: {method: 'DELETE', isArray: false}
+        })
+    }
+}]);
 services.factory('ContentService', ['$resource', function($resource){
     return {
         content: $resource('api/admin/content', {}, {

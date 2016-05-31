@@ -1,0 +1,27 @@
+<div class="container-fluid">
+    <div class="well">
+        <div class="row">
+            <div class="col-xs-5"><h3>Gestionare Divizii</h3></div>
+            <div class="col-xs-2 pull-right">
+                <a ng-click="addDivision()" class="btn btn-info pull-right margintop20px" id="add-division"><i
+                        class="glyphicon glyphicon-plus-sign"></i> Adauga divizie</a>
+            </div>
+        </div>
+    </div>
+    <bulk-operations model="divisions" delete-button items-set="selectedItems"
+                     filtered-array="resultData"></bulk-operations>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="div in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(div._id)" ng-checked="checkValue(div._id)"/>
+            </td>
+            <td data-title="'Name'" filter="{ 'name': 'text' }" sortable="'name'">{{div.name}}</td>
+            <!--<td data-title="'Code'" sortable="'code'" ng-bind-html="renderHtml(div.code)"></td>-->
+            <td>
+                <action-buttons show-edit-button="true" show-delete-button="true"
+                                delete-item="deleteDivision(div)"
+                                update-item="editDivision(div)"></action-buttons>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -3,35 +3,35 @@
  */
 
 //Static page for the Imunnology QA , the videos are uploaded in the admin page,which generates a link,the links are copied from there
-app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success', 'Error','$modal', function($scope, $window,Success,Error, $modal){
+app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success', 'Error','$modal', '$rootScope', function($scope, $window,Success,Error, $modal, $rootScope){
         $scope.questions = [
                 {
                         question:'What is your vision regarding the future of the management of RA?',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc4beca6d0618008d86cd/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q1_JOSE DELGADO ALVES.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc4beca6d0618008d86cd/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q1_JOSE DELGADO ALVES.mp4'
                                 },
                                 {
                                         name:'Daniel Aletaha',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc32bca6d0618008d86cc/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q1_DANIEL_ALETAHA.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc32bca6d0618008d86cc/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q1_DANIEL_ALETAHA.mp4'
                                 },
                                 {
                                         name:'Eugen Feist',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc681ca6d0618008d86cf/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q1_Eugen_Feist.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc681ca6d0618008d86cf/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q1_Eugen_Feist.mp4'
                                 },
                                 {
                                         name:'Dennis McGonagle',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msd-prod/speakers/555dc83eca6d0618008d86d4/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q1_Dennis_Mcgonagle.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc83eca6d0618008d86d4/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q1_Dennis_Mcgonagle.mp4'
                                 },
                                 {
                                         name:'Hans Bijlsm',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc804ca6d0618008d86d3/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q1_Hans_Bijlsma.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc804ca6d0618008d86d3/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q1_Hans_Bijlsma.mp4'
                                 }
                         ]
                 },
@@ -40,28 +40,28 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc4beca6d0618008d86cd/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q2_JOSE DELGADO ALVES.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc4beca6d0618008d86cd/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q2_JOSE DELGADO ALVES.mp4'
                                 },
                                 {
                                         name:'Daniel Aletaha',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc32bca6d0618008d86cc/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q2_DANIEL_ALETAHA.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc32bca6d0618008d86cc/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q2_DANIEL_ALETAHA.mp4'
                                 },
                                 {
                                         name:'Eugen Feist',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc681ca6d0618008d86cf/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q2_Eugen_Feist.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc681ca6d0618008d86cf/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q2_Eugen_Feist.mp4'
                                 },
                                 {
                                         name:'Dennis McGonagle',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msd-prod/speakers/555dc83eca6d0618008d86d4/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q2_Dennis_Mcgonagle.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc83eca6d0618008d86d4/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q2_Dennis_Mcgonagle.mp4'
                                 },
                                 {
                                         name:'Hans Bijlsm',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc804ca6d0618008d86d3/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q2_Hans_Bijlsma.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc804ca6d0618008d86d3/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q2_Hans_Bijlsma.mp4'
                                 }
                         ]
                 },
@@ -70,28 +70,28 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc4beca6d0618008d86cd/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q3_JOSE DELGADO ALVES.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc4beca6d0618008d86cd/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q3_JOSE DELGADO ALVES.mp4'
                                 },
                                 {
                                         name:'Daniel Aletaha',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc32bca6d0618008d86cc/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q3_DANIEL_ALETAHA.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc32bca6d0618008d86cc/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q3_DANIEL_ALETAHA.mp4'
                                 },
                                 {
                                         name:'Eugen Feist',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc681ca6d0618008d86cf/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q3_Eugen_Feist.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc681ca6d0618008d86cf/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q3_Eugen_Feist.mp4'
                                 },
                                 {
                                         name:'Dennis McGonagle',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msd-prod/speakers/555dc83eca6d0618008d86d4/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q3_Dennis_Mcgonagle.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc83eca6d0618008d86d4/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q3_Dennis_Mcgonagle.mp4'
                                 },
                                 {
                                         name:'Hans Bijlsm',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc804ca6d0618008d86d3/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q3_Hans_Bijlsma.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc804ca6d0618008d86d3/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q3_Hans_Bijlsma.mp4'
                                 }
                         ]
                 },
@@ -100,28 +100,28 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc4beca6d0618008d86cd/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q4_JOSE DELGADO ALVES.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc4beca6d0618008d86cd/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q4_JOSE DELGADO ALVES.mp4'
                                 },
                                 {
                                         name:'Daniel Aletaha',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc32bca6d0618008d86cc/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q4_DANIEL_ALETAHA.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc32bca6d0618008d86cc/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q4_DANIEL_ALETAHA.mp4'
                                 },
                                 {
                                         name:'Eugen Feist',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc681ca6d0618008d86cf/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q4_Eugen_Feist.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc681ca6d0618008d86cf/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q4_Eugen_Feist.mp4'
                                 },
                                 {
                                         name:'Dennis McGonagle',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msd-prod/speakers/555dc83eca6d0618008d86d4/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q4_Dennis_Mcgonagle.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc83eca6d0618008d86d4/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q4_Dennis_Mcgonagle.mp4'
                                 },
                                 {
                                         name:'Hans Bijlsm',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc804ca6d0618008d86d3/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q4_Hans_Bijlsma.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc804ca6d0618008d86d3/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q4_Hans_Bijlsma.mp4'
                                 }
                         ]
                 },
@@ -130,13 +130,13 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc4beca6d0618008d86cd/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q5_JOSE DELGADO ALVES.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc4beca6d0618008d86cd/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q5_JOSE DELGADO ALVES.mp4'
                                 },
                                 {
                                         name:'Daniel Aletaha',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc32bca6d0618008d86cc/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q5_DANIEL_ALETAHA.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc32bca6d0618008d86cc/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q5_DANIEL_ALETAHA.mp4'
                                 }
                         ]
                 },
@@ -145,18 +145,18 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         speakers:[
                                 {
                                         name:'Jose Delgado Alves',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc4beca6d0618008d86cd/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q6_JOSE DELGADO ALVES.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc4beca6d0618008d86cd/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q6_JOSE DELGADO ALVES.mp4'
                                 },
                                 {
                                         name:'Eugen Feist',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc681ca6d0618008d86cf/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q6_Eugen_Feist.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc681ca6d0618008d86cf/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q6_Eugen_Feist.mp4'
                                 },
                                 {
                                         name:'Dennis McGonagle',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msd-prod/speakers/555dc83eca6d0618008d86d4/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q6_Dennis_Mcgonagle.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc83eca6d0618008d86d4/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q6_Dennis_Mcgonagle.mp4'
                                 }
                         ]
                 },
@@ -165,13 +165,13 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         speakers:[
                                 {
                                         name:'Daniel Aletaha',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc32bca6d0618008d86cc/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q7_DANIEL_ALETAHA.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc32bca6d0618008d86cc/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q7_DANIEL_ALETAHA.mp4'
                                 },
                                 {
                                         name:'Hans Bijlsm',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc804ca6d0618008d86d3/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q7_Hans_Bijlsma.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc804ca6d0618008d86d3/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q7_Hans_Bijlsma.mp4'
                                 }
                         ]
                 },
@@ -180,13 +180,13 @@ app.controllerProvider.register('ProductPageQA', ['$scope','$window', 'Success',
                         speakers:[
                                 {
                                         name:'Dennis McGonagle',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msd-prod/speakers/555dc83eca6d0618008d86d4/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q8_Dennis_Mcgonagle.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc83eca6d0618008d86d4/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q8_Dennis_Mcgonagle.mp4'
                                 },
                                 {
                                         name:'Hans Bijlsm',
-                                        picture:'https://s3-eu-west-1.amazonaws.com/msdqa/speakers/555dc804ca6d0618008d86d3/logo.png',
-                                        video:'https://s3-eu-west-1.amazonaws.com/msdqa/productPages/555c7c3b55ac231800ff941c/videos/Q8_Hans_Bijlsma.mp4'
+                                        picture: $rootScope.pathAmazonDev + 'speakers/555dc804ca6d0618008d86d3/logo.png',
+                                        video: $rootScope.pathAmazonDev + 'productPages/555c7c3b55ac231800ff941c/videos/Q8_Hans_Bijlsma.mp4'
                                 }
                         ]
                 }
