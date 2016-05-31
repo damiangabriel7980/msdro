@@ -1,0 +1,21 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h3 class="modal-title">Schimba specializare</h3>
+    </div>
+    <div class="col-md-12 modal-body">
+        <div class="col-md-12" style="margin-bottom: 15px;">
+            <alert ng-if="alert.show" type="{{alert.type}}" close="alert.show=false">{{alert.text}}</alert>
+        </div>
+        <div class="form-group col-md-12">
+            <label>Specializare:</label>
+            <input type="text" class="form-control" ng-model="specialty.name">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+            <button type="submit" class="btn btn-primary" ng-click="updateSpecialty(specialty)">Schimba specializare</button>
+        </div>
+    </div>
+</div>

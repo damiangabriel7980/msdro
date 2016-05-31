@@ -61,6 +61,8 @@
     <script src="javascript/admin/UsersControllers/Groups.js"></script>
     <script src="javascript/admin/UsersControllers/AddGroup.js"></script>
     <script src="javascript/admin/UsersControllers/EditGroup.js"></script>
+    <script src="javascript/admin/UsersControllers/Specialty/Specialty.js"></script>
+    <script src="javascript/admin/UsersControllers/Specialty/EditSpecialty.js"></script>
     <script src="javascript/admin/UsersControllers/NewAccounts/NewAccounts.js"></script>
     <script src="javascript/admin/UsersControllers/NewAccounts/UsersAccepted.js"></script>
     <script src="javascript/admin/UsersControllers/NewAccounts/UsersRejected.js"></script>
@@ -230,6 +232,8 @@
                         <li ui-sref="users.groups"><a > Grupuri utilizatori </a></li>
                         <li class="divider"></li>
                         <li ui-sref="users.importUsers"><a > Import Users </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="users.specialty"><a > Specializari </a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('content')}">

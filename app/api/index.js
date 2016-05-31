@@ -36,6 +36,7 @@ var myPrescription = require("../models/myPrescription");
 var pdf = require("html-pdf");
 var Pathologies = require('../models/pathologies');
 var brochureSection = require('../models/brochureSections');
+var Speciality = require('../models/specialty');
 
 var xlsx = require("xlsx");
 
@@ -3548,6 +3549,68 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/admin/users/specialty')
+        .get(function (req, res) {
+            if(req.query.id){
+                Speciality.findOne({_id: req.query.id},function(err,speciality){
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, speciality);
+                    }
+                })
+            }
+            else{
+                Speciality.find({}).exec(function (err, specialities) {
+                    if (err) {
+                        handleError(res, err, 500)
+                    } else {
+                        handleSuccess(res, specialities);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var newSpecialty = new Speciality ({
+                name: 'Untitled'
+            });
+            newSpecialty.save(function (err, saved) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    handleSuccess(res, {}, 2);
+                }
+            })
+        })
+        .put(function (req, res) {
+            var updated = req.body.specialty;
+            updated.lastUpdated = new Date();
+            Speciality.update({_id: updated._id},(function (err, updatedSpecialty) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    handleSuccess(res, {updated: updatedSpecialty}, 3);
+                }
+            }))
+
+        })
+        .delete(function (req, res) {
+            Speciality.findOne({_id: req.query.id}, function (err, specialty) {
+                if (err) {
+                    handleError(res, err, 500)
+                }
+                if (specialty) {
+                    Speciality.remove({_id: req.query.id}).exec(function (err, spec) {
+                        if (err) {
+                            handleError(res, err, 500);
+                        }
+                        else{
+                            handleSuccess(res, {specialty: spec}, 4)
+                        }
+                    })
+                }
+            })
+        });
     router.route('/admin/intros')
         .get(function (req, res) {
             if(req.query.id){
