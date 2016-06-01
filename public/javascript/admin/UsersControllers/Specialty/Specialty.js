@@ -5,6 +5,7 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
     $scope.deleteSpecialty = deleteSpecialty;
     $scope.addToSelectedItems = addToSelectedItems;
     $scope.checkValue = checkValue;
+    $scope.toggleItem = toggleItem;
 
     function addSpecialty(){
         ManageSpecialtyService.specialty.save().$promise.then(function(res){
@@ -82,6 +83,21 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
         } else {
             return false;
         }
+    }
+    function toggleItem(specialty){
+        ActionModal.show(
+            specialty.enabled?"Dezactiveaza specializare":"Activeaza specializare",
+            specialty.enabled?"Sunteti sigur ca doriti sa dezactivati specializarea?":"Sunteti sigur ca doriti sa activati specializarea?",
+            function(){
+                specialty.enabled = !specialty.enabled;
+                ManageSpecialtyService.specialty.update({specialty: specialty}).$promise.then(function(){
+                    refreshTable();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
+                });
+            },{
+                yes: "Da"
+            })
     }
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);

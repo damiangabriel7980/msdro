@@ -14,9 +14,14 @@
                 <input type="checkbox" ng-click="addToSelectedItems(specialty._id)" ng-checked="checkValue(specialty._id)"/>
             </td>
             <td data-title="'Name'" filter="{ 'name': 'text' }" sortable="'name'">{{specialty.name}}</td>
+            <td data-title="'Status'" sortable="enabled">
+                {{specialty.enabled? "Activ": "Inactiv"}}
+            </td>
             <td>
                 <action-buttons show-edit-button="true" show-delete-button="true"
-                                delete-item="deleteSpecialty(specialty)" update-item="editSpecialty(specialty)"></action-buttons>
+                                item-enable-property="specialty.enabled"
+                                show-toggle-button="true"
+                                delete-item="deleteSpecialty(specialty)" toggle-item="toggleItem(specialty)" update-item="editSpecialty(specialty)"></action-buttons>
             </td>
         </tr>
     </table>

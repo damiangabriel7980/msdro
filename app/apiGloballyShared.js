@@ -150,7 +150,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         try{
             var activation = req.body.activation || {};
             //make sure only the info provided in the form is updated
-            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty']);
+            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','workplace']);
             var userData = req.body.user;
             userData.groupsID = userData.groupsID || [];
 
@@ -456,7 +456,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         });
     router.route('/accountActivation/specialty')
         .get(function (req, res) {
-            Speciality.find({}).exec(function (err, specialities) {
+            Speciality.find({enabled: true}).exec(function (err, specialities) {
                 if (err) {
                     handleError(res, err, 500)
                 } else {

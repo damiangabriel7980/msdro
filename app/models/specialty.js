@@ -1,8 +1,9 @@
-var mongoose		= require('mongoose');
-var Schema			= mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-var SpecialtySchema		= new Schema({
+var SpecialtySchema = new Schema({
     name: {type: String},
+    enabled: {type: Boolean, default: true},
     lastUpdated: {type: Date, default: Date.now}
 });
 
