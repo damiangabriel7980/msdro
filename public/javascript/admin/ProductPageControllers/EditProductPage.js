@@ -1,4 +1,4 @@
-controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', 'PathologiesService', function($scope, SpecialProductsService, AmazonService, Success, Error, PathologiesService) {
+controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', 'PathologiesService', 'Utils', function($scope, SpecialProductsService, AmazonService, Success, Error, PathologiesService, Utils) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -9,9 +9,10 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
 
     SpecialProductsService.products.query({id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
         resp = Success.getObject(resp);
-        $scope.newProductPage = resp[0];
+        $scope.newProductPage = resp.specialProduct;
+        $scope.associatedProduct = resp.associatedProduct ? resp.associatedProduct : null;
         $scope.myPathologies.selectedPathologies = $scope.newProductPage.pathologiesID;
-        $scope.selectedGroups = resp[0].groups;
+        $scope.selectedGroups = $scope.newProductPage.groups;
         //get available groups (a group can have only one special product)
         SpecialProductsService.groups.query().$promise.then(function (resp) {
             $scope.groupsAvailable = Success.getObject(resp);
@@ -24,16 +25,21 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
 
     $scope.logoImageBody = null;
     $scope.headerImageBody = null;
+    $scope.rcpBody = null;
 
-    $scope.logoSelected = function ($files, $event) {
+    $scope.fileSelected = function ($files, forWhat) {
         if($files[0]){
-            $scope.logoImageBody = $files[0];
-        }
-    };
-
-    $scope.headerSelected = function ($files, $event) {
-        if($files[0]){
-            $scope.headerImageBody = $files[0];
+            switch (forWhat) {
+                case 'logo':
+                    $scope.logoImageBody = $files[0];
+                    break;
+                case 'header':
+                    $scope.headerImageBody = $files[0];
+                    break;
+                case 'rcp':
+                    $scope.rcpBody = $files[0];
+                    break;
+            }
         }
     };
 
@@ -60,6 +66,13 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
                 var headerKey = "productPages/"+$scope.newProductPage._id+"/header."+extension;
                 toUpload.push({fileBody: $scope.headerImageBody, key: headerKey});
                 toUpdate.header_image = headerKey;
+            }
+            if($scope.rcpBody){
+                extension = $scope.rcpBody.name.split(".").pop();
+                var key = $scope.associatedProduct.file_path ? $scope.associatedProduct.file_path : "produse/" + $scope.associatedProduct._id + "/rpc/rpc" + $scope.associatedProduct._id + "." + extension;
+                toUpload.push({fileBody: $scope.rcpBody, key: key});
+                toUpdate.file_path = key;
+                toUpdate.file_key = $scope.associatedProduct._id;
             }
             //upload files
             if(toUpload.length > 0){
