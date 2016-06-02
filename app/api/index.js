@@ -4353,7 +4353,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var ans = {};
 
             var newData = req.body.newData;
-            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address","workplace", "subscriptions", "practiceType"]);
+            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
 
             var namePatt = UtilsModule.regexes.name;
             var phonePatt = UtilsModule.regexes.phone;
@@ -4409,32 +4409,32 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var streetPatt = UtilsModule.regexes.streetName;
             var namePatt = UtilsModule.regexes.jobName;
             var numberPatt = UtilsModule.regexes.jobNumber;
-            if(!numberPatt.test(job.street_number.toString())) {
+            if(job.street_number && !numberPatt.test(job.street_number.toString())) {
                 ans.error = true;
                 ans.message = "Numarul strazii trebuie sa contina intre 1 si 5 cifre";
             }
-            if(!streetPatt.test(job.street_name.toString())) {
+            if(job.street_name && !streetPatt.test(job.street_name.toString())) {
                 return handleError(res,null,400,40);
             }
-            if(!namePatt.test(job.job_name.toString())) {
+            if(job.job_name && !namePatt.test(job.job_name.toString())) {
                 return handleError(res,null,400,41);
             }
-            if(!isNaN(parseInt(job.job_type))){
+            if(job.job_type && !isNaN(parseInt(job.job_type))){
                 if(parseInt(job.job_type)<1 || parseInt(job.job_type>4)){
                     return handleError(res,null,400,29);
                 }
-            }else{
+            }else if(job.job_type){
                 return handleError(res,null,400,29);
             }
             if(!job._id){
                 //create new
                 var newJob = new Job({
-                    job_type: job.job_type,
-                    job_name: job.job_name,
-                    street_name: job.street_name,
-                    street_number: job.street_number,
-                    postal_code: job.postal_code,
-                    job_address: job.job_address
+                    job_type: job.job_type ? job.job_type : "",
+                    job_name: job.job_name ? job.job_name : "",
+                    street_name: job.street_name ? job.street_name : "",
+                    street_number: job.street_number ? job.street_number : "",
+                    postal_code: job.postal_code ? job.postal_code : "",
+                    job_address: job.job_address ? job.job_address : ""
                 });
                 newJob.save(function (err, inserted) {
                     if(err){
@@ -4453,21 +4453,25 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }else{
                 //update existing
-                var upd = Job.update({_id:job._id}, {
-                    job_type: job.job_type,
-                    job_name: job.job_name,
-                    street_name: job.street_name,
-                    street_number: job.street_number,
-                    postal_code: job.postal_code,
-                    job_address: job.job_address
-                }, function () {
-                    if(!upd._castError){
-                        handleSuccess(res, {}, 12);
-                    }else{
-                        handleError(res,null,400,2);
-                    }
-                });
-            }
+                Job.update({_id: job._id}, {
+                $set: {
+                    job_type: job.job_type ? job.job_type : "",
+                    job_name: job.job_name ? job.job_name : "",
+                    street_name: job.street_name ? job.street_name : "",
+                    street_number: job.street_number ? job.street_number : "",
+                    postal_code: job.postal_code ? job.postal_code : "",
+                    job_address: job.job_address ? job.job_address : ""
+                }
+            }, function (err, jobs) {
+                if (err) {
+                    console.log('err', err)
+                    handleError(res, null, 400, 2);
+
+                } else {
+                    handleSuccess(res, {}, 12);
+                }
+            });
+        }
         });
 
     router.route('/changePassword')
