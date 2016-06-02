@@ -7868,6 +7868,10 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle .noMarginBottom {
   margin-bottom: 0;
 }
+.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureNoImage {
+  position: relative;
+  padding: 0;
+}
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .job_id {
   margin-top: 20px;
 }

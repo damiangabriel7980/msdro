@@ -6,7 +6,7 @@
             </div>
             <div class="col-xs-12 noPadding" ng-repeat="section in brochureSections">
                 <div class="col-xs-12 lineHeight16" ng-class="{'margins20': section.title_image}">
-                    <div class="col-xs-12 col-sm-12 col-md-10 brochureTitle" ng-class="{'noPaddingLeft': isMobile()}" ng-if="section.title">
+                    <div class="col-xs-12 col-sm-12 col-md-10 brochureTitle" ng-class="{'noPaddingLeft': isMobile(), 'brochureNoImage': !section.title_image}" ng-if="section.title">
                         <h3 class="specialProductTitle noMarginBottom" convert-special conver="section.title" ng-bind-html="trustAsHtml(section.title)">
                         </h3>
                     </div>
