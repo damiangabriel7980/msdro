@@ -7074,11 +7074,14 @@ body .btn {
   padding-bottom: 8px !important;
 }
 .homeStyles .leftSection .aboutSection .image {
-  padding: 0;
+  padding: 0 25px 0 10px;
   border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
+}
+.homeStyles .leftSection .aboutSection .image img {
+  border-radius: 6px;
 }
 .homeStyles .leftSection .aboutSection .paddingLeftBig {
   padding-left: 30px !important;
@@ -7864,6 +7867,10 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle .noMarginBottom {
   margin-bottom: 0;
+}
+.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureNoImage {
+  position: relative;
+  padding: 0;
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .job_id {
   margin-top: 20px;
