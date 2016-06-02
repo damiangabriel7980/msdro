@@ -6,6 +6,8 @@ var Professions = require('./models/professions');
 var Counties = require('./models/counties');
 var Parameters = require('./models/parameters');
 var Divisions = require('./models/divisions/divisions');
+var Speciality = require('./models/specialty');
+var Job = require('./models/jobs');
 
 var mongoose = require('mongoose');
 var validator = require('validator');
@@ -96,6 +98,10 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         var email = req.body.email || user.username || "";
         var password = req.body.password || user.password || "";
         var registeredFrom = req.body.registeredFrom || user.registeredFrom || "";
+        var job = req.body.job || user.job || "";
+        var newJob = new Job({
+            job_name: job
+        })
 
         //console.log(name.replace(/ /g,'').replace(/-/g,'').replace(/\./g,''));
 
@@ -121,21 +127,30 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                         if(err || !role){
                             handleError(res, err);
                         }else{
-                            req.staywellUser = {
-                                rolesID: [role._id.toString()],
-                                title: title,
-                                name: name,
-                                username: email,
-                                password: new User().generateHash(password),
-                                state: "PENDING", //proof verification status
-                                account_expired: false,
-                                account_locked: false,
-                                enabled: false, //email verification status
-                                created: Date.now(),
-                                last_updated: Date.now(),
-                                registeredFrom: registeredFrom
-                            };
-                            next();
+                            newJob.save(function(err,savedJob) {
+                                if(err){
+                                    handleError(res,null,400,2);
+                                }
+                                else{
+                                    req.staywellUser = {
+                                        rolesID: [role._id.toString()],
+                                        title: title,
+                                        jobsID: [savedJob._id],
+                                        name: name,
+                                        username: email,
+                                        password: new User().generateHash(password),
+                                        state: "PENDING", //proof verification status
+                                        account_expired: false,
+                                        account_locked: false,
+                                        enabled: false, //email verification status
+                                        created: Date.now(),
+                                        last_updated: Date.now(),
+                                        registeredFrom: registeredFrom
+                                    };
+                                    next();
+                                }
+                            })
+
                         }
                     });
                 }
@@ -148,8 +163,9 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
 
         try{
             var activation = req.body.activation || {};
+
             //make sure only the info provided in the form is updated
-            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions']);
+            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','workplace']);
             var userData = req.body.user;
             userData.groupsID = userData.groupsID || [];
 
@@ -212,9 +228,8 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                         //    }
                                         //});
                                         Divisions.findOne({code: SHA512(activation.value).toString()}).exec(function (err, division) {
-                                            console.log('division>>>',division);
                                             if(err || !division){
-                                                handleError(res, err);
+                                                handleError(res ,null, 400, 351);
                                             }else{
                                                 if(!activation.value || (SHA512(activation.value).toString() !== division.code)){
                                                     handleError(res, null, 403, 351);
@@ -451,6 +466,16 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     handleError(res, err);
                 }else{
                     handleSuccess(res, professions);
+                }
+            });
+        });
+    router.route('/accountActivation/specialty')
+        .get(function (req, res) {
+            Speciality.find({enabled: true}).exec(function (err, specialities) {
+                if (err) {
+                    handleError(res, err, 500)
+                } else {
+                    handleSuccess(res, specialities);
                 }
             });
         });

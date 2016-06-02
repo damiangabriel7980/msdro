@@ -312,6 +312,18 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('ManageSpecialtyService',['$resource',function($resource){
+    return {
+        specialty: $resource('api/admin/users/specialty',{},{
+            query: { method: 'GET', isArray: false },
+            save: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+
+        })
+    }
+}]);
+
 services.factory('IntroService', ['$resource', function($resource){
     return {
         intros: $resource('api/admin/intros/', {}, {

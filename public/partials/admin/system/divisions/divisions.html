@@ -1,17 +1,17 @@
 <div class="container-fluid">
     <div class="well">
         <div class="row">
-            <div class="col-xs-5"><h3>Gestionare Divizii</h3></div>
+            <div class="col-xs-5"><h3>Gestionare coduri activare</h3></div>
             <div class="col-xs-2 pull-right">
                 <a ng-click="addDivision()" class="btn btn-info pull-right margintop20px" id="add-division"><i
-                        class="glyphicon glyphicon-plus-sign"></i> Adauga divizie</a>
+                        class="glyphicon glyphicon-plus-sign"></i> Adauga cod activare</a>
             </div>
         </div>
     </div>
     <bulk-operations model="divisions" delete-button items-set="selectedItems"
                      filtered-array="resultData"></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
-        <tr ng-repeat="div in $data">
+        <tr ng-repeat="div in divisions">
             <td width="30">
                 <input type="checkbox" ng-click="addToSelectedItems(div._id)" ng-checked="checkValue(div._id)"/>
             </td>

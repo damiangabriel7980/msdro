@@ -72,6 +72,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/importUsers',
             templateUrl: 'partials/admin/users/importUsers.html'
         })
+        .state('users.specialty',{
+            url: '/specialty',
+            templateUrl: 'partials/admin/users/Specialty/manageSpecialty.html',
+            controller: 'Specialty'
+        })
         .state('content', {
             abstract: true,
             url: '/content',

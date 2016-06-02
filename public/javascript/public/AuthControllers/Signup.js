@@ -60,6 +60,10 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
     $scope.infoSource = {
         type: {}
     };
+    //============================================================================================== specialty
+    AuthService.specialty.query({}).$promise.then(function(specialties) {
+        $scope.specialties =  Success.getObject(specialties);
+    });
 
     //============================================================================================== profession / group
 
