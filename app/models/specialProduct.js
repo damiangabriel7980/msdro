@@ -20,6 +20,7 @@ var specialProductSchema		= new Schema({
     speakers: [{type: Schema.Types.ObjectId,ref: 'speakers'}],
     pathologiesID: [{type: Schema.Types.ObjectId, ref: 'pathologies',index: true}],
     enabled: Boolean,
+    file_path: String,
     show_safety_info_for: {
         resources: Boolean,
         glossary: Boolean,

@@ -60,16 +60,28 @@
             </div>
         </div>
         <div class="col-md-12 marginTop20">
-            <button class="btn btn-default" type="file" ngf-select ngf-change="headerSelected($files, $event)" ngf-multiple="false"
+            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, 'header')" ngf-multiple="false"
                     ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca header</button>
             <span ng-if="headerImageBody">{{headerImageBody.name}}</span>
             <span ng-if="!headerImageBody">{{newProductPage.header_image}}</span>
         </div>
         <div class="col-md-12" style="margin-top: 10px">
-            <button class="btn btn-default" type="file" ngf-select ngf-change="logoSelected($files, $event)" ngf-multiple="false"
+            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, 'logo')" ngf-multiple="false"
                     ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca logo</button>
             <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
             <span ng-if="!logoImageBody">{{newProductPage.logo_path}}</span>
+        </div>
+        <div class="col-md-12 marginTop10">
+            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, 'rcp')" ngf-multiple="false"
+                    ngf-accept="'application/pdf'"><i class="glyphicon glyphicon-open-file"></i>&nbsp;Incarca RCP</button>
+            <span ng-if="rcpBody">{{rcpBody.name}}</span>
+            <span ng-if="!rcpBody && newProductPage.file_path">{{pathAmazonDev + newProductPage.file_path}}</span>
+        </div>
+        <div class="col-md-12 marginTop10" ng-if="newProductPage.file_path">
+            <div class="col-md-12 noPadding">
+                <a class="btn btn-default" href="{{pathAmazonDev+associatedProduct.file_path}}" target="_blank"><i
+                        class="glyphicon glyphicon-save-file"></i>&nbsp;Descarca RCP</a>
+            </div>
         </div>
                 <div class="col-md-12" style="margin-top: 15px">
                     <div class="newAccountsTabs">

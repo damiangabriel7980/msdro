@@ -1402,7 +1402,22 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res, products);
+                    if(products.length > 1){
+                        handleSuccess(res, products);
+                    } else {
+                        Products.findOne({name: products[0].product_name}).exec(function (err, foundProd) {
+                            if(err){
+                                handleError(res,err,500);
+                            } else {
+                                var objectToSend = {};
+                                objectToSend.specialProduct = products[0];
+                                if(foundProd){
+                                    objectToSend.associatedProduct = foundProd;
+                                }
+                                handleSuccess(res, objectToSend);
+                            }
+                        })
+                    }
                 }
             })
         })
@@ -1420,11 +1435,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         })
         .put(function (req, res) {
+            if(req.body.file_path_prod){
+                var forAssociatedProd = {
+                    file_path: req.body.file_path_prod
+                };
+                var prodKey = req.body.file_key;
+                delete req.body.file_key;
+                delete req.body.file_path_prod;
+            }
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
                     handleError(res,err,500);
                 }else{
-                    handleSuccess(res, {}, 3);
+                    if(forAssociatedProd){
+                        Products.update({_id: prodKey},{$set:forAssociatedProd}, function (err, wRes) {
+                            if(err){
+                                handleError(res,err,500);
+                            }else{
+                                handleSuccess(res, {updated:wRes}, 3);
+                            }
+                        });
+                    } else {
+                        handleSuccess(res, {}, 3);
+                    }
                 }
             });
         })
