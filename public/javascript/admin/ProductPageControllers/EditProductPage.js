@@ -27,9 +27,9 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
     $scope.headerImageBody = null;
     $scope.rcpBody = null;
 
-    $scope.fileSelected = function ($files, forWhat) {
+    $scope.fileSelected = function ($files, fileType) {
         if($files[0]){
-            switch (forWhat) {
+            switch (fileType) {
                 case 'logo':
                     $scope.logoImageBody = $files[0];
                     break;
