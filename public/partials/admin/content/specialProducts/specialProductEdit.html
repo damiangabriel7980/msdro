@@ -71,18 +71,16 @@
             <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
             <span ng-if="!logoImageBody">{{newProductPage.logo_path}}</span>
         </div>
-        <div class="col-md-12" style="margin-top: 10px" ng-if="associatedProduct">
-            <div class="col-md-10 noPadding">
-                <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, 'rcp')" ngf-multiple="false"
-                        ngf-accept="'application/pdf'"><i class="glyphicon glyphicon-open-file"></i>&nbsp;Incarca RCP</button>
-                <span ng-if="rcpBody">{{rcpBody.name}}</span>
-                <span ng-if="!rcpBody">{{associatedProduct.file_path}}</span>
-            </div>
-            <div class="col-md-2 noPadding" ng-if="associatedProduct && associatedProduct.file_path">
-                <div class="col-md-12 noPaddingRight">
-                    <a class="btn pull-right btn-default" href="{{pathAmazonDev+associatedProduct.file_path}}" target="_self"><i
-                            class="glyphicon glyphicon-save-file"></i>&nbsp;Descarca RCP</a>
-                </div>
+        <div class="col-md-12 marginTop10">
+            <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, 'rcp')" ngf-multiple="false"
+                    ngf-accept="'application/pdf'"><i class="glyphicon glyphicon-open-file"></i>&nbsp;Incarca RCP</button>
+            <span ng-if="rcpBody">{{rcpBody.name}}</span>
+            <span ng-if="!rcpBody && newProductPage.file_path">{{pathAmazonDev + newProductPage.file_path}}</span>
+        </div>
+        <div class="col-md-12 marginTop10" ng-if="newProductPage.file_path">
+            <div class="col-md-12 noPadding">
+                <a class="btn btn-default" href="{{pathAmazonDev+associatedProduct.file_path}}" target="_blank"><i
+                        class="glyphicon glyphicon-save-file"></i>&nbsp;Descarca RCP</a>
             </div>
         </div>
                 <div class="col-md-12" style="margin-top: 15px">

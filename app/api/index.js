@@ -1367,13 +1367,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         })
         .put(function (req, res) {
-            if(req.body.file_path){
+            if(req.body.file_path_prod){
                 var forAssociatedProd = {
-                    file_path: req.body.file_path
+                    file_path: req.body.file_path_prod
                 };
                 var prodKey = req.body.file_key;
                 delete req.body.file_key;
-                delete req.body.file_path;
+                delete req.body.file_path_prod;
             }
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){

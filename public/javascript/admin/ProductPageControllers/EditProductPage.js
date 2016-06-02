@@ -69,10 +69,15 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
             }
             if($scope.rcpBody){
                 extension = $scope.rcpBody.name.split(".").pop();
-                var key = $scope.associatedProduct.file_path ? $scope.associatedProduct.file_path : "produse/" + $scope.associatedProduct._id + "/rpc/rpc" + $scope.associatedProduct._id + "." + extension;
-                toUpload.push({fileBody: $scope.rcpBody, key: key});
-                toUpdate.file_path = key;
-                toUpdate.file_key = $scope.associatedProduct._id;
+                var rcpKey =  "productPages/"+$scope.newProductPage._id+"/rcp."+extension;
+                if($scope.associatedProduct){
+                    var keyAssociated = $scope.associatedProduct.file_path ? $scope.associatedProduct.file_path : "produse/" + $scope.associatedProduct._id + "/rpc/rpc" + $scope.associatedProduct._id + "." + extension;
+                    toUpload.push({fileBody: $scope.rcpBody, key: keyAssociated});
+                    toUpdate.file_path_prod = keyAssociated;
+                    toUpdate.file_key = $scope.associatedProduct._id;
+                }
+                toUpload.push({fileBody: $scope.rcpBody, key: rcpKey});
+                toUpdate.file_path = rcpKey;
             }
             //upload files
             if(toUpload.length > 0){
