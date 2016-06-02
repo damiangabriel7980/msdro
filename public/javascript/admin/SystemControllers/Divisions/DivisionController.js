@@ -7,7 +7,7 @@ controllers.controller('DivisionsController', ['$scope', '$rootScope', '$state',
     $scope.checkValue = checkValue;
     function addDivision() {
         DivisionsService.divisions.create({}).$promise.then(function (res) {
-            refreshTable();
+            $state.reload()
         }).catch(function (err) {
             console.log(Error.getMessage(err))
         })
@@ -29,7 +29,7 @@ controllers.controller('DivisionsController', ['$scope', '$rootScope', '$state',
     };
     function refreshTable() {
         DivisionsService.divisions.query().$promise.then(function (result) {
-            $scope.divisions = Success.getObject(result);
+            var divisions = Success.getObject(result);
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -40,10 +40,10 @@ controllers.controller('DivisionsController', ['$scope', '$rootScope', '$state',
                     name: ''       // initial filter
                 }
             }, {
-                total: $scope.divisions.length, // length of data
+                total: divisions.length, // length of data
                 getData: function ($defer, params) {
 
-                    var orderedData = $filter('orderBy')(($filter('filter')($scope.divisions, params.filter())), params.orderBy());
+                    var orderedData = $filter('orderBy')(($filter('filter')(divisions, params.filter())), params.orderBy());
                     params.total(orderedData.length);
                     $scope.resultData = orderedData;
                     if (params.total() < (params.page() - 1) * params.count()) {

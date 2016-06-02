@@ -9,7 +9,7 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
 
     function addSpecialty(){
         ManageSpecialtyService.specialty.save().$promise.then(function(res){
-            refreshTable();
+           $state.reload();
         }).catch(function(err){
             console.log(Error.getMessage(err))
         })
@@ -17,6 +17,7 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
     function refreshTable() {
         ManageSpecialtyService.specialty.query().$promise.then(function(result){
             $scope.specialities = Success.getObject(result);
+            var specialties = Success.getObject(result);
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -27,10 +28,10 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
                     name: ''       // initial filter
                 }
             }, {
-                total: $scope.specialities.length, // length of data
+                total: specialties.length, // length of data
                 getData: function($defer, params) {
 
-                    var orderedData = $filter('orderBy')(($filter('filter')($scope.specialities, params.filter())), params.orderBy());
+                    var orderedData = $filter('orderBy')(($filter('filter')(specialties, params.filter())), params.orderBy());
                     params.total(orderedData.length);
                     $scope.resultData = orderedData;
                     if(params.total() < (params.page() -1) * params.count()){
@@ -43,6 +44,7 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
             console.log(Error.getMessage(err));
         });
     }
+    refreshTable()
     function editSpecialty(specialty) {
         $modal.open({
             templateUrl: 'partials/admin/users/Specialty/editSpecialty.html',
@@ -102,5 +104,5 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
     $scope.renderHtml = function (htmlCode) {
         return $sce.trustAsHtml(htmlCode);
     };
-    refreshTable()
+
 }]);
