@@ -58,9 +58,15 @@
                     <div class="col-md-12 col-sm-12 noPadding">
                         <hr style="margin: 10px 0"/>
                         <div class="col-md-12 form-group-sm col-xs-12" ng-class="{'has-error': profileForm.address.$error.required}">
-                            <label>Adresa<sup>*</sup>:</label>
-                            <input type="text" class="form-control" name="address" ng-model="address" ng-required="true">
-                            <p ng-show="profileForm.address.$error.required">Adresa este obligatorie</p>
+                           <div>
+                               <label>Adresa<sup>*</sup>:</label>
+                               <input type="text" class="form-control" name="address" ng-model="address" ng-required="true">
+                               <p ng-show="profileForm.address.$error.required">Adresa este obligatorie</p>
+                           </div>
+                            <div>
+                                <label>Loc de munca</label>
+                                <input type="text" class="form-control" name="workplace" ng-model = "workplace">
+                            </div>
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group-sm">

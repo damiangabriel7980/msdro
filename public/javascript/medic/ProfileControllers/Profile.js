@@ -73,6 +73,7 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         $scope.imageUser = imagePre + userData.image_path;
         $scope.selectedAreas = userData['therapeutic-areasID'] || [];
         $scope.address = userData.address;
+        $scope.workplace = userData.workplace;
         $scope.selectedCounty = {
             name: userData.county_name,
             _id: userData.county_id
@@ -165,6 +166,7 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
             toSend['therapeutic-areasID'] = this.newAreas;
             toSend.citiesID = [this.selectedCity._id];
             toSend.address = this.address;
+            toSend.workplace = this.workplace;
             toSend.subscriptions = this.userData.subscriptions;
             toSend.practiceType = this.userData.practiceType;
             ProfileService.UserData.save({newData:toSend}).$promise.then(function (resp) {

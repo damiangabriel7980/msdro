@@ -4353,7 +4353,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             var ans = {};
 
             var newData = req.body.newData;
-            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address", "subscriptions", "practiceType"]);
+            UtilsModule.allowFields(newData, ["name", "title", "phone", "newsletter", "therapeutic-areasID", "citiesID", "address","workplace", "subscriptions", "practiceType"]);
 
             var namePatt = UtilsModule.regexes.name;
             var phonePatt = UtilsModule.regexes.phone;
