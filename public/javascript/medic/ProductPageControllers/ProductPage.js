@@ -1,4 +1,4 @@
-app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', 'Success', 'Error', '$location', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService,Success,Error, $location){
+app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService,Success,Error){
     $scope.oneAtATime = true; //open accordion groups one at a time
     $scope.isCollapsed = {
         isFirstOpen: false
