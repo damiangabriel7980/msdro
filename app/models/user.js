@@ -43,7 +43,7 @@ var userSchema = new Schema({
         newsletterStaywell: Boolean,
         infoMSD: Boolean
     },
-    division: {type:Schema.Types.ObjectId, ref: 'division', index: true},
+    division: {type:Schema.Types.ObjectId, ref: 'divisions', index: true},
     specialty: {type: Schema.Types.ObjectId, ref: 'specialty'},
     routing_role: {type: String, enum: ["admin", "manager", "reprezentant"], select: false},
     address: {type: String, select: false},

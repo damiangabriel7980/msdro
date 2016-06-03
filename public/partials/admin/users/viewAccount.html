@@ -28,6 +28,16 @@
                             ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
                 </div>
                 <div class="form-group col-md-12">
+                    <label for="division">Divizie:</label>
+                    <select ng-disabled="true" ng-model="selectedDivision" class="form-control" ng-disabled="saveSuccess"
+                            ng-options="division._id as division.name for division in divisions" id="division"></select>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="specialty">Specializare:</label>
+                    <select ng-model="selectedSpecialty" class="form-control" ng-disabled="saveSuccess"
+                            ng-options="specialty._id as specialty.name for specialty in specialities" id="specialty"></select>
+                </div>
+                <div class="form-group col-md-12">
                     <label>Grupuri:</label>
                     <my-multiple-select all-objects="groups" selected-objects="user.groupsID" track-by="_id" display-by="display_name"
                                         split-by="profession.display_name" output="selectedGroups"></my-multiple-select>
