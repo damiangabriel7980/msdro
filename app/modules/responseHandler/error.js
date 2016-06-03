@@ -53,7 +53,8 @@ var errorCodes = {
     48: "Un device cu acelasi nume sau email exista deja!",
     49: "Toate campurile sunt obligatorii!",
     50: "Eroare la trimiterea email-ului!",
-    52: "Numele si email-ul sunt obligatorii!"
+    52: "Numele si email-ul sunt obligatorii!",
+    53: "Selectati un loc de munca",
 };
 
 module.exports = function(logger){
