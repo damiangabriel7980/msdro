@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var SpecialtySchema = new Schema({
     name: {type: String},
-    enabled: {type: Boolean, default: true},
+    enabled: {type: Boolean, default: false},
     lastUpdated: {type: Date, default: Date.now}
 });
 
