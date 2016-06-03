@@ -1136,7 +1136,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res, err, 500)
                 }
                 else {
-                    handleSuccess(res, {saved: saved}, 2);
+                    handleSuccess(res, saved, 2);
                 }
             })
         })
@@ -3698,7 +3698,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if (err) {
                     handleError(res, err);
                 } else {
-                    handleSuccess(res, {}, 2);
+                    handleSuccess(res, saved, 2);
                 }
             })
         })

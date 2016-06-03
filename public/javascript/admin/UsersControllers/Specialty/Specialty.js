@@ -9,14 +9,14 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
 
     function addSpecialty(){
         ManageSpecialtyService.specialty.save().$promise.then(function(res){
+            var newSpecialty = Success.getObject(res);
+            $scope.tableParams.data.push(newSpecialty)
             refreshTable();
         }).catch(function(err){
             console.log(Error.getMessage(err))
         })
     }
     function refreshTable() {
-        ManageSpecialtyService.specialty.query().$promise.then(function(result){
-            $scope.specialities = Success.getObject(result);
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -27,21 +27,24 @@ controllers.controller('Specialty', ['$scope', '$state', '$sce', 'ngTableParams'
                     name: ''       // initial filter
                 }
             }, {
-                total: $scope.specialities.length, // length of data
+                total: 0, // length of data
                 getData: function($defer, params) {
+                    ManageSpecialtyService.specialty.query().$promise.then(function(result){
+                        var specialities = $scope.tableParams.data = Success.getObject(result);
+                        var orderedData = $filter('orderBy')(($filter('filter')(specialities, params.filter())), params.orderBy());
+                        params.total(orderedData.length);
+                        $scope.resultData = orderedData;
+                        if(params.total() < (params.page() -1) * params.count()){
+                            params.page(1);
+                        }
+                        $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                    }).catch(function(err){
+                        console.log(Error.getMessage(err))
+                    })
 
-                    var orderedData = $filter('orderBy')(($filter('filter')($scope.specialities, params.filter())), params.orderBy());
-                    params.total(orderedData.length);
-                    $scope.resultData = orderedData;
-                    if(params.total() < (params.page() -1) * params.count()){
-                        params.page(1);
-                    }
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
-        }).catch(function(err){
-            console.log(Error.getMessage(err));
-        });
+
     }
     function editSpecialty(specialty) {
         $modal.open({
