@@ -165,7 +165,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             var activation = req.body.activation || {};
 
             //make sure only the info provided in the form is updated
-            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','workplace']);
+            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','job']);
             var userData = req.body.user;
             userData.groupsID = userData.groupsID || [];
 
@@ -195,6 +195,8 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             handleError(res, null, 400, 37);
                         }else if(!userData.address){
                             handleError(res, null, 400, 28);
+                        }else if(!userData.job){
+                            handleError(res, null, 400, 52);
                         }else if(!userData.citiesID){
                             handleError(res, null, 400, 38);
                         }else if(userData.phone && !phonePatt.test(userData.phone)){
