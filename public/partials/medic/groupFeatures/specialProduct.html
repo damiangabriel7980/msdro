@@ -34,17 +34,17 @@
             </accordion-group>
         </accordion>
         <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
-            <accordion-group is-open="status.isFirstOpen" class="parent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id})">
+            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" ng-repeat="pathology in specialProductPage.pathologiesID" ng-if="pathology.description" class="parent" ui-sref="pathologies({pathology_id: pathology._id})">
+            <accordion-group is-open="status.isFirstOpen" ng-repeat="pathology in specialProductPage.pathologiesID" ng-if="pathology.description" class="parent oddParent" ui-sref="pathologies({pathology_id: pathology._id})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Inapoi la {{pathology.display_name}}</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" class="parent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
+            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Vezi toate produsele</div>
                 </accordion-heading>
