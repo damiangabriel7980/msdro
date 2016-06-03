@@ -9,7 +9,7 @@
     </div>
     <bulk-operations model="specialty" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
-        <tr ng-repeat="specialty in specialities">
+        <tr ng-repeat="specialty in $data">
             <td width="30">
                 <input type="checkbox" ng-click="addToSelectedItems(specialty._id)" ng-checked="checkValue(specialty._id)"/>
             </td>

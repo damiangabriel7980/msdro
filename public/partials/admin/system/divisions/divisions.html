@@ -11,7 +11,7 @@
     <bulk-operations model="divisions" delete-button items-set="selectedItems"
                      filtered-array="resultData"></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
-        <tr ng-repeat="div in divisions">
+        <tr ng-repeat="div in $data">
             <td width="30">
                 <input type="checkbox" ng-click="addToSelectedItems(div._id)" ng-checked="checkValue(div._id)"/>
             </td>
