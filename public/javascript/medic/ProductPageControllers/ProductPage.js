@@ -63,7 +63,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
                else
                 $scope.mobileMenuTitle = menu[0].title;
         }
-        $state.go('groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId});
+        $state.go('groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId}, {location: 'replace'});
     };
     $scope.status = {
         isFirstOpen: false
