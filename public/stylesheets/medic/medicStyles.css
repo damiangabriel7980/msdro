@@ -7738,7 +7738,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
   border-radius: 0px;
 }
 .specialProductMainWrapper #menuDiv .panel-heading {
-  background-color: #f0f0f0;
+  background-color: #fcfcfc;
   padding: 15px 15px;
 }
 .specialProductMainWrapper #menuDiv .panel {
@@ -7767,25 +7767,27 @@ fieldset[disabled] .navbarMedic .profile .btn {
   color: #696969;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent.active {
-  background-color: white;
-  color: #01877B;
+  background-color: #00a39e;
+  color: white;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading {
-  background-color: white;
-  color: #01877B !important;
+  background-color: #00a39e;
+  color: white !important;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading .MSDgreenDarker {
   color: #fff !important;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading .panel-title {
-  color: #01877B;
+  color: white;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading {
-  color: #006d69;
-  background-color: #01877B !important;
+  background-color: #01877B;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading .panel-title {
-  font-size: inherit;
+  color: white;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading.active {
+  background-color: #00a39e !important;
   color: white;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .child {

@@ -1362,7 +1362,7 @@ body {
       border-radius: 0px;
     }
     .panel-heading {
-      background-color: #f0f0f0;
+      background-color: #fcfcfc;
       padding: 15px 15px;
     }
     .panel{
@@ -1396,26 +1396,28 @@ body {
           }
         }
         &.active {
-          background-color: white;
-          color: @green;
+          background-color: #00a39e;
+          color: white;
           .panel-heading {
-            background-color: white;
-            color: @green !important;
+            background-color: #00a39e;
+            color: white !important;
             .MSDgreenDarker {
               color: @body-bg !important;
             }
             .panel-title {
-              color: @green;
+              color: white;
             }
           }
         }
       }
       .oddParent {
         .panel-heading {
-          .MSDgreenDarker;
-          background-color: @green !important;
+          background-color: @green;
           .panel-title {
-            font-size: inherit;
+            color: white;
+          }
+          &.active {
+            background-color: #00a39e !important;
             color: white;
           }
         }
