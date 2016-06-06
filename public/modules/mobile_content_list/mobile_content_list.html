@@ -19,7 +19,7 @@
         <div class="col-xs-8 description">
             <div class="col-xs-12 title" ng-click="navigate(content)" ng-bind-html="trustAsHtml(content[titleAttr])"></div>
             <div class="col-xs-12 type">{{boldTextFunction?boldTextFunction(content):''}}</div>
-            <div class="col-xs-12 content" ng-bind-html="trustAsHtml(htmlToPlainText(content[textAttr]?content[textAttr]:''))"></div>
+            <div class="col-xs-12 content" ng-bind-html="trustAsHtml(htmlToPlainText(textAttr ? (content[textAttr] ? content[textAttr]:'') : (textAttrAlt)))"></div>
         </div>
     </div>
 </div>

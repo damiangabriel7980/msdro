@@ -8,7 +8,7 @@
         </div>
         <div class="col-md-3 col-sm-6 product" ng-repeat="prod in pathology.associated_items | orderBy:'product_name' ">
             <vertical-content-list content="prod" image-path-attr="logo_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
-                                   title-attr="product_name" text-attr="general_description" navigate="goToSpecialProduct" with-background></vertical-content-list>
+                                   title-attr="product_name" text-attr-alt="prod.firstMenuItem['description']" navigate="goToSpecialProduct" with-background></vertical-content-list>
         </div>
     </div>
     <div class="col-xs-12" ng-if="isMobile(true)" ng-repeat="pathology in pathologiesAndProducts | orderBy:'display_name'">
@@ -18,6 +18,6 @@
             </h3>
         </div>
         <mobile-content-list content="pathology.associated_items" image-attr="logo_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultProductImage}}" title-attr="product_name"
-                              text-attr="general_description" navigate="navigateProductDetails" limit="lmt"></mobile-content-list>
+                              text-attr="firstMenuItem['description']" navigate="navigateProductDetails" limit="lmt"></mobile-content-list>
     </div>
 </div>

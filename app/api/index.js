@@ -108,6 +108,28 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
+var getSpecialProductMenu = function (productID, onlyFirstItem) {
+    var deferred = Q.defer();
+    specialProductMenu.distinct('children_ids', function (err,allChildren) {
+        if(err)
+        {
+            deferred.reject(err);
+        }
+        else {
+            specialProductMenu.find({product: productID,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
+                if(err) {
+                    deferred.reject(err);
+                }
+                else
+                {
+                    deferred.resolve(onlyFirstItem ? details[0] : details);
+                }
+            });
+        }
+    });
+    return deferred.promise;
+};
+
 var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQParams){
     var deferred = Q.defer();
     var pathologiesToSend = [];
@@ -133,9 +155,33 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 header_image: pathology.header_image,
                                 specialApps: pathology.specialApps
                             };
-                            objectToPush['associated_items'] = associated;
-                            pathologiesToSend.push(objectToPush);
-                            callback();
+                            var associatedItemsClean = [];
+                            async.each(associated, function(singleItem, callbackItem){
+                                getSpecialProductMenu(singleItem._id, true).then(
+                                    function (success) {
+                                        var itemToAdd = {
+                                            _id: singleItem._id,
+                                            general_description : singleItem.general_description,
+                                            logo_path: singleItem.logo_path,
+                                            product_name: singleItem.product_name,
+                                            firstMenuItem: success
+                                        };
+                                        associatedItemsClean.push(itemToAdd);
+                                        callbackItem();
+                                    },
+                                    function (err) {
+                                        callbackItem(err);
+                                    }
+                                )
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                } else {
+                                    objectToPush['associated_items'] = associatedItemsClean;
+                                    pathologiesToSend.push(objectToPush);
+                                    callback();
+                                }
+                            });
                         } else {
                             if(queryPathology._id)
                                 pathologiesToSend.push(pathology);
@@ -4223,24 +4269,14 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
     router.route('/specialProductMenu')
         .get(function(req, res) {
-            specialProductMenu.distinct('children_ids', function (err,allChildren) {
-                if(err)
-                {
+            getSpecialProductMenu(req.query.id).then(
+                function (success) {
+                    handleSuccess(res,success);
+                },
+                function (err) {
                     handleError(res,err,500);
                 }
-                else{
-                    specialProductMenu.find({product: req.query.id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
-                        if(err) {
-                            handleError(res,err,500);
-                        }
-                        else
-                        {
-                            handleSuccess(res,details);
-                        }
-                    });
-                }
-
-            });
+            )
         });
     router.route('/specialProductDescription')
         .get(function(req, res) {

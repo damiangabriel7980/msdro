@@ -16,6 +16,7 @@
                 titleAttr: '@',
                 boldTextFunction: '=',
                 textAttr: '@',
+                textAttrAlt: '=',
                 navigate: '=',
                 category: '@',
                 categoryFunc: '=',
