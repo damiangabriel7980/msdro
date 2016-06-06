@@ -54,7 +54,7 @@ var errorCodes = {
     49: "Toate campurile sunt obligatorii!",
     50: "Eroare la trimiterea email-ului!",
     52: "Numele si email-ul sunt obligatorii!",
-    53: "Selectati un loc de munca",
+    53: "Locul de munca este obligatoriu!"
 };
 
 module.exports = function(logger){
