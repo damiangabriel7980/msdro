@@ -116,6 +116,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             User.findOne({username: UtilsModule.regexes.emailQuery(email)}, function(err, user) {
                 //if there are any errors, return the error
                 if(err){
+                    console.log('error validating user!' + err);
                     handleError(res, err);
                 }else if(user) {
                     // check to see if there's already a user with that email
@@ -125,6 +126,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     //get default role
                     Roles.findOne({'authority': 'ROLE_FARMACIST'}, function (err, role) {
                         if(err || !role){
+                            console.log('error finding role pharma!' + err);
                             handleError(res, err);
                         }else{
                             newJob.save(function(err,savedJob) {
@@ -189,6 +191,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             }else{
                 UserGroup.find({profession: userData.profession, show_at_signup: true}, function(err, availableGroups){
                     if(err){
+                        console.log('error finding group: ' + err);
                         handleError(res, err);
                     }else{
                         if(!userData.groupsID[0] && availableGroups.length > 0){
@@ -205,6 +208,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             //establish default user group
                             UserGroup.findOne({profession: userData.profession, display_name: "Default"}, function (err, group) {
                                 if(err || !group){
+                                    console.log('error finding group default: ' + err);
                                     handleError(res, err);
                                 }else{
                                     //establish groups ids
@@ -251,6 +255,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                             req.staywellProof = activation.value;
                                             next();
                                         }else{
+                                            console.log('error activation: ' + activation);
                                             handleError(res, null, 500, 39);
                                         }
                                     }
@@ -284,12 +289,15 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         if(staywellUser.state === "ACCEPTED"){
             next();
         }else if(!staywellProof){
+            console.log('error finding user!!!: ' + staywellProof);
             handleError(res, null, 500, 39);
         }else if(!userEmail){
+            console.log('error finding user!!!: ' + userEmail);
             handleError(res, null, 500, 39);
         }else{
             User.findOne({username: UtilsModule.regexes.emailQuery(userEmail)}).exec(function (err, user) {
                 if(err || !user){
+                    console.log('error finding user for proof: ' + err);
                     handleError(res, err);
                 }else{
                     var key = "user/"+user._id+"/proof."+staywellProof.extension;
@@ -316,6 +324,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         var user = new User(req.staywellUser);
         user.save(function (err, saved) {
             if(err){
+                console.log('error finding user!!!: ' + err);
                 handleError(res, err);
             }else{
                 req.staywellUser._id = saved._id;
@@ -371,6 +380,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
 
             if(req.staywellUser.state === "ACCEPTED"){
                 generateToken(req.staywellUser.username, function (err, activationToken) {
+                    console.log(err);
                     var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
@@ -397,6 +407,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             //do nothing
                         },
                         function (err) {
+                            console.log(err);
                             logger.error(err);
                         }
                     );
