@@ -1136,7 +1136,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res, err, 500)
                 }
                 else {
-                    handleSuccess(res, {saved: saved}, 2);
+                    handleSuccess(res, saved, 2);
                 }
             })
         })
@@ -3462,7 +3462,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/admin/users/ManageAccounts/users')
         .get(function (req, res) {
             if(req.query.id){
-                User.findOne({_id: req.query.id}).select('+enabled +phone +routing_role').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
+                User.findOne({_id: req.query.id}).select('+enabled +phone +routing_role').populate('division specialty').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -3698,7 +3698,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if (err) {
                     handleError(res, err);
                 } else {
-                    handleSuccess(res, {}, 2);
+                    handleSuccess(res, saved, 2);
                 }
             })
         })

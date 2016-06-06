@@ -20,7 +20,6 @@
       link: function(scope, element, attrs) {
 
         var toSet = {};
-        var modifyMaxItems = true;
 
         scope.deleteButton = 'deleteButton' in attrs;
         scope.modifyButton = 'modifyButton' in attrs;
@@ -42,9 +41,8 @@
         };
 
         scope.$watch('filteredArray', function(newValue, oldValue){
-          if (modifyMaxItems && typeof  newValue != "undefined") {
+          if ( typeof  newValue != "undefined") {
             scope.maxItems = newValue.length;
-            modifyMaxItems = false;
 
           }
         });

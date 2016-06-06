@@ -7,6 +7,8 @@ controllers.controller('DivisionsController', ['$scope', '$rootScope', '$state',
     $scope.checkValue = checkValue;
     function addDivision() {
         DivisionsService.divisions.create({}).$promise.then(function (res) {
+            var newDivision = Success.getObject(res);
+            $scope.tableParams.data.push(newDivision);
             refreshTable();
         }).catch(function (err) {
             console.log(Error.getMessage(err))
@@ -28,8 +30,6 @@ controllers.controller('DivisionsController', ['$scope', '$rootScope', '$state',
         });
     };
     function refreshTable() {
-        DivisionsService.divisions.query().$promise.then(function (result) {
-            $scope.divisions = Success.getObject(result);
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -40,21 +40,23 @@ controllers.controller('DivisionsController', ['$scope', '$rootScope', '$state',
                     name: ''       // initial filter
                 }
             }, {
-                total: $scope.divisions.length, // length of data
+                total: 0, // length of data
                 getData: function ($defer, params) {
-
-                    var orderedData = $filter('orderBy')(($filter('filter')($scope.divisions, params.filter())), params.orderBy());
-                    params.total(orderedData.length);
-                    $scope.resultData = orderedData;
-                    if (params.total() < (params.page() - 1) * params.count()) {
-                        params.page(1);
-                    }
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                    DivisionsService.divisions.query().$promise.then(function (result) {
+                        var divisions = Success.getObject(result);
+                        var orderedData = $filter('orderBy')(($filter('filter')(divisions, params.filter())), params.orderBy());
+                        $scope.tableParams.data = divisions;
+                        params.total(orderedData.length);
+                        $scope.resultData = orderedData;
+                        if (params.total() < (params.page() - 1) * params.count()) {
+                            params.page(1);
+                        }
+                        $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                    }).catch(function(err){
+                        console.log(Error.getMessage(err))
+                    });
                 }
             });
-        }).catch(function (err) {
-            console.log(Error.getMessage(err));
-        });
     }
     function deleteDivision(division){
         ActionModal.show("Stergere divizie", "Sunteti sigur ca doriti sa stergeti acesta divizie?",function(){

@@ -5,7 +5,7 @@
                 ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
     </div>
     <div class="form-group-sm col-md-6">
-        <label>&nbsp;Cod de activare:</label>
+        <label>&nbsp;Cod de activare<sup>*</sup>:</label>
         <input id="code" type="text" ng-model="user.temp.activationCode" class="form-control">
     </div>
     <!--<div class="col-md-6 noPadding" ng-show="proofRequired">-->
@@ -41,7 +41,7 @@
         <select ng-model="user.practiceType" class="form-control" ng-options="practice.number as practice.name for practice in practices"></select>
     </div>
     <div class="form-group col-md-12">
-        <label>Loc de munca:</label>
+        <label>Loc de munca<sup>*</sup>:</label>
         <input type="text" class="form-control" ng-model="user.job"/>
     </div>
     <div class="form-group-sm col-md-12">
