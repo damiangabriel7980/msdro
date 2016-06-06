@@ -101,7 +101,7 @@ app.controllerProvider.register('EventModal', ['$scope', 'eventsService', '$stat
     };
 
     $scope.closeModal = function () {
-        $state.go('calendar.events.event', {idPathology: 0, id: null}, {}, {reload: true});
+        $state.go('calendar.events.event', {idArea: 0, id: null}, {}, {reload: true});
         $modalInstance.close();
         $stateParams.id = null;
     };

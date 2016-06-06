@@ -296,7 +296,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         }])
         .when(/calendar/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
-            $state.go('calendar.events.event', {idPathology: parsedURL[3]});
+            $state.go('calendar.events.event', {idArea: parsedURL[3]});
         }])
         .when(/conferinte/, ['$state','$match', function ($state, $match) {
             $state.go('conferinte');
@@ -419,7 +419,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
            }
         })
         .state('calendar.events.event',{
-            url: '/eveniment/:idPathology/:id',
+            url: '/eveniment/:idArea/:id',
             templateUrl: 'partials/medic/calendar.ejs',
             controller: 'Events',
             resolve: {

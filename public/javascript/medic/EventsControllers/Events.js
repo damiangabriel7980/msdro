@@ -8,7 +8,7 @@ app.controllerProvider.register('Events', ['$scope','eventsService','$stateParam
     $scope.eventSources = [];
 
     var getContent = function () {
-        eventsService.calendar.query({idPathology: $stateParams.idPathology}).$promise.then(function(result){
+        eventsService.calendar.query({idPathology: $stateParams.idArea}).$promise.then(function(result){
             var i;
             var events = Success.getObject(result);
             var eventsFiltered = [];

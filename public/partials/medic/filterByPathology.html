@@ -7,7 +7,7 @@
         <div class="col-xs-11 col-xs-offset-1 title">PATOLOGII</div>
 
         <ul class="col-xs-12 menu text-center">
-            <div class="col-xs-11 col-xs-offset-1 area text-left" ng-repeat="pathology in allPathologies" ng-class="{'active':pathology._id == selectedPathology}" ng-click="selectPathology(pathology._id)">
+            <div class="col-xs-11 col-xs-offset-1 area text-left" ng-repeat="pathology in allPathologies" ng-class="{'active':pathology._id == $state.params.idArea}" ng-click="selectPathology(pathology._id)">
                 <b convert-special conver="pathology.display_name" ng-bind-html="trustAsHtml(pathology.display_name)"></b>
             </div>
         </ul>
