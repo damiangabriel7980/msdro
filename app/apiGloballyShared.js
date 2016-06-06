@@ -196,7 +196,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                         }else if(!userData.address){
                             handleError(res, null, 400, 28);
                         }else if(!userData.job){
-                            handleError(res, null, 400, 52);
+                            handleError(res, null, 400, 53);
                         }else if(!userData.citiesID){
                             handleError(res, null, 400, 38);
                         }else if(userData.phone && !phonePatt.test(userData.phone)){
