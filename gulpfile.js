@@ -348,6 +348,44 @@ gulp.task("tpaCleanup", function () {
 
 });
 
+gulp.task('stageToProd', function () {
+    var mongoose = require('mongoose');
+    var async = require('async');
+    var Amazon = require('./config/amazon.js'),
+        amazon = new Amazon();
+
+    var databases = {
+        staging : 'mongodb://msdStaging:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/msdStaging',
+        production : 'mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@188.166.46.88:9050/MSDQualitance'
+    };
+    var dateLimit, i = process.argv.indexOf("--date");
+    if(i>-1) {
+        dateLimit = process.argv[i+1];
+    }
+
+    //declare items to clone
+    var Articles = require('./app/models/articles');
+    var Pathologies = require('../models/pathologies');
+    var brochureSection = require('../models/brochureSections');
+    var specialProduct = require('../models/specialProduct');
+    var specialProductMenu = require('../models/specialProduct_Menu');
+    var specialProductGlossary = require('../models/specialProduct_glossary');
+    var specialProductFiles = require('../models/specialProduct_files');
+    var specialApps = require('../models/userGroupApplications');
+    var UserGroup = require('../models/userGroup');
+
+
+    mongoose.connect(databases.staging);
+    articles.find({}).exec(function (err,resp) {
+        console.log('new' + resp[0]);
+        mongoose.disconnect();
+        mongoose.connect(databases.production);
+        articles.find({}).exec(function (err,resp) {
+            console.log(resp[0]);
+        })
+    })
+});
+
 gulp.task("farma", function () {
 
     var dbAddress = "mongodb://localhost:27017/msd";
