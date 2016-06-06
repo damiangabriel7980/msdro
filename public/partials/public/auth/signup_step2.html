@@ -5,7 +5,8 @@
                 ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
     </div>
     <div class="form-group-sm col-md-6">
-        <label>&nbsp;Cod de activare<sup>*</sup>:</label>
+        <label popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="bottom"
+               style="visibility: visible; display: inline-block"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;Cod de activare<sup>*</sup>:</label>
         <input id="code" type="text" ng-model="user.temp.activationCode" class="form-control">
     </div>
     <!--<div class="col-md-6 noPadding" ng-show="proofRequired">-->
@@ -26,11 +27,11 @@
             <!--</a>-->
         <!--</div>-->
     <!--</div>-->
-    <!--<div class="form-group-sm col-md-6" ng-if="groups.length > 0">-->
-        <!--<label for="group">Specialitate<sup>*</sup>:</label>-->
-        <!--<select ng-model="user.groupsID" class="form-control"-->
-                <!--ng-options="group._id as group.display_name for group in groups" id="group"></select>-->
-    <!--</div>-->
+    <div class="form-group-sm col-md-6" ng-if="groups.length > 0">
+        <label for="group">Specialitate<sup>*</sup>:</label>
+        <select ng-model="user.groupsID" class="form-control"
+                ng-options="group._id as group.display_name for group in groups" id="group"></select>
+    </div>
     <div class="form-group-sm col-md-6" ng-if="specialties.length > 0">
         <label for="specialty">Specializare<sup>*</sup>:</label>
         <select ng-model="user.specialty" class="form-control"
@@ -80,7 +81,7 @@
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="nonUser.termsMSD">
-        <span>Accept <a href="apiPublic/termsAndConditionsMSD" target="_blank">politica MSD privind datele profesionale</a>&nbsp;<sup>*</sup></span>
+        <span>Accept <a href="apiPublic/termsAndConditionsMSD" target="_blank">politica de confidentialitate a MSD privind datele cu caracter personal</a>&nbsp;<sup>*</sup></span>
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="user.subscriptions.newsletterStaywell">
