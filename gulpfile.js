@@ -350,7 +350,6 @@ gulp.task("tpaCleanup", function () {
 
 gulp.task('stageToProd', function () {
     var mongoose = require('mongoose');
-    var async = require('async');
     var Amazon = require('./config/amazon.js'),
         amazon = new Amazon();
 
@@ -358,31 +357,163 @@ gulp.task('stageToProd', function () {
         staging : 'mongodb://msdStaging:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/msdStaging',
         production : 'mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@188.166.46.88:9050/MSDQualitance'
     };
+
     var dateLimit, i = process.argv.indexOf("--date");
     if(i>-1) {
         dateLimit = process.argv[i+1];
+        if(!dateLimit){
+            return console.log('Please include a date in the command (like this) : 22/10/2012');
+        }
+    } else {
+        return console.log('Please include a date in the command (like this) : --date 22/10/2012');
     }
+
+    var objectWithStageItems = {
+        articles : [],
+        pathologies : [],
+        brochureSections : [],
+        specialProducts : [],
+        userGroups : [],
+        specialty : []
+    };
+
+    mongoose.connect(databases.staging);
+    console.log("Connected to staging environment");
 
     //declare items to clone
     var Articles = require('./app/models/articles');
-    var Pathologies = require('../models/pathologies');
-    var brochureSection = require('../models/brochureSections');
-    var specialProduct = require('../models/specialProduct');
-    var specialProductMenu = require('../models/specialProduct_Menu');
-    var specialProductGlossary = require('../models/specialProduct_glossary');
-    var specialProductFiles = require('../models/specialProduct_files');
-    var specialApps = require('../models/userGroupApplications');
-    var UserGroup = require('../models/userGroup');
+    var Pathologies = require('./app/models/pathologies');
+    var brochureSection = require('./app/models/brochureSections');
+    var specialProduct = require('./app/models/specialProduct');
+    var specialProductMenu = require('./app/models/specialProduct_Menu');
+    var specialProductGlossary = require('./app/models/specialProduct_glossary');
+    var specialProductFiles = require('./app/models/specialProduct_files');
+    var specialty = require('./app/models/specialty');
+    var UserGroup = require('./app/models/userGroup');
+    var userGroupApplications = require('./app/models/userGroupApplications');
 
-
-    mongoose.connect(databases.staging);
-    articles.find({}).exec(function (err,resp) {
-        console.log('new' + resp[0]);
-        mongoose.disconnect();
-        mongoose.connect(databases.production);
-        articles.find({}).exec(function (err,resp) {
-            console.log(resp[0]);
-        })
+    async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
+        switch (keyOfObj) {
+            case 'articles':
+                Articles.find({"last_updated": {$gte: new Date(dateLimit)}}).populate('groupsID pathologiesID').exec(function (err, response) {
+                    if(err){
+                        return console.log(err);
+                    } else {
+                        objectWithStageItems.articles = response;
+                        callback();
+                    }
+                });
+                break;
+            case 'pathologies':
+                Pathologies.find({"last_updated": {$gte: new Date(dateLimit)}}).populate('specialApps').exec(function (err, response) {
+                    if(err){
+                        return console.log(err);
+                    } else {
+                        objectWithStageItems.pathologies = response;
+                        callback();
+                    }
+                });
+                break;
+            case 'brochureSections':
+                brochureSection.find({"last_updated": {$gte: new Date(dateLimit)}}).exec(function (err, response) {
+                    if(err){
+                        return console.log(err);
+                    } else {
+                        objectWithStageItems.brochureSections = response;
+                        callback();
+                    }
+                });
+                break;
+            case 'specialProduct':
+                specialProduct.find({}).exec(function (err, response) {
+                    if(err){
+                        return console.log(err);
+                    } else {
+                        var foundProducts = response;
+                        var objectOfAssociatedItems = {
+                            'menuItems' : specialProductMenu,
+                            'glossary' : specialProductGlossary,
+                            'files' : specialProductFiles
+                        };
+                        var newArrayOfSpecProd = [];
+                        async.each(foundProducts, function (prod, callbackProd) {
+                            var objectWithSpecProd = {
+                                specialProduct : prod
+                            };
+                            async.each(Object.keys(objectOfAssociatedItems), function (item, callbackItem) {
+                                objectOfAssociatedItems[item].find({product : prod._id}).exec(function (err, itemsFound) {
+                                    objectWithSpecProd[item] = itemsFound;
+                                    callbackItem();
+                                })
+                            }, function (err) {
+                                if(err){
+                                    callbackProd(err);
+                                } else {
+                                    newArrayOfSpecProd.push(objectWithSpecProd);
+                                    callbackProd();
+                                }
+                            })
+                        }, function (err) {
+                            if(err){
+                                callback(err);
+                            } else {
+                                objectWithStageItems.specialProducts = newArrayOfSpecProd;
+                                callback();
+                            }
+                        })
+                    }
+                });
+                break;
+            case 'userGroups':
+                UserGroup.find({"last_updated": {$gte: new Date(dateLimit)}}).exec(function (err, response) {
+                    if(err){
+                        return console.log(err);
+                    } else {
+                        objectWithStageItems.userGroups = response;
+                        callback();
+                    }
+                });
+                break;
+            case 'specialty':
+                specialty.find({"last_updated": {$gte: new Date(dateLimit)}}).exec(function (err, response) {
+                    if(err){
+                        return console.log(err);
+                    } else {
+                        objectWithStageItems.specialty = response;
+                        callback();
+                    }
+                });
+                break;
+        }
+    }, function (err) {
+        if(err){
+            return console.log(err);
+        } else {
+            mongoose.disconnect();
+            mongoose.connect(databases.production);
+            console.log("Connected to production environment!");
+            console.log(objectWithStageItems.specialProducts[0]);
+            console.log(objectWithStageItems.pathologies.length);
+            console.log(objectWithStageItems.brochureSections.length);
+            // async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
+            //     switch (keyOfObj) {
+            //         case 'articles':
+            //             break;
+            //         case 'pathologies':
+            //             break;
+            //         case 'brochureSections':
+            //             break;
+            //         case 'specialProduct':
+            //             break;
+            //         case 'userGroups':
+            //             break;
+            //         case 'specialty':
+            //             break;
+            //     }
+            // }, function (err) {
+            //
+            // })
+        }
     })
 });
 
