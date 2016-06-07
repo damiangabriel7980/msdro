@@ -355,7 +355,9 @@ gulp.task('stageToProd', function () {
 
     var databases = {
         staging : 'mongodb://msdStaging:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/msdStaging',
-        production : 'mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@188.166.46.88:9050/MSDQualitance'
+        production : 'mongodb://msdprod:PWj4zOt_qX9oRRDH8cwiUqadb@188.166.46.88:9050/MSDQualitance',
+        local: 'mongodb://localhost:27017/msd',
+        devShared : 'mongodb://msddevshared:PWj4zOt_qX9oRRDH8cwiUqadb@10.200.0.213:27017/MSDdevshared'
     };
 
     var dateLimit, i = process.argv.indexOf("--date");
@@ -437,7 +439,7 @@ gulp.task('stageToProd', function () {
         return deferred.promise;
     }
 
-    mongoose.connect(databases.staging);
+    mongoose.connect(databases.local);
     console.log("Connected to staging environment");
 
     //declare items to clone
@@ -449,6 +451,7 @@ gulp.task('stageToProd', function () {
     var specialProductGlossary = require('./app/models/specialProduct_glossary');
     var specialProductFiles = require('./app/models/specialProduct_files');
     var specialty = require('./app/models/specialty');
+    var Speakers = require('./app/models/speakers');
     var UserGroup = require('./app/models/userGroup');
     var userGroupApplications = require('./app/models/userGroupApplications');
 
@@ -550,11 +553,83 @@ gulp.task('stageToProd', function () {
             return console.log(err);
         } else {
             mongoose.disconnect();
-            mongoose.connect(databases.production);
+            mongoose.connect(databases.devShared);
             console.log("Connected to production environment!");
             async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
                 switch (keyOfObj) {
                     case 'articles':
+                        async.each(objectWithStageItems[keyOfObj], function (entityToSave, callbackArticles) {
+                            async.parallel([
+                                    function(callback){
+                                        var objectToAdd = {
+                                            display_name : null,
+                                            description: null,
+                                            image_path: null,
+                                            default_group: null,
+                                            content_specific : null,
+                                            restrict_CRUD : null,
+                                            profession : null,
+                                            propertyToSearch: 'display_name'
+                                        };
+                                        if(!entityToSave.groupsID){
+                                            changeReferences(entityToSave.groupsID, UserGroup, objectToAdd).then(
+                                                function (success) {
+                                                    entityToSave.groupsID = success;
+                                                    callback(null)
+                                                },
+                                                function (err) {
+                                                    callback(err);
+                                                }
+                                            )
+                                        } else {
+                                            callback(null)
+                                        }
+                                    },
+                                    function (callback) {
+                                        var objectToAdd = {
+                                            display_name : null,
+                                            description: null,
+                                            header_image: null,
+                                            associated_multimedia: null,
+                                            last_updated : null,
+                                            enabled : null,
+                                            propertyToSearch: 'display_name'
+                                        };
+                                        if(!entityToSave.pathologiesID){
+                                            callback(null)
+                                        } else {
+                                            changeReferences(entityToSave.pathologiesID, Pathologies, objectToAdd).then(
+                                                function (success) {
+                                                    entityToSave.pathologiesID = success;
+                                                    callback(null)
+                                                },
+                                                function (err) {
+                                                    callback(err);
+                                                }
+                                            )
+                                        }
+                                    }
+                                ],
+                                function(err, results){
+                                    if(err){
+                                        callbackArticles(err);
+                                    } else {
+                                        entityToSave.save(function (err, saved) {
+                                            if(err){
+                                                callbackArticles(err);
+                                            } else {
+                                                callbackArticles();
+                                            }
+                                        })
+                                    }
+                                });
+                        }, function (err) {
+                            if(err){
+                                callback(err);
+                            } else {
+                                callback();
+                            }
+                        });
                         break;
                     case 'pathologies':
                         async.each(objectWithStageItems[keyOfObj], function (entityToSave, callbackPath) {
@@ -566,21 +641,26 @@ gulp.task('stageToProd', function () {
                                     code : null,
                                     propertyToSearch : 'name'
                                 };
-                                changeReferences(entityToSave.specialApps, userGroupApplications, objectToAdd).then(
-                                    function (success) {
-                                        entityToSave.specialApps = success;
-                                        entityToSave.save(function (err, saved) {
-                                            if(err){
-                                                callbackPath(err);
-                                            } else {
-                                                callbackPath();
-                                            }
-                                        });
-                                    },
-                                    function (err) {
-                                        callbackPath(err);
-                                    }
-                                )
+                                if(entityToSave.specialApps){
+                                    changeReferences(entityToSave.specialApps, userGroupApplications, objectToAdd).then(
+                                        function (success) {
+                                            entityToSave.specialApps = success;
+                                            entityToSave.save(function (err, saved) {
+                                                if(err){
+                                                    callbackPath(err);
+                                                } else {
+                                                    callbackPath();
+                                                }
+                                            });
+                                        },
+                                        function (err) {
+                                            callbackPath(err);
+                                        }
+                                    )
+                                } else {
+                                    callbackPath();
+                                }
+
                             } else {
                                 entityToSave.save(function (err, saved) {
                                     if(err){
@@ -609,17 +689,105 @@ gulp.task('stageToProd', function () {
                         );
                         break;
                     case 'specialProduct':
-                        async.each(objectWithStageItems[keyOfObj], function (prod, callbackProd) {
+                        async.each(objectWithStageItems[keyOfObj], function (prod, callbackProduct) {
                             async.each(Object.keys(prod), function (keyOfObj, callbackProd) {
                                 switch (keyOfObj) {
                                     case 'product':
-                                        prod[keyOfObj]
+                                        async.parallel([
+                                                function(callback){
+                                                    if(prod[keyOfObj].groups){
+                                                        var objectToAdd = {
+                                                            display_name : null,
+                                                            description: null,
+                                                            image_path: null,
+                                                            default_group: null,
+                                                            content_specific : null,
+                                                            restrict_CRUD : null,
+                                                            profession : null,
+                                                            propertyToSearch: 'display_name'
+                                                        };
+                                                        changeReferences(prod[keyOfObj].groups, UserGroup, objectToAdd).then(
+                                                            function (success) {
+                                                                prod[keyOfObj].groups = success;
+                                                                callback(null)
+                                                            },
+                                                            function (err) {
+                                                                callback(err);
+                                                            }
+                                                        )
+                                                    } else {
+                                                        callback(null)
+                                                    }
+                                                },
+                                                function (callback) {
+                                                    if(prod[keyOfObj].pathologiesID){
+                                                        var objectToAdd = {
+                                                            display_name : null,
+                                                            description: null,
+                                                            header_image: null,
+                                                            associated_multimedia: null,
+                                                            last_updated : null,
+                                                            enabled : null,
+                                                            propertyToSearch: 'display_name'
+                                                        };
+                                                        changeReferences(prod[keyOfObj].pathologiesID, Pathologies, objectToAdd).then(
+                                                            function (success) {
+                                                                prod[keyOfObj].pathologiesID = success;
+                                                                callback(null)
+                                                            },
+                                                            function (err) {
+                                                                callback(err);
+                                                            }
+                                                        )
+                                                    } else {
+                                                        callback(null)
+                                                    }
+                                                }
+                                            ],
+                                            function(err, results){
+                                                if(err){
+                                                    callbackProd(err);
+                                                } else {
+                                                    prod['speakers'] = null;
+                                                    prod.save(function (err, saved) {
+                                                        if(err){
+                                                            callbackProd(err);
+                                                        } else {
+                                                            callbackProd();
+                                                        }
+                                                    })
+                                                }
+                                            });
                                         break;
                                     case 'menuItems':
+                                        saveToDB(prod[keyOfObj]).then(
+                                            function (success) {
+                                                callbackProd();
+                                            },
+                                            function (err) {
+                                                callbackProd(err);
+                                            }
+                                        );
                                         break;
                                     case 'glossary':
+                                        saveToDB(prod[keyOfObj]).then(
+                                            function (success) {
+                                                callbackProd();
+                                            },
+                                            function (err) {
+                                                callbackProd(err);
+                                            }
+                                        );
                                         break;
                                     case 'files':
+                                        saveToDB(prod[keyOfObj]).then(
+                                            function (success) {
+                                                callbackProd();
+                                            },
+                                            function (err) {
+                                                callbackProd(err);
+                                            }
+                                        );
                                         break;
                                     default :
                                         callbackProd();
@@ -627,9 +795,9 @@ gulp.task('stageToProd', function () {
                                 }
                             }, function (err) {
                                 if(err){
-                                    callbackProd(err);
+                                    callbackProduct(err);
                                 } else {
-                                    callbackProd()
+                                    callbackProduct()
                                 }
                             });
                         }, function (err) {
