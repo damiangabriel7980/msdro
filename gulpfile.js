@@ -9,7 +9,7 @@ var gulp = require('gulp'),
     notify = require('gulp-notify'),
     AWS = require('aws-sdk'),
     webserver = require('gulp-webserver'),
-    MongoClient = require('mongodb').MongoClient,
+    _ = require('underscore'),
     ObjectID = require('mongodb').ObjectID,
     assert = require('assert'),
     mysql = require('mysql'),
@@ -377,6 +377,66 @@ gulp.task('stageToProd', function () {
         specialty : []
     };
 
+    function saveToDB(arrayOfEntitiesToSave) {
+        var deferred = Q.defer();
+        async.each(arrayOfEntitiesToSave, function (entityToSave, callback) {
+            entityToSave.save(function (err, saved) {
+                if(err){
+                    callback(err);
+                } else {
+                    callback();
+                }
+            });
+        }, function (err) {
+            if(err){
+                deferred.reject(err);
+            } else {
+                deferred.resolve()
+            }
+        });
+        return deferred.promise;
+    };
+
+    function changeReferences(arrayOfItems, correspEntity, objectToAdd) {
+        var deferred = Q.defer();
+        var arrayOfIds = [];
+        var objectForSearch = {};
+        objectForSearch[objectToAdd.propertyForSearch] = objectToAdd.propertyForSearch;
+        delete objectToAdd.propertyForSearch;
+        async.each(arrayOfItems, function (item, callbackApp) {
+            correspEntity.findOne(objectForSearch).exec(function (err,resp) {
+                if(err){
+                    callbackApp(err);
+                } else {
+                    if(!resp){
+                        var entity = new correspEntity();
+                        _.each(objectToAdd, function (value, key) {
+                            entity[key] = resp[key];
+                        });
+                        entity.save(function (err, saved) {
+                            if(err){
+                                callbackApp(err);
+                            } else {
+                                arrayOfIds.push(saved._id);
+                                callbackApp();
+                            }
+                        })
+                    } else {
+                        arrayOfIds.push(resp._id);
+                        callbackApp();
+                    }
+                }
+            })
+        }, function (err) {
+            if(err){
+                deferred.reject(err);
+            } else {
+                deferred.resolve(arrayOfIds);
+            }
+        });
+        return deferred.promise;
+    }
+
     mongoose.connect(databases.staging);
     console.log("Connected to staging environment");
 
@@ -425,7 +485,7 @@ gulp.task('stageToProd', function () {
                 });
                 break;
             case 'specialProducts':
-                specialProduct.find({}).exec(function (err, response) {
+                specialProduct.find({}).populate('groups speakers pathologiesID').exec(function (err, response) {
                     if(err){
                         return console.log(err);
                     } else {
@@ -438,7 +498,7 @@ gulp.task('stageToProd', function () {
                         var newArrayOfSpecProd = [];
                         async.each(foundProducts, function (prod, callbackProd) {
                             var objectWithSpecProd = {
-                                specialProduct : prod
+                                product : prod
                             };
                             async.each(Object.keys(objectOfAssociatedItems), function (item, callbackItem) {
                                 objectOfAssociatedItems[item].find({product : prod._id}).exec(function (err, itemsFound) {
@@ -492,24 +552,125 @@ gulp.task('stageToProd', function () {
             mongoose.disconnect();
             mongoose.connect(databases.production);
             console.log("Connected to production environment!");
-            // async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
-            //     switch (keyOfObj) {
-            //         case 'articles':
-            //             break;
-            //         case 'pathologies':
-            //             break;
-            //         case 'brochureSections':
-            //             break;
-            //         case 'specialProduct':
-            //             break;
-            //         case 'userGroups':
-            //             break;
-            //         case 'specialty':
-            //             break;
-            //     }
-            // }, function (err) {
-            //
-            // })
+            async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
+                switch (keyOfObj) {
+                    case 'articles':
+                        break;
+                    case 'pathologies':
+                        async.each(objectWithStageItems[keyOfObj], function (entityToSave, callbackPath) {
+                            if(entityToSave.specialApps){
+                                var objectToAdd = {
+                                    name : null,
+                                    url: null,
+                                    isEnabled : null,
+                                    code : null,
+                                    propertyToSearch : 'name'
+                                };
+                                changeReferences(entityToSave.specialApps, userGroupApplications, objectToAdd).then(
+                                    function (success) {
+                                        entityToSave.specialApps = success;
+                                        entityToSave.save(function (err, saved) {
+                                            if(err){
+                                                callbackPath(err);
+                                            } else {
+                                                callbackPath();
+                                            }
+                                        });
+                                    },
+                                    function (err) {
+                                        callbackPath(err);
+                                    }
+                                )
+                            } else {
+                                entityToSave.save(function (err, saved) {
+                                    if(err){
+                                        callbackPath(err);
+                                    } else {
+                                        callbackPath();
+                                    }
+                                });
+                            }
+                        }, function (err) {
+                            if(err){
+                                callback(err);
+                            } else {
+                                callback()
+                            }
+                        });
+                        break;
+                    case 'brochureSections':
+                        saveToDB(objectWithStageItems[keyOfObj]).then(
+                            function (success) {
+                                callback();
+                            },
+                            function (err) {
+                                callback(err);
+                            }
+                        );
+                        break;
+                    case 'specialProduct':
+                        async.each(objectWithStageItems[keyOfObj], function (prod, callbackProd) {
+                            async.each(Object.keys(prod), function (keyOfObj, callbackProd) {
+                                switch (keyOfObj) {
+                                    case 'product':
+                                        prod[keyOfObj]
+                                        break;
+                                    case 'menuItems':
+                                        break;
+                                    case 'glossary':
+                                        break;
+                                    case 'files':
+                                        break;
+                                    default :
+                                        callbackProd();
+                                        break;
+                                }
+                            }, function (err) {
+                                if(err){
+                                    callbackProd(err);
+                                } else {
+                                    callbackProd()
+                                }
+                            });
+                        }, function (err) {
+                            if(err){
+                                callback(err);
+                            } else {
+                                callback()
+                            }
+                        });
+                        break;
+                    case 'userGroups':
+                        saveToDB(objectWithStageItems[keyOfObj]).then(
+                            function (success) {
+                                callback();
+                            },
+                            function (err) {
+                                callback(err);
+                            }
+                        );
+                        break;
+                    case 'specialty':
+                        saveToDB(objectWithStageItems[keyOfObj]).then(
+                            function (success) {
+                                callback();
+                            },
+                            function (err) {
+                                callback(err);
+                            }
+                        );
+                        break;
+                    default :
+                        callback();
+                        break;
+                }
+            }, function (err) {
+                if(err){
+                    return console.log(err);
+                } else {
+                    return console.log('Migration finished!')
+                }
+            })
         }
     })
 });
