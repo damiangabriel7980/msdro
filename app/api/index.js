@@ -91,7 +91,7 @@ var getNonSpecificUserGroupsIds = function(user){
 var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     var deferred = Q.defer();
     //first get non specific content groups only
-    var myCursor = Content.find({enable: {$ne: false}, type: content_type});
+    var myCursor = Content.find({enable: {$exists:true, $ne: false}, type: content_type});
     if(sortDescendingByAttribute){
         var attr = {};
         attr[sortDescendingByAttribute] = -1;
