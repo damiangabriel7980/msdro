@@ -379,10 +379,11 @@ gulp.task('stageToProd', function () {
         specialty : []
     };
 
-    function saveToDB(arrayOfEntitiesToSave) {
+    function saveToDB(arrayOfEntitiesToSave, entitySchema) {
         var deferred = Q.defer();
         async.each(arrayOfEntitiesToSave, function (entityToSave, callback) {
-            entityToSave.save(function (err, saved) {
+            var toSave = new entitySchema(entityToSave);
+            toSave.save(function (err, saved) {
                 if(err){
                     callback(err);
                 } else {
@@ -403,17 +404,20 @@ gulp.task('stageToProd', function () {
         var deferred = Q.defer();
         var arrayOfIds = [];
         var objectForSearch = {};
-        objectForSearch[objectToAdd.propertyForSearch] = objectToAdd.propertyForSearch;
-        delete objectToAdd.propertyForSearch;
+        var propertyForSearch = objectToAdd.propertyToSearch;
+        objectForSearch[propertyForSearch] = null;
+        delete objectToAdd.propertyToSearch;
         async.each(arrayOfItems, function (item, callbackApp) {
+            objectForSearch[propertyForSearch] = item[propertyForSearch];
             correspEntity.findOne(objectForSearch).exec(function (err,resp) {
                 if(err){
                     callbackApp(err);
                 } else {
+                    console.log(resp);
                     if(!resp){
                         var entity = new correspEntity();
                         _.each(objectToAdd, function (value, key) {
-                            entity[key] = resp[key];
+                            entity[key] = item[key];
                         });
                         entity.save(function (err, saved) {
                             if(err){
@@ -554,6 +558,15 @@ gulp.task('stageToProd', function () {
         } else {
             mongoose.disconnect();
             mongoose.connect(databases.devShared);
+            console.log(objectWithStageItems.articles.length);
+            console.log(objectWithStageItems.pathologies.length);
+            console.log(objectWithStageItems.brochureSections.length);
+            objectWithStageItems.specialProducts = _.filter(objectWithStageItems.specialProducts, function (prod) {
+                return prod.product.product_name == 'Adempas';
+            });
+            console.log(objectWithStageItems.specialProducts.length);
+            console.log(objectWithStageItems.userGroups.length);
+            console.log(objectWithStageItems.specialty.length);
             console.log("Connected to production environment!");
             async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
                 switch (keyOfObj) {
@@ -571,7 +584,7 @@ gulp.task('stageToProd', function () {
                                             profession : null,
                                             propertyToSearch: 'display_name'
                                         };
-                                        if(!entityToSave.groupsID){
+                                        if(entityToSave.groupsID){
                                             changeReferences(entityToSave.groupsID, UserGroup, objectToAdd).then(
                                                 function (success) {
                                                     entityToSave.groupsID = success;
@@ -595,9 +608,7 @@ gulp.task('stageToProd', function () {
                                             enabled : null,
                                             propertyToSearch: 'display_name'
                                         };
-                                        if(!entityToSave.pathologiesID){
-                                            callback(null)
-                                        } else {
+                                        if(entityToSave.pathologiesID){
                                             changeReferences(entityToSave.pathologiesID, Pathologies, objectToAdd).then(
                                                 function (success) {
                                                     entityToSave.pathologiesID = success;
@@ -606,7 +617,9 @@ gulp.task('stageToProd', function () {
                                                 function (err) {
                                                     callback(err);
                                                 }
-                                            )
+                                            );
+                                        } else {
+                                            callback(null)
                                         }
                                     }
                                 ],
@@ -614,7 +627,8 @@ gulp.task('stageToProd', function () {
                                     if(err){
                                         callbackArticles(err);
                                     } else {
-                                        entityToSave.save(function (err, saved) {
+                                        var toSave = new Articles(entityToSave);
+                                        toSave.save(function (err, saved) {
                                             if(err){
                                                 callbackArticles(err);
                                             } else {
@@ -645,7 +659,8 @@ gulp.task('stageToProd', function () {
                                     changeReferences(entityToSave.specialApps, userGroupApplications, objectToAdd).then(
                                         function (success) {
                                             entityToSave.specialApps = success;
-                                            entityToSave.save(function (err, saved) {
+                                            var toSave = new Pathologies(entityToSave);
+                                            toSave.save(function (err, saved) {
                                                 if(err){
                                                     callbackPath(err);
                                                 } else {
@@ -662,7 +677,8 @@ gulp.task('stageToProd', function () {
                                 }
 
                             } else {
-                                entityToSave.save(function (err, saved) {
+                                var toSave = new Pathologies(entityToSave);
+                                toSave.save(function (err, saved) {
                                     if(err){
                                         callbackPath(err);
                                     } else {
@@ -679,7 +695,7 @@ gulp.task('stageToProd', function () {
                         });
                         break;
                     case 'brochureSections':
-                        saveToDB(objectWithStageItems[keyOfObj]).then(
+                        saveToDB(objectWithStageItems[keyOfObj], brochureSection).then(
                             function (success) {
                                 callback();
                             },
@@ -688,7 +704,7 @@ gulp.task('stageToProd', function () {
                             }
                         );
                         break;
-                    case 'specialProduct':
+                    case 'specialProducts':
                         async.each(objectWithStageItems[keyOfObj], function (prod, callbackProduct) {
                             async.each(Object.keys(prod), function (keyOfObj, callbackProd) {
                                 switch (keyOfObj) {
@@ -748,8 +764,10 @@ gulp.task('stageToProd', function () {
                                                 if(err){
                                                     callbackProd(err);
                                                 } else {
-                                                    prod['speakers'] = null;
-                                                    prod.save(function (err, saved) {
+                                                    prod[keyOfObj].speakers = null;
+                                                    var toSave = new specialProduct(prod[keyOfObj]);
+                                                    console.log(toSave);
+                                                    toSave.save(function (err, saved) {
                                                         if(err){
                                                             callbackProd(err);
                                                         } else {
@@ -760,7 +778,7 @@ gulp.task('stageToProd', function () {
                                             });
                                         break;
                                     case 'menuItems':
-                                        saveToDB(prod[keyOfObj]).then(
+                                        saveToDB(prod[keyOfObj], specialProductMenu).then(
                                             function (success) {
                                                 callbackProd();
                                             },
@@ -770,7 +788,7 @@ gulp.task('stageToProd', function () {
                                         );
                                         break;
                                     case 'glossary':
-                                        saveToDB(prod[keyOfObj]).then(
+                                        saveToDB(prod[keyOfObj], specialProductGlossary).then(
                                             function (success) {
                                                 callbackProd();
                                             },
@@ -780,7 +798,7 @@ gulp.task('stageToProd', function () {
                                         );
                                         break;
                                     case 'files':
-                                        saveToDB(prod[keyOfObj]).then(
+                                        saveToDB(prod[keyOfObj], specialProductFiles).then(
                                             function (success) {
                                                 callbackProd();
                                             },
@@ -809,7 +827,7 @@ gulp.task('stageToProd', function () {
                         });
                         break;
                     case 'userGroups':
-                        saveToDB(objectWithStageItems[keyOfObj]).then(
+                        saveToDB(objectWithStageItems[keyOfObj], UserGroup).then(
                             function (success) {
                                 callback();
                             },
@@ -819,7 +837,7 @@ gulp.task('stageToProd', function () {
                         );
                         break;
                     case 'specialty':
-                        saveToDB(objectWithStageItems[keyOfObj]).then(
+                        saveToDB(objectWithStageItems[keyOfObj], specialty).then(
                             function (success) {
                                 callback();
                             },
@@ -836,6 +854,7 @@ gulp.task('stageToProd', function () {
                 if(err){
                     return console.log(err);
                 } else {
+                    mongoose.disconnect();
                     return console.log('Migration finished!')
                 }
             })
