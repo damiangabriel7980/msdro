@@ -360,10 +360,10 @@ gulp.task('stageToProd', function () {
 
     var dateLimit, i = process.argv.indexOf("--date");
     if(i>-1) {
-        dateLimit = process.argv[i+1];
-        if(!dateLimit){
+        if(!process.argv[i+1]){
             return console.log('Please include a date in the command (like this) : 22/10/2012');
         }
+        dateLimit = new Date(process.argv[i+1].replace( /(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3") );
     } else {
         return console.log('Please include a date in the command (like this) : --date 22/10/2012');
     }
@@ -395,7 +395,7 @@ gulp.task('stageToProd', function () {
     async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
         switch (keyOfObj) {
             case 'articles':
-                Articles.find({"last_updated": {$gte: new Date(dateLimit)}}).populate('groupsID pathologiesID').exec(function (err, response) {
+                Articles.find({"last_updated": {$gte: dateLimit}}).populate('groupsID pathologiesID').exec(function (err, response) {
                     if(err){
                         return console.log(err);
                     } else {
@@ -405,7 +405,7 @@ gulp.task('stageToProd', function () {
                 });
                 break;
             case 'pathologies':
-                Pathologies.find({"last_updated": {$gte: new Date(dateLimit)}}).populate('specialApps').exec(function (err, response) {
+                Pathologies.find({"last_updated": {$gte: dateLimit}}).populate('specialApps').exec(function (err, response) {
                     if(err){
                         return console.log(err);
                     } else {
@@ -415,7 +415,7 @@ gulp.task('stageToProd', function () {
                 });
                 break;
             case 'brochureSections':
-                brochureSection.find({"last_updated": {$gte: new Date(dateLimit)}}).exec(function (err, response) {
+                brochureSection.find({"last_updated": {$gte: dateLimit}}).exec(function (err, response) {
                     if(err){
                         return console.log(err);
                     } else {
@@ -424,7 +424,7 @@ gulp.task('stageToProd', function () {
                     }
                 });
                 break;
-            case 'specialProduct':
+            case 'specialProducts':
                 specialProduct.find({}).exec(function (err, response) {
                     if(err){
                         return console.log(err);
@@ -465,7 +465,7 @@ gulp.task('stageToProd', function () {
                 });
                 break;
             case 'userGroups':
-                UserGroup.find({"last_updated": {$gte: new Date(dateLimit)}}).exec(function (err, response) {
+                UserGroup.find({"last_updated": {$gte: dateLimit}}).exec(function (err, response) {
                     if(err){
                         return console.log(err);
                     } else {
@@ -475,7 +475,7 @@ gulp.task('stageToProd', function () {
                 });
                 break;
             case 'specialty':
-                specialty.find({"last_updated": {$gte: new Date(dateLimit)}}).exec(function (err, response) {
+                specialty.find({"last_updated": {$gte: dateLimit}}).exec(function (err, response) {
                     if(err){
                         return console.log(err);
                     } else {
@@ -492,9 +492,6 @@ gulp.task('stageToProd', function () {
             mongoose.disconnect();
             mongoose.connect(databases.production);
             console.log("Connected to production environment!");
-            console.log(objectWithStageItems.specialProducts[0]);
-            console.log(objectWithStageItems.pathologies.length);
-            console.log(objectWithStageItems.brochureSections.length);
             // async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
             //     switch (keyOfObj) {
             //         case 'articles':
