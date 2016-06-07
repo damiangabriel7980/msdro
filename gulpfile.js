@@ -379,15 +379,28 @@ gulp.task('stageToProd', function () {
         specialty : []
     };
 
-    function saveToDB(arrayOfEntitiesToSave, entitySchema) {
+    function saveToDB(arrayOfEntitiesToSave, entitySchema, propertyForSearch) {
         var deferred = Q.defer();
+        var objectForSearch = {};
+        objectForSearch[propertyForSearch] = null;
         async.each(arrayOfEntitiesToSave, function (entityToSave, callback) {
-            var toSave = new entitySchema(entityToSave);
-            toSave.save(function (err, saved) {
+            objectForSearch[propertyForSearch] = entity[propertyForSearch];
+            entitySchema.findOne(objectForSearch).exec(function (err, resp) {
                 if(err){
-                    callback(err);
+                    deferred.reject(err);
                 } else {
-                    callback();
+                    if(resp){
+                        callback();
+                    } else {
+                        var toSave = new entitySchema(entityToSave);
+                        toSave.save(function (err, saved) {
+                            if(err){
+                                callback(err);
+                            } else {
+                                callback();
+                            }
+                        });
+                    }
                 }
             });
         }, function (err) {
@@ -695,7 +708,7 @@ gulp.task('stageToProd', function () {
                         });
                         break;
                     case 'brochureSections':
-                        saveToDB(objectWithStageItems[keyOfObj], brochureSection).then(
+                        saveToDB(objectWithStageItems[keyOfObj], brochureSection, 'title').then(
                             function (success) {
                                 callback();
                             },
@@ -778,7 +791,7 @@ gulp.task('stageToProd', function () {
                                             });
                                         break;
                                     case 'menuItems':
-                                        saveToDB(prod[keyOfObj], specialProductMenu).then(
+                                        saveToDB(prod[keyOfObj], specialProductMenu, 'title').then(
                                             function (success) {
                                                 callbackProd();
                                             },
@@ -788,7 +801,7 @@ gulp.task('stageToProd', function () {
                                         );
                                         break;
                                     case 'glossary':
-                                        saveToDB(prod[keyOfObj], specialProductGlossary).then(
+                                        saveToDB(prod[keyOfObj], specialProductGlossary, 'keyword').then(
                                             function (success) {
                                                 callbackProd();
                                             },
@@ -798,7 +811,7 @@ gulp.task('stageToProd', function () {
                                         );
                                         break;
                                     case 'files':
-                                        saveToDB(prod[keyOfObj], specialProductFiles).then(
+                                        saveToDB(prod[keyOfObj], specialProductFiles, 'filename').then(
                                             function (success) {
                                                 callbackProd();
                                             },
@@ -827,7 +840,7 @@ gulp.task('stageToProd', function () {
                         });
                         break;
                     case 'userGroups':
-                        saveToDB(objectWithStageItems[keyOfObj], UserGroup).then(
+                        saveToDB(objectWithStageItems[keyOfObj], UserGroup, 'display_name').then(
                             function (success) {
                                 callback();
                             },
@@ -837,7 +850,7 @@ gulp.task('stageToProd', function () {
                         );
                         break;
                     case 'specialty':
-                        saveToDB(objectWithStageItems[keyOfObj], specialty).then(
+                        saveToDB(objectWithStageItems[keyOfObj], specialty, 'name').then(
                             function (success) {
                                 callback();
                             },
