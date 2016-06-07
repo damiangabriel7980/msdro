@@ -384,7 +384,7 @@ gulp.task('stageToProd', function () {
         var objectForSearch = {};
         objectForSearch[propertyForSearch] = null;
         async.each(arrayOfEntitiesToSave, function (entityToSave, callback) {
-            objectForSearch[propertyForSearch] = entity[propertyForSearch];
+            objectForSearch[propertyForSearch] = entityToSave[propertyForSearch];
             entitySchema.findOne(objectForSearch).exec(function (err, resp) {
                 if(err){
                     deferred.reject(err);
