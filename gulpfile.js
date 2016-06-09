@@ -379,6 +379,24 @@ gulp.task('stageToProd', function () {
         specialty : []
     };
 
+    function checkIfExists(entitySchema, objectToCheck, propertyForSearch){
+        var deferred = Q.defer();
+        var objectForSearch = {};
+        objectForSearch[propertyForSearch] = objectToCheck[propertyForSearch];
+        entitySchema.findOne(objectForSearch).exec(function (err, resp) {
+            if(err){
+                deferred.reject(err);
+            } else {
+                if(resp){
+                    deferred.resolve({exists: true});
+                } else {
+                    deferred.resolve({exists: false});
+                }
+            }
+        });
+        return deferred.promise;
+    }
+
     function saveToDB(arrayOfEntitiesToSave, entitySchema, propertyForSearch) {
         var deferred = Q.defer();
         var objectForSearch = {};
@@ -426,7 +444,6 @@ gulp.task('stageToProd', function () {
                 if(err){
                     callbackApp(err);
                 } else {
-                    console.log(resp);
                     if(!resp){
                         var entity = new correspEntity();
                         _.each(objectToAdd, function (value, key) {
@@ -456,7 +473,7 @@ gulp.task('stageToProd', function () {
         return deferred.promise;
     }
 
-    mongoose.connect(databases.local);
+    mongoose.connect(databases.staging);
     console.log("Connected to staging environment");
 
     //declare items to clone
@@ -571,85 +588,97 @@ gulp.task('stageToProd', function () {
         } else {
             mongoose.disconnect();
             mongoose.connect(databases.devShared);
-            console.log(objectWithStageItems.articles.length);
-            console.log(objectWithStageItems.pathologies.length);
-            console.log(objectWithStageItems.brochureSections.length);
+            console.log('Found ' + objectWithStageItems.articles.length + ' articles!');
+            console.log('Found ' + objectWithStageItems.pathologies.length + ' pathologies!');
+            console.log('Found ' + objectWithStageItems.brochureSections.length + ' brochure sections!');
             objectWithStageItems.specialProducts = _.filter(objectWithStageItems.specialProducts, function (prod) {
-                return prod.product.product_name == 'Adempas';
+                return prod.product.product_name == 'Arcoxia';
             });
-            console.log(objectWithStageItems.specialProducts.length);
-            console.log(objectWithStageItems.userGroups.length);
-            console.log(objectWithStageItems.specialty.length);
+            console.log('Found ' + objectWithStageItems.specialProducts.length + ' special products!');
+            console.log('Found ' + objectWithStageItems.userGroups.length + ' groups!');
+            console.log('Found ' + objectWithStageItems.specialty.length + ' specialties!');
             console.log("Connected to production environment!");
             async.each(Object.keys(objectWithStageItems), function(keyOfObj, callback){
                 switch (keyOfObj) {
                     case 'articles':
                         async.each(objectWithStageItems[keyOfObj], function (entityToSave, callbackArticles) {
-                            async.parallel([
-                                    function(callback){
-                                        var objectToAdd = {
-                                            display_name : null,
-                                            description: null,
-                                            image_path: null,
-                                            default_group: null,
-                                            content_specific : null,
-                                            restrict_CRUD : null,
-                                            profession : null,
-                                            propertyToSearch: 'display_name'
-                                        };
-                                        if(entityToSave.groupsID){
-                                            changeReferences(entityToSave.groupsID, UserGroup, objectToAdd).then(
-                                                function (success) {
-                                                    entityToSave.groupsID = success;
-                                                    callback(null)
-                                                },
-                                                function (err) {
-                                                    callback(err);
-                                                }
-                                            )
-                                        } else {
-                                            callback(null)
-                                        }
-                                    },
-                                    function (callback) {
-                                        var objectToAdd = {
-                                            display_name : null,
-                                            description: null,
-                                            header_image: null,
-                                            associated_multimedia: null,
-                                            last_updated : null,
-                                            enabled : null,
-                                            propertyToSearch: 'display_name'
-                                        };
-                                        if(entityToSave.pathologiesID){
-                                            changeReferences(entityToSave.pathologiesID, Pathologies, objectToAdd).then(
-                                                function (success) {
-                                                    entityToSave.pathologiesID = success;
-                                                    callback(null)
-                                                },
-                                                function (err) {
-                                                    callback(err);
-                                                }
-                                            );
-                                        } else {
-                                            callback(null)
-                                        }
-                                    }
-                                ],
-                                function(err, results){
-                                    if(err){
-                                        callbackArticles(err);
+                            checkIfExists(Articles, entityToSave, 'title').then(
+                                function (success) {
+                                    if(success.exists){
+                                        callbackArticles();
                                     } else {
-                                        var toSave = new Articles(entityToSave);
-                                        toSave.save(function (err, saved) {
-                                            if(err){
-                                                callbackArticles(err);
-                                            } else {
-                                                callbackArticles();
-                                            }
-                                        })
+                                        async.parallel([
+                                                function(callback){
+                                                    var objectToAdd = {
+                                                        display_name : null,
+                                                        description: null,
+                                                        image_path: null,
+                                                        default_group: null,
+                                                        content_specific : null,
+                                                        restrict_CRUD : null,
+                                                        profession : null,
+                                                        propertyToSearch: 'display_name'
+                                                    };
+                                                    if(entityToSave.groupsID){
+                                                        changeReferences(entityToSave.groupsID, UserGroup, objectToAdd).then(
+                                                            function (success) {
+                                                                entityToSave.groupsID = success;
+                                                                callback(null)
+                                                            },
+                                                            function (err) {
+                                                                callback(err);
+                                                            }
+                                                        )
+                                                    } else {
+                                                        callback(null)
+                                                    }
+                                                },
+                                                function (callback) {
+                                                    var objectToAdd = {
+                                                        display_name : null,
+                                                        description: null,
+                                                        header_image: null,
+                                                        associated_multimedia: null,
+                                                        last_updated : null,
+                                                        enabled : null,
+                                                        propertyToSearch: 'display_name'
+                                                    };
+                                                    if(entityToSave.pathologiesID){
+                                                        changeReferences(entityToSave.pathologiesID, Pathologies, objectToAdd).then(
+                                                            function (success) {
+                                                                entityToSave.pathologiesID = success;
+                                                                callback(null)
+                                                            },
+                                                            function (err) {
+                                                                callback(err);
+                                                            }
+                                                        );
+                                                    } else {
+                                                        callback(null)
+                                                    }
+                                                }
+                                            ],
+                                            function(err, results){
+                                                if(err){
+                                                    callbackArticles(err);
+                                                } else {
+                                                    var toSave = new Articles(entityToSave);
+                                                    toSave.save(function (err, saved) {
+                                                        if(err){
+                                                            callbackArticles(err);
+                                                        } else {
+                                                            callbackArticles();
+                                                        }
+                                                    })
+                                                }
+                                            });
                                     }
-                                });
+                                },
+                                function (err) {
+                                    callbackArticles(err);
+                                }
+                            );
+
                         }, function (err) {
                             if(err){
                                 callback(err);
@@ -660,18 +689,41 @@ gulp.task('stageToProd', function () {
                         break;
                     case 'pathologies':
                         async.each(objectWithStageItems[keyOfObj], function (entityToSave, callbackPath) {
-                            if(entityToSave.specialApps){
-                                var objectToAdd = {
-                                    name : null,
-                                    url: null,
-                                    isEnabled : null,
-                                    code : null,
-                                    propertyToSearch : 'name'
-                                };
-                                if(entityToSave.specialApps){
-                                    changeReferences(entityToSave.specialApps, userGroupApplications, objectToAdd).then(
-                                        function (success) {
-                                            entityToSave.specialApps = success;
+                            checkIfExists(Pathologies, entityToSave, 'display_name').then(
+                                function (success) {
+                                    if(success.exists){
+                                        callbackPath();
+                                    } else {
+                                        if(entityToSave.specialApps){
+                                            var objectToAdd = {
+                                                name : null,
+                                                url: null,
+                                                isEnabled : null,
+                                                code : null,
+                                                propertyToSearch : 'name'
+                                            };
+                                            if(entityToSave.specialApps){
+                                                changeReferences(entityToSave.specialApps, userGroupApplications, objectToAdd).then(
+                                                    function (success) {
+                                                        entityToSave.specialApps = success;
+                                                        var toSave = new Pathologies(entityToSave);
+                                                        toSave.save(function (err, saved) {
+                                                            if(err){
+                                                                callbackPath(err);
+                                                            } else {
+                                                                callbackPath();
+                                                            }
+                                                        });
+                                                    },
+                                                    function (err) {
+                                                        callbackPath(err);
+                                                    }
+                                                )
+                                            } else {
+                                                callbackPath();
+                                            }
+
+                                        } else {
                                             var toSave = new Pathologies(entityToSave);
                                             toSave.save(function (err, saved) {
                                                 if(err){
@@ -680,25 +732,13 @@ gulp.task('stageToProd', function () {
                                                     callbackPath();
                                                 }
                                             });
-                                        },
-                                        function (err) {
-                                            callbackPath(err);
                                         }
-                                    )
-                                } else {
-                                    callbackPath();
-                                }
-
-                            } else {
-                                var toSave = new Pathologies(entityToSave);
-                                toSave.save(function (err, saved) {
-                                    if(err){
-                                        callbackPath(err);
-                                    } else {
-                                        callbackPath();
                                     }
-                                });
-                            }
+                                },
+                                function (err) {
+                                    callbackPath(err);
+                                }
+                            )
                         }, function (err) {
                             if(err){
                                 callback(err);
@@ -779,7 +819,6 @@ gulp.task('stageToProd', function () {
                                                 } else {
                                                     prod[keyOfObj].speakers = null;
                                                     var toSave = new specialProduct(prod[keyOfObj]);
-                                                    console.log(toSave);
                                                     toSave.save(function (err, saved) {
                                                         if(err){
                                                             callbackProd(err);
