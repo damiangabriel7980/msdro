@@ -143,7 +143,7 @@
                         Patologii <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu" >
-                        <li ng-repeat="pathology in pathologies" ui-sref="pathologies({pathology_id:pathology._id})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-list-alt"></i>&nbsp;{{pathology.display_name}}</a>
+                        <li ng-repeat="pathology in pathologies" ui-sref="pathologies({pathology_id:pathology._id})" ng-click="closeNavbar()"><a>&nbsp;{{pathology.display_name}}</a>
 
                         </li>
                     </ul>
@@ -156,8 +156,8 @@
                         Evenimente <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu" >
-                        <li ui-sref="calendar.events.event({idArea: 0})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-calendar"></i>&nbsp;Calendar</a></li>
-                        <li ui-sref="conferinte" href="#/evenimente/conferinte" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-facetime-video"></i>&nbspConferinte live</a></li>
+                        <li ui-sref="calendar.events.event({idArea: 0})" ng-click="closeNavbar()"><a>&nbsp;Calendar</a></li>
+                        <li ui-sref="conferinte" href="#/evenimente/conferinte" ng-click="closeNavbar()"><a>&nbsp;Conferinte live</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" ng-class="{'active': $state.includes('biblioteca') || $state.includes('elearning')}">
@@ -165,9 +165,9 @@
                         Resurse <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="closeNavbar()"><a><i class="glyphicon glyphicon-file"></i>&nbspArticole stiintifice </a></li>
-                        <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()"><i class="glyphicon glyphicon-th-large"></i>&nbspManualul MSD</a></li>
-                        <li ng-click="closeNavbar(); $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a><i class="glyphicon glyphicon-film"></i>&nbspMultimedia</a></li>
+                        <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="closeNavbar()"><a>&nbsp;Articole stiintifice </a></li>
+                        <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()">&nbsp;Manualul MSD</a></li>
+                        <li ng-click="closeNavbar(); $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a>&nbsp;Multimedia</a></li>
                     </ul>
                 </li>
                 <li class="mobileLink dividerTop" ng-class="{'active': $state.includes('profileMobile')}" ng-click="showProfile();closeNavbar()"><a>Contul meu</a></li>

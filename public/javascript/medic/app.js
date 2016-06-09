@@ -276,16 +276,16 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .when(/articoleStiintifice/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
             if(parsedURL.length < 5)
-                $state.go('biblioteca.articoleStiintifice.listaArticole', {articleType: 3});
+                $state.go('biblioteca.articoleStiintifice.listaArticole', {articleType: 3}, {location: 'replace'});
             else
-                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]});
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]}, {location: 'replace'});
         }])
         .when(/noutati/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
             if(parsedURL[1] == 3)
-                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[1], articleId: parsedURL[3]});
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[1], articleId: parsedURL[3]}, {location: 'replace'});
             else
-                $state.go('noutati.articol', {articleType: parsedURL[1], articleId: parsedURL[3], fromHome: 1})
+                $state.go('noutati.articol', {articleType: parsedURL[1], articleId: parsedURL[3], fromHome: 1}, {location: 'replace'})
         }])
         .when(/produse/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
