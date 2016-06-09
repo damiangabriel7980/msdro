@@ -7840,6 +7840,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper #descriptionDiv #initialDescriptionDiv {
   margin-right: -30px;
 }
+.specialProductMainWrapper #descriptionDiv .marginTop20 {
+  margin-top: 20px;
+}
 .specialProductMainWrapper #descriptionDiv .noPadding {
   padding: 0;
 }
