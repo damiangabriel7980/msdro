@@ -191,9 +191,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     if(err){
                         handleError(res, err);
                     }else{
-                        if(!userData.groupsID[0] && availableGroups.length > 0){
-                            handleError(res, null, 400, 37);
-                        }else if(!userData.address){
+                        if(!userData.address){
                             handleError(res, null, 400, 28);
                         }else if(!userData.job){
                             handleError(res, null, 400, 53);

@@ -27,13 +27,8 @@
             <!--</a>-->
         <!--</div>-->
     <!--</div>-->
-    <div class="form-group-sm col-md-6" ng-if="groups.length > 0">
-        <label for="group">Specialitate<sup>*</sup>:</label>
-        <select ng-model="user.groupsID" class="form-control"
-                ng-options="group._id as group.display_name for group in groups" id="group"></select>
-    </div>
     <div class="form-group-sm col-md-6" ng-if="specialties.length > 0">
-        <label for="specialty">Specializare<sup>*</sup>:</label>
+        <label for="specialty">Specialitate<sup>*</sup>:</label>
         <select ng-model="user.specialty" class="form-control"
                 ng-options="specialty._id as specialty.name for specialty in specialties" id="specialty"></select>
     </div>
