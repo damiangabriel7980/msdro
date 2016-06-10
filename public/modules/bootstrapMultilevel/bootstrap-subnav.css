@@ -45,7 +45,7 @@
 }
 @media (max-width: 1367px) {
   .parentMenu {
-    max-height: 600px;
+    max-height: 480px;
   }
 }
 .parentMenu > li {
