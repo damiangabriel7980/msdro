@@ -123,7 +123,7 @@ var getSpecialProductMenu = function (productID, onlyFirstItem) {
                 else
                 {
                     if(onlyFirstItem){
-                        if(details[0] && details[0].children_ids){
+                        if(details[0] && details[0].children_ids && details[0].children_ids.length){
                             deferred.resolve(details[0].children_ids[0]);
                         } else {
                             deferred.resolve(details[0]);
