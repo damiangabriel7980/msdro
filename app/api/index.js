@@ -122,7 +122,16 @@ var getSpecialProductMenu = function (productID, onlyFirstItem) {
                 }
                 else
                 {
-                    deferred.resolve(onlyFirstItem ? details[0] : details);
+                    if(onlyFirstItem){
+                        if(details[0] && details[0].children_ids){
+                            deferred.resolve(details[0].children_ids[0]);
+                        } else {
+                            deferred.resolve(details[0]);
+                        }
+                    } else {
+                        deferred.resolve(details);
+                    }
+
                 }
             });
         }
