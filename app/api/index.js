@@ -4613,16 +4613,24 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/userHomeSearch/')
         .get(function(req,res){
             var data=req.query.data;
-            var arr_of_items=[Products,Multimedia,Content,Events];
+            var arr_of_items=[specialProduct,Multimedia,Content,Events];
             var ObjectOfResults={};
             async.each(arr_of_items, function (item, callback) {
                 var hydrateOp;
-                if(item == Events){
-                    hydrateOp = {find: {enable:{ $exists: true, $ne : false },start:{$gt: new Date()}}};
-                }else{
-                    hydrateOp = {find: {enable:{ $exists: true, $ne : false } }};
+                switch (item) {
+                    case Events :
+                        hydrateOp = {find: {enable:{ $exists: true, $ne : false },start:{$gt: new Date()}}};
+                        break;
+                    case Content :
+                        hydrateOp = {find: {enable:{ $exists: true, $ne : false } , type: 3}};
+                        break;
+                    case specialProduct:
+                        hydrateOp = {find: {enabled:{ $exists: true, $ne : false }}};
+                        break;
+                    default :
+                        hydrateOp = {find: {enable:{ $exists: true, $ne : false } }};
+                        break;
                 }
-
                 item.search({
 
                     query_string: {

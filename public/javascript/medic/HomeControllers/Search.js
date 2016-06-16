@@ -10,11 +10,11 @@ app.controllerProvider.register('Search', ['$scope', '$state', '$rootScope', 'Ho
     var getResults = function (specialGroupSelected) {
         HomeService.getSearchResults.query({data:$stateParams.textToSearch.toString(),specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function(response){
             var results = Success.getObject(response);
-            $scope.products = results.products;
+            $scope.products = results.specialProducts;
             $scope.multimedia = results.multimedia;
             $scope.articles= results.articles;
             $scope.calendarEv= results['calendar-events'];
-            $scope.resultsCount = results.products.length + results.multimedia.length + results.articles.length + results['calendar-events'].length;
+            $scope.resultsCount = results.specialProducts.length + results.multimedia.length + results.articles.length + results['calendar-events'].length;
         });
     };
 
@@ -26,11 +26,11 @@ app.controllerProvider.register('Search', ['$scope', '$state', '$rootScope', 'Ho
     };
 
     $scope.navigateToProduct = function (product) {
-        $state.go('biblioteca.produse.prodById', {id:product._id});
+        $state.go('groupSpecialProduct.menuItem', {product_id: product._id}, {inherit: false,reload: true});
     };
 
     $scope.navigateToEvent = function (event) {
-        $state.go('calendar', ({id: event._id}));
+        $state.go('calendar.events.event', ({id: event._id}));
     };
 
     $scope.navigateToArticle = function (article) {
