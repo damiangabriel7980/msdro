@@ -11,22 +11,23 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
     });
     $scope.mobileMenuTitle="";
     $scope.goToMenuItemWithNoChildren=function(parent,event){
-        if(parent.children_ids.length==0)
-            $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:''});
+        if(parent.children_ids.length==0){
+            $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:''});
+        }
         else
             event.stopPropagation();
     };
     $scope.goToMenuItemWithChildren=function(parent,child){
         $scope.mobileMenuTitle = child.title;
-        $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id});
+        $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id});
     };
     if($state.is('groupSpecialProduct.files'))
         $scope.mobileMenuTitle = 'Resurse';
-    if($state.is('groupSpecialProduct.speakers'))
+    if($state.is('pathologyResources.speakers'))
         $scope.mobileMenuTitle = 'Speakers';
     if($state.is('groupSpecialProduct.sitemap'))
         $scope.mobileMenuTitle = 'Sitemap';
-    if($state.is('groupSpecialProduct.immunologyQA'))
+    if($state.is('pathologyResources.immunologyQA'))
         $scope.mobileMenuTitle = 'Q & A';
     $scope.navigateMobile = function(name){
       if(name === "Resurse"){
@@ -35,7 +36,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
       }
         if(name === 'Speakers'){
             $scope.mobileMenuTitle=name;
-            $state.go('groupSpecialProduct.speakers',{product_id: $scope.specialProductPage._id});
+            $state.go('pathologyResources.speakers',{product_id: $scope.specialProductPage._id});
         }
         if(name === 'Sitemap'){
             $scope.mobileMenuTitle=name;
@@ -43,7 +44,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
         }
         if (name === 'Q & A'){
             $scope.mobileMenuTitle=name;
-            $state.go('groupSpecialProduct.immunologyQA',{product_id: $scope.specialProductPage._id});
+            $state.go('pathologyResources.immunologyQA',{product_id: $scope.specialProductPage._id});
         }
     };
 
@@ -63,7 +64,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
                else
                 $scope.mobileMenuTitle = menu[0].title;
         }
-        $state.go('groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId}, {location: 'replace'});
+        $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId}, {location: 'replace'});
     };
     $scope.status = {
         isFirstOpen: false

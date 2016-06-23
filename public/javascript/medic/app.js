@@ -525,6 +525,24 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
         })
+        .state('pathologyResources', {
+            url: '/pathologyResources/:product_id',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
+            controller: 'ProductPage',
+            resolve: {
+                loadDeps: loadStateDeps(['ProductPage'])
+            }
+        })
+        .state('pathologyResources.menuItem', {
+            url: '/menuItem/:menuId/:childId',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
+            controller: 'ProductPageMenu'
+        })
+        .state('pathologyResources.glossary', {
+            url: '/selectedGlossary',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
+            controller: 'ProductPageGlossary'
+        })
         .state('productList', {
             abstract: true,
             url: '/pathologyProducts',
@@ -549,11 +567,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['ProductPageList'])
             }
         })
-        .state('groupSpecialProduct.speakers', {
+        .state('pathologyResources.speakers', {
             url: '/speakers',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakers.html'
         })
-        .state('groupSpecialProduct.speakerDetails', {
+        .state('pathologyResources.speakerDetails', {
             url: '/speakerDetails/:speaker_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakerDetails.html',
             controller: 'ProductPageSpeaker'
@@ -580,7 +598,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
         })
-        .state('groupSpecialProduct.immunologyQA',{
+        .state('pathologyResources.immunologyQA',{
             url:'/immunologyQA',
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
