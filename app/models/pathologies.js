@@ -11,6 +11,7 @@ var PathologiesSchema		= new Schema({
     associated_multimedia: Array,
     last_updated: Date,
     enabled: Boolean,
+    order_index: Number,
     specialApps: [{type: Schema.Types.ObjectId, ref: 'groupsApplications'}]
 });
 

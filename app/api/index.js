@@ -144,7 +144,7 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
     var pathologiesToSend = [];
     var queryPathology = pathQParams ? pathQParams : { enabled: true };
     //get pathologies and for each get list of products
-    Pathologies.find(queryPathology).sort('display_name').populate('specialApps').exec(function(err, pathologies){
+    Pathologies.find(queryPathology).sort({order_index: 1}).populate('specialApps').exec(function(err, pathologies){
         if(err)
         {
             deferred.reject(err);
@@ -162,7 +162,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 display_name: pathology.display_name,
                                 description: pathology.description,
                                 header_image: pathology.header_image,
-                                specialApps: pathology.specialApps
+                                specialApps: pathology.specialApps,
+                                order_index: pathology.order_index
                             };
                             var associatedItemsClean = [];
                             async.each(associated, function(singleItem, callbackItem){
@@ -203,7 +204,7 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                     deferred.reject(err);
                 } else {
                     pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
-                        return obj.display_name;
+                        return obj.order_index;
                     });
                     deferred.resolve(pathologiesToSend);
                 }
@@ -4894,7 +4895,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
             if(req.query.forDropdown){
                 queryPathObject.description = { $exists: true, $ne : '' };
-                Pathologies.find(queryPathObject).sort('display_name').exec(function (err, pathologies) {
+                Pathologies.find(queryPathObject).sort({order_index: 1}).exec(function (err, pathologies) {
                     if(err){
                         handleError(res,err,500);
                     }else{

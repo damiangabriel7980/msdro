@@ -11,6 +11,12 @@
                     <input ng-model="pathology.display_name" type="text" class="form-control col-xs-12">
                 </div>
             </div>
+    <div class="col-xs-12 noPadding">
+        <div class="col-xs-12 noPadding">
+            <label>Ordine:</label>
+            <input ng-model="pathology.order_index" type="number" class="form-control col-xs-12">
+        </div>
+    </div>
             <div class="col-md-12 noPadding marginTop20">
                 <div class="col-md-12 noPadding">
                     <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine header</button>
