@@ -12,7 +12,7 @@
                 <i class="glyphicon glyphicon-print pull-right" ng-click="printPage()">&nbsp;Print&nbsp;</i>
             </span>
             <span class="hide">
-                <i class="glyphicon glyphicon-th-list pull-right" ui-sref="groupSpecialProduct.glossary({product_id: $stateParams.product_id})">&nbsp;Glosar&nbsp;</i>
+                <i class="glyphicon glyphicon-th-list pull-right" ui-sref="{{$state.includes('pathologyResources') ? 'pathologyResources.glossary({product_id: $stateParams.product_id})' : 'groupSpecialProduct.glossary({product_id: $stateParams.product_id})'}}">&nbsp;Glosar&nbsp;</i>
             </span>
     </div>
     <div class="col-xs-12">
