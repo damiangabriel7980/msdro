@@ -1,7 +1,7 @@
 <div class="col-xs-12 filterByTherapeuticAreas" id="content">
     <div class="col-xs-12 areasMobile" dropdown is-open="status.isopen" id="menuDiv" ng-if="isMobile(true)">
         <select class="form-control" ng-options="pathology._id as pathology.display_name for pathology in allPathologies"
-                ng-model="selectedArea" ng-change="selectPathology(selectedPathology)"></select>
+                ng-model="selectedPathology" ng-change="selectPathology(selectedPathology)"></select>
     </div>
     <div class="col-md-2 col-sm-3 areas text-center" ng-if="!isMobile(true)">
         <div class="col-xs-11 col-xs-offset-1 title">PATOLOGII</div>
