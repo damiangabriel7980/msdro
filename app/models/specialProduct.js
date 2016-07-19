@@ -31,6 +31,8 @@ var specialProductSchema		= new Schema({
         glossary: Boolean,
         site_map: Boolean
     },
+    productType: {type: String, enum: ["product", "resource"]},
+    order_index: Number,
     show_sitemap_prescription: Boolean
 });
 

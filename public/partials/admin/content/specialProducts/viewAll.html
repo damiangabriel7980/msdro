@@ -1,5 +1,5 @@
 <div class = "col-md-12 well">
-    <div class="col-md-9"><h3>Gestionare pagini de produse speciale</h3></div>
+    <div class="col-md-9"><h3>Gestionare resurse & produse speciale</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialProduct()">Adauga pagina produs</div></div>
 </div>
 <bulk-operations model="specialProducts" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
@@ -11,6 +11,9 @@
             </td>
             <td data-title="'Nume produs'" filter="{ 'product_name': 'text' }" sortable="'product_name'">
                 {{product.product_name}}
+            </td>
+            <td data-title="'Numar ordine'" sortable="'order_index'">
+                {{product.order_index}}
             </td>
             <td data-title="'Grupuri atasate'">
                 <ul>
