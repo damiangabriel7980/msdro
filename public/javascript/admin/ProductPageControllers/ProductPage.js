@@ -1,4 +1,4 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', 'Error', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success, Error){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', 'Error', 'advancedNgTableFilter', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success, Error, advancedNgTableFilter){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
@@ -9,21 +9,30 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
                 count: 10,          // count per page
                 sorting: {
                     product_name: 'asc'     // initial sorting
-                },
-                filter: {
-                    product_name: ''       // initial filter
                 }
             }, {
                 total: data.length, // length of data
                 getData: function($defer, params) {
 
-                    var orderedData = $filter('orderBy')(($filter('filter')(data, params.filter())), params.orderBy());
-                    $scope.resultData = orderedData;
-                    params.total(orderedData.length);
+                    var filterObject = advancedNgTableFilter.filterByNestedObject(params.$params.filter);
+
+                    // filter with $filter (don't forget to inject it)
+                    var filteredDatas = params.filter() ? $filter('filter')(data, filterObject) : data;
+
+                    // ordering
+                    var key = params.sorting() ? Object.keys(params.sorting())[0] : null;
+                    var orderedDatas = params.sorting() ? $filter('orderBy')(filteredDatas, key, params.sorting()[key] == 'desc') : filteredDatas;
+
+                    // get for the wanted subset
+                    var splitedDatas = orderedDatas.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+                    // resolve the ngTable promise
+                    $scope.resultData = splitedDatas;
+                    params.total(splitedDatas.length);
                     if(params.total() < (params.page() -1) * params.count()){
                         params.page(1);
                     }
-                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                    $defer.resolve(splitedDatas.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
         });

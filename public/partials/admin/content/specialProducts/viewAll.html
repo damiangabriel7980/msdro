@@ -15,10 +15,10 @@
             <td data-title="'Numar ordine'" sortable="'order_index'">
                 {{product.order_index}}
             </td>
-            <td data-title="'Grupuri atasate'">
+            <td data-title="'Patologii'" filter="{ 'pathologiesID.display_name': 'text' }">
                 <ul>
-                    <li ng-repeat="productGroup in product.groups">
-                        {{productGroup.display_name}}&nbsp;({{productGroup.profession.display_name}})
+                    <li ng-repeat="pathology in product.pathologiesID">
+                        {{pathology.display_name}}
                     </li>
                 </ul>
             </td>
