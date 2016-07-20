@@ -741,6 +741,20 @@ services.factory('advancedNgTableFilter', [function () {
     }
 }]);
 
+services.factory('translateProperty', [function () {
+    var translatedProp =function (arrayOfObjects, propertyToTranslate, translatedValues) {
+        angular.forEach(arrayOfObjects, function(val,key){
+            if(translatedValues[arrayOfObjects[key][propertyToTranslate]]){
+                arrayOfObjects[key][propertyToTranslate] = translatedValues[arrayOfObjects[key][propertyToTranslate]];
+            }
+        });
+        return arrayOfObjects;
+    };
+    return {
+        translatedProp : translatedProp
+    }
+}]);
+
 services.factory('CSVParser', ['$q', function ($q) {
     var parseContent = function (contents, headers, separator) {
         console.log(contents);

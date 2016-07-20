@@ -15,6 +15,9 @@
             <td data-title="'Numar ordine'" sortable="'order_index'">
                 {{product.order_index}}
             </td>
+            <td data-title="'Tip'" sortable="'productType'" filter="{'productType' : 'text'}">
+                {{product.productType}}
+            </td>
             <td data-title="'Patologii'" filter="{ 'pathologiesID.display_name': 'text' }">
                 <ul>
                     <li ng-repeat="pathology in product.pathologiesID">

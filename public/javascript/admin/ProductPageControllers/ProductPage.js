@@ -1,9 +1,8 @@
-controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', 'Error', 'advancedNgTableFilter', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success, Error, advancedNgTableFilter){
+controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$filter', 'ngTableParams' ,'SpecialProductsService', '$modal', 'Success', 'Error', 'advancedNgTableFilter', 'translateProperty', function($scope, $rootScope, $stateParams, $filter, ngTableParams, SpecialProductsService, $modal, Success, Error, advancedNgTableFilter, translateProperty){
 
     $scope.refreshTable = function () {
         SpecialProductsService.products.query().$promise.then(function (resp) {
-            var data = Success.getObject(resp);
-
+            var data = translateProperty.translatedProp(Success.getObject(resp), 'productType', {'product': 'Produs', 'resource': 'Resursa'});
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 10,          // count per page
@@ -114,6 +113,5 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
                 }
             }
         });
-    }
-
+    };
 }]);
