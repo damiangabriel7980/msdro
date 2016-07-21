@@ -23,6 +23,22 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
         selectedPathologies: null
     };
 
+    $scope.productDisplayNames = ["product", "resource", null];
+
+    $scope.productTypeDisplayName = function (name) {
+        switch (name) {
+            case "product":
+                return "Produs special";
+                break;
+            case "resource":
+                return "Resursa";
+                break;
+            default:
+                return "Fara tip";
+                break;
+        }
+    };
+
     $scope.logoImageBody = null;
     $scope.headerImageBody = null;
     $scope.rcpBody = null;

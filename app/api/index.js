@@ -174,6 +174,7 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                             general_description : singleItem.general_description,
                                             logo_path: singleItem.logo_path,
                                             product_name: singleItem.product_name,
+                                            order_index: singleItem.order_index,
                                             firstMenuItem: success
                                         };
                                         associatedItemsClean.push(itemToAdd);
@@ -187,6 +188,9 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 if(err){
                                     callback(err);
                                 } else {
+                                    associatedItemsClean = _.sortBy(associatedItemsClean, function(obj){
+                                        return obj.order_index;
+                                    });
                                     objectToPush['associated_items'] = associatedItemsClean;
                                     pathologiesToSend.push(objectToPush);
                                     callback();

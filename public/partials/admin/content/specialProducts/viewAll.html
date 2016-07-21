@@ -1,5 +1,5 @@
 <div class = "col-md-12 well">
-    <div class="col-md-9"><h3>Gestionare pagini de produse speciale</h3></div>
+    <div class="col-md-9"><h3>Gestionare resurse & produse speciale</h3></div>
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialProduct()">Adauga pagina produs</div></div>
 </div>
 <bulk-operations model="specialProducts" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
@@ -12,10 +12,16 @@
             <td data-title="'Nume produs'" filter="{ 'product_name': 'text' }" sortable="'product_name'">
                 {{product.product_name}}
             </td>
-            <td data-title="'Grupuri atasate'">
+            <td data-title="'Numar ordine'" sortable="'order_index'">
+                {{product.order_index}}
+            </td>
+            <td data-title="'Tip'" sortable="'productType'" filter="{'productType' : 'text'}">
+                {{product.productType}}
+            </td>
+            <td data-title="'Patologii'" filter="{ 'pathologiesID.display_name': 'text' }">
                 <ul>
-                    <li ng-repeat="productGroup in product.groups">
-                        {{productGroup.display_name}}&nbsp;({{productGroup.profession.display_name}})
+                    <li ng-repeat="pathology in product.pathologiesID">
+                        {{pathology.display_name}}
                     </li>
                 </ul>
             </td>
