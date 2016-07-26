@@ -2,9 +2,9 @@
  * Created by andrei.mirica on 26/07/16.
  */
 controllers.controller('SelectProductType', ['$scope', 'SpecialProductsService', '$state', '$modalInstance', function($scope, SpecialProductsService, $state, $modalInstance) {
-    $scope.pageTypeDisplayNames = ["product", "resource"];
+    $scope.productTypeDisplayNames = ["product", "resource"];
 
-    $scope.pageTypeDisplayName = function (name) {
+    $scope.productTypeDisplayName = function (name) {
         switch (name) {
             case "product":
                 return "Pagina produs";
