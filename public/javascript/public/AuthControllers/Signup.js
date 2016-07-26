@@ -22,7 +22,7 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
         " si ale Ordinului Ministerului Sanatatii nr. 194/2015 privind aprobarea Normelor pentru evaluarea si avizarea publicitatii la medicamentele " +
         "de uz uman care reglementeaza publicitatea medicamentelor eliberate pe baza de prescriptie medicala doar catre specialisti in domeniul sanatatii, va rugam sa introduceti codul care atesta dovada " +
         "calitatii dvs. de profesionist in domeniul sanatatii (de ex. medic/farmacist) furnizat prin e-mail/sms/personal. Daca nu aveti un cod de activare, va " +
-        "rugam sa contactati un reprezentant MSD sau sa sunati la numarul de telefon ... .";
+        "rugam sa contactati un reprezentant MSD sau sa sunati la numarul de telefon 0215292900.";
 
     $scope.proofAlert = function () {
         window.alert($scope.codeTooltip);
