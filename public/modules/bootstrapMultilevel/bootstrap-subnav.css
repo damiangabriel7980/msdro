@@ -43,7 +43,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-@media (max-width: 1367px) {
+@media (max-width: 1601px) {
   .parentMenu {
     max-height: 480px;
   }
