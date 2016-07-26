@@ -60,10 +60,11 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
         }
     };
     $scope.addSpecialProduct = function(){
-        SpecialProductsService.products.create({}).$promise.then(function (resp) {
-            $scope.refreshTable();
-        }).catch(function (err) {
-            console.log(Error.getMessage(err));
+        $modal.open({
+            templateUrl: 'partials/admin/content/specialProducts/selectProductType.html',
+            size: 'md',
+            windowClass: 'fade',
+            controller: 'SelectProductType'
         });
     };
 

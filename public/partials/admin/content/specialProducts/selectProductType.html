@@ -1,0 +1,17 @@
+<div>
+    <div class="modal-header">
+        <div class="modal-title"><h3>Alege tip</h3></div>
+    </div>
+    <div class="modal-body container col-md-12">
+        <div class="form-group col-md-12 noPadding">
+            <label for="productType">Tip:</label>
+            <select ng-model="selectedPageType" ng-options="pageType as pageTypeDisplayName(pageType) for pageType in pageTypeDisplayNames"
+                    class="form-control col-md-12 noPadding" id="productType">
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
+        <a class="btn pull-right btn-danger" ng-click="saveSpecialProduct()">Adauga</a>
+    </div>
+</div>

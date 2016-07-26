@@ -1497,7 +1497,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var toCreate = new specialProduct({
                 product_name: 'Untitled',
-                header_title: 'Untitled'
+                header_title: 'Untitled',
+                productType: req.body.productType
             });
             toCreate.save(function (err, saved) {
                 if(err){
