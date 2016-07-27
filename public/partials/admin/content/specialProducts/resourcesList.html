@@ -10,6 +10,6 @@
 <div class="modal-footer">
     <div class="col-xs-12">
         <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
-        <a class="btn btn-warning pull-right" ng-click="renderView('specialProductEdit')">Inapoi</a>
+        <a class="btn btn-warning pull-right" ng-click="renderView(sessionData.isResource ? 'resourceEdit' : 'specialProductEdit')">Inapoi</a>
     </div>
 </div>

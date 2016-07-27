@@ -141,6 +141,9 @@ services.factory('Utils', ['$sce', function ($sce) {
             return input;
         }
     };
+    var capitalizeFirstLetter = function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
     return{
         fileToBase64: function (file, callback) {
             var reader = new FileReader();
@@ -204,7 +207,8 @@ services.factory('Utils', ['$sce', function ($sce) {
         trimWords: trimWords,
         createHeader: createHeader,
         isEmptyObject:isEmptyObject,
-		objectHasAllProperties: objectHasAllProperties
+		objectHasAllProperties: objectHasAllProperties,
+        capitalizeFirstLetter: capitalizeFirstLetter
     }
 }]);
 services.factory('Diacritics',function(){

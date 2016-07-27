@@ -10,9 +10,6 @@
                             <label>Nume produs:</label>
                             <input class="form-control" type="text" ng-model="newProductPage.product_name">
                         </div>
-                        <div class="col-md-12 noPadding">
-                            <!--<label>Grupuri curente:</label>{{newProductPage.groups}}-->
-                        </div>
                         <div class="form-group col-md-12 noPadding">
                             <label>Job ID:</label>
                             <input type="text" class="form-control" ng-model="newProductPage.job_id">
@@ -116,7 +113,7 @@
     <div class="modal-footer">
         <div class="col-xs-12">
             <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
-            <a class="btn btn-warning pull-right" ng-click="addPage()">Finalizeaza</a>
+            <a class="btn btn-warning pull-right" ng-click="addPage()">Salveaza</a>
             <a class="btn btn-warning pull-right" ng-click="addPage(true)">Modifica meniu</a>
             <a class="btn btn-warning pull-right" ng-click="renderView('resourcesList')">Lista Resurse</a>
             <a class="btn btn-warning pull-right" ng-click="renderView('viewGlossary')">Modifica glosar</a>

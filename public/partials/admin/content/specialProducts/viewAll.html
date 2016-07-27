@@ -15,8 +15,8 @@
             <td data-title="'Numar ordine'" sortable="'order_index'">
                 {{product.order_index}}
             </td>
-            <td data-title="'Tip'" sortable="'productType'" filter="{'productType' : 'text'}">
-                {{product.productType}}
+            <td data-title="'Tip'" sortable="'translatedProductType'" filter="{'translatedProductType' : 'text'}">
+                {{product.translatedProductType}}
             </td>
             <td data-title="'Patologii'" filter="{ 'pathologiesID.display_name': 'text' }">
                 <ul>
@@ -27,7 +27,7 @@
             </td>
             <td data-title="'Actiuni'">
                 <action-buttons item-enable-property="product.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
-                                toggle-item="toggleSpecialProduct(product._id,product.enabled)" delete-item="deleteSpecialProduct(product._id)" update-item="editSpecialProduct(product._id)"></action-buttons>
+                                toggle-item="toggleSpecialProduct(product._id,product.enabled)" delete-item="deleteSpecialProduct(product._id)" update-item="editSpecialProduct(product._id, product.productType)"></action-buttons>
             </td>
         </tr>
     </table>
