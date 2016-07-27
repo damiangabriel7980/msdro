@@ -188,8 +188,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 if(err){
                                     callback(err);
                                 } else {
-                                    associatedItemsClean = _.sortBy(associatedItemsClean, function(obj){
-                                        return obj.order_index;
+                                    associatedItemsClean = _.sortBy(associatedItemsClean, function(asociatedItemObject){
+                                        return asociatedItemObject.order_index;
                                     });
                                     objectToPush['associated_items'] = associatedItemsClean;
                                     pathologiesToSend.push(objectToPush);
@@ -207,8 +207,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                 if(err){
                     deferred.reject(err);
                 } else {
-                    pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
-                        return obj.order_index;
+                    pathologiesToSend = _.sortBy(pathologiesToSend, function(pathologyObj){
+                        return pathologyObj.order_index;
                     });
                     deferred.resolve(pathologiesToSend);
                 }
@@ -1497,7 +1497,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var toCreate = new specialProduct({
                 product_name: 'Untitled',
-                header_title: 'Untitled'
+                header_title: 'Untitled',
+                productType: req.body.productType
             });
             toCreate.save(function (err, saved) {
                 if(err){
@@ -4260,7 +4261,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             } else {
                 var itemQParams = {
                     query: {
-                        enabled: { $exists: true, $ne : false }
+                        enabled: { $exists: true, $ne : false },
+                        productType: 'product'
                     },
                     sort: {
                         product_name: 1
@@ -4915,6 +4917,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         product_name: 1
                     }
                 };
+                if(!req.query.id){
+                    itemQParams.query.productType = 'product';
+                }
                 getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
                     function (success) {
                         handleSuccess(res,success);
