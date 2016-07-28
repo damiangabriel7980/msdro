@@ -68,7 +68,7 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
         });
     };
 
-    $scope.editSpecialProduct = function (id) {
+    $scope.editSpecialProduct = function (id, productType) {
         $modal.open({
             templateUrl: 'partials/admin/content/specialProducts/baseModalView.html',
             size: 'lg',
@@ -76,10 +76,10 @@ controllers.controller('ProductPage', ['$scope', '$rootScope', '$stateParams','$
             controller: 'ProductPageModal',
             resolve: {
                 intent: function () {
-                    return "specialProductEdit"
+                    return productType === 'resource' ? "resourceEdit" : "specialProductEdit";
                 },
                 sessionData: function () {
-                    return {idToEdit: id};
+                    return {idToEdit: id, isResource: productType === 'resource' ? true : false};
                 }
             }
         });

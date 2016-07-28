@@ -12,6 +12,7 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
         $scope.newProductPage = resp.specialProduct;
         $scope.associatedProduct = resp.associatedProduct ? resp.associatedProduct : null;
         $scope.myPathologies.selectedPathologies = $scope.newProductPage.pathologiesID;
+        $scope.showTab($scope.newProductPage.productType === 'resource' ? 'prescription' : 'description');
     });
 
     $scope.myPathologies = {
@@ -134,6 +135,6 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
     $scope.showTab = function (content) {
         $scope.activeTab = content;
     };
-    $scope.showTab('description');
+
 
 }]);

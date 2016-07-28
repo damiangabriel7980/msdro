@@ -741,11 +741,11 @@ services.factory('advancedNgTableFilter', [function () {
     }
 }]);
 
-services.factory('translateProperty', [function () {
+services.factory('translateProperty', ['Utils', function (Utils) {
     var translatedProp =function (arrayOfObjects, propertyToTranslate, translatedValues) {
         angular.forEach(arrayOfObjects, function(val,key){
             if(translatedValues[arrayOfObjects[key][propertyToTranslate]]){
-                arrayOfObjects[key][propertyToTranslate] = translatedValues[arrayOfObjects[key][propertyToTranslate]];
+                arrayOfObjects[key]['translated' + Utils.capitalizeFirstLetter(propertyToTranslate)] = translatedValues[arrayOfObjects[key][propertyToTranslate]];
             }
         });
         return arrayOfObjects;

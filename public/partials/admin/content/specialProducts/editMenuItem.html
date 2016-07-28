@@ -20,12 +20,12 @@
                         <label>Ordine:</label>
                         <input type="text" class="form-control" ng-model="currentItem.order_index">
                     </div>
-                    <div class="form-group col-md-2 noPadding">
-                        <label>Afiseaza safety info:</label>
+                    <div class="form-group col-md-2 noPadding" ng-if="!sessionData.isResource">
+                        <label>Afiseaza safety info</label>
                         <input type="checkbox" ng-model="currentItem.show_safety_info">
                     </div>
-                    <div class="form-group col-md-2 noPadding">
-                        <label>Afiseaza prescription:</label>
+                    <div class="form-group col-md-3 noPadding">
+                        <label>Afiseaza {{sessionData.isResource ? 'footer' : 'prescription'}}:</label>
                         <input type="checkbox" ng-model="currentItem.show_prescription">
                     </div>
                 </div>
@@ -46,7 +46,7 @@
     <div class="modal-footer">
         <div class="col-xs-12">
             <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
-            <a class="btn btn-warning pull-right" ng-click="editMenuItem()">Finalizeaza</a>
+            <a class="btn btn-warning pull-right" ng-click="editMenuItem()">Salveaza</a>
             <a class="btn btn-warning pull-right" ng-click="renderView('editProductMenu')">Inapoi</a>
         </div>
     </div>
