@@ -386,7 +386,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ProductDetail'
         })
         .state('biblioteca.articoleStiintifice',{
-            url: '/articoleStiintifice/:articleType',
+            url: '/despreMSD/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
             controller: 'ArticlesView',
             resolve: {
