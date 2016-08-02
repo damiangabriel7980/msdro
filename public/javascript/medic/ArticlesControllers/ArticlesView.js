@@ -10,7 +10,7 @@ app.controllerProvider.register('ArticlesView', ['$scope', '$rootScope', '$state
         $scope.title = "STIRI INTERNATIONALE";
     }
     if($stateParams.articleType==3){
-        $scope.title = "ARTICOLE STIINTIFICE";
+        $scope.title = "DESPRE MSD";
     }
 
     SpecialFeaturesService.specialGroups.getSelected().then(function (specialGroupSelected) {
@@ -25,7 +25,7 @@ app.controllerProvider.register('ArticlesView', ['$scope', '$rootScope', '$state
                 if($stateParams.articleType<3)
                     $scope.message="Nu exista stiri!";
                 else
-                    $scope.message="Nu exista articole stiintifice!";
+                    $scope.message="Nu exista articole!";
             }
 
         });
