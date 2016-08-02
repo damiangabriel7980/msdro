@@ -4,14 +4,14 @@
             <accordion-group is-open="mystatus.open" class="parent" ng-repeat="parent in specialProductMenu"
                              ng-class="{'active': ($state.includes('pathologyResources.menuItem') || $state.includes('groupSpecialProduct.menuItem')) && $state.params.menuId==parent._id}">
                 <accordion-heading>
-                <span ng-click="parent.children_ids.length==0? ($state.includes('pathologyResources') ? $state.go('pathologyResources.menuItem',{menuId: parent._id, childId:''}) : $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:''})):null">
+                <span ng-click="parent.children_ids.length==0? ($state.includes('pathologyResources') ? $state.go('pathologyResources.menuItem',{menuId: parent._id, childId:''}) : $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:'', isResource: $state.params.isResource})):null">
                     <i ng-class="{'glyphicon glyphicon-chevron-down': mystatus.open&&parent.children_ids.length!=0,
                                   'glyphicon glyphicon-chevron-right': !mystatus.open||parent.children_ids.length==0}"></i>&nbsp;&nbsp;{{parent.title}}
                 </span>
                 </accordion-heading>
                 <div class="menuMarginBottom">
                     <div class="child" ng-repeat="subItem in parent.children_ids"
-                         ui-sref="{{$state.includes('pathologyResources') ? 'pathologyResources.menuItem({menuId: parent._id, childId: subItem._id})' : 'groupSpecialProduct.menuItem({menuId: parent._id, childId: subItem._id})'}}"
+                         ui-sref="{{$state.includes('pathologyResources') ? 'pathologyResources.menuItem({menuId: parent._id, childId: subItem._id})' : 'groupSpecialProduct.menuItem({menuId: parent._id, childId: subItem._id, isResource: $state.params.isResource})'}}"
                          ng-class="{'active': ($state.includes('pathologyResources.menuItem') || $state.includes('groupSpecialProduct.menuItem')) && $state.params.childId==subItem._id}">
                         &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right fontS"></i>&nbsp;&nbsp;{{subItem.title}}
                     </div>
@@ -34,7 +34,7 @@
             </accordion-group>
         </accordion>
         <accordion close-others="oneAtATime" ng-if="!$state.includes('pathologyResources')" class="productPageMenu hidden-xs hidden-sm">
-            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id})">
+            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id, isResource: $state.params.isResource})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>

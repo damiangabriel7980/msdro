@@ -522,6 +522,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
+            params: {
+                isResource: false
+            },
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
         })
@@ -588,6 +591,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.sitemap', {
             url: '/sitemap',
+            params: {
+                isResource: false
+            },
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html'
         })
         .state('profileMobile',{

@@ -6,20 +6,23 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
     };
     specialProductService.SpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
         $scope.specialProductPage = Success.getObject(result);
+        if($scope.specialProductPage.productType === 'resource'){
+            $state.params.isResource = true;
+        }
     }).catch(function(){
         $state.reload();
     });
     $scope.mobileMenuTitle="";
     $scope.goToMenuItemWithNoChildren=function(parent,event){
         if(parent.children_ids.length==0){
-            $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:''});
+            $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:'', isResource: $state.params.isResource});
         }
         else
             event.stopPropagation();
     };
     $scope.goToMenuItemWithChildren=function(parent,child){
         $scope.mobileMenuTitle = child.title;
-        $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id});
+        $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:child._id, isResource: $state.params.isResource});
     };
     if($state.is('groupSpecialProduct.files'))
         $scope.mobileMenuTitle = 'Resurse';
@@ -64,7 +67,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
                else
                 $scope.mobileMenuTitle = menu[0].title;
         }
-        $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId}, {location: 'replace'});
+        $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId, isResource: $state.params.isResource}, {location: 'replace'});
     };
     $scope.status = {
         isFirstOpen: false
