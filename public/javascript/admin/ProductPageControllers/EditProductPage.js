@@ -19,7 +19,7 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
         selectedPathologies: null
     };
 
-    $scope.productDisplayNames = ["product", "resource", null];
+    $scope.productDisplayNames = ["product", "resource"];
 
     $scope.productTypeDisplayName = function (name) {
         switch (name) {
@@ -28,9 +28,6 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
                 break;
             case "resource":
                 return "Resursa";
-                break;
-            default:
-                return "Fara tip";
                 break;
         }
     };
