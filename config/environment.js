@@ -15,6 +15,7 @@ module.exports = function(){
                 dpocAppLink: "unavailable",
                 publicFolder: "public",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                onlineCoursesURL: "http://cursurimedicale.ro/staywell.php",
                 newsletter: {
                     scheduleInterval: 'everyMinute',
                     batch: {
