@@ -11,13 +11,11 @@ app.controllerProvider.register('medicalCourses', ['$scope', '$rootScope', '$sce
         };
     };
 
-    $scope.confirm=function(){
-        coursesService.requestToken.query().$promise.then(function (response) {
-            $scope.resetAlert('Token-ul obtinut este: ' + Success.getObject(response).token, 'success');
-        }).catch(function(err){
-            $scope.resetAlert(Error.getMessage(err));
-        });
-    };
+    coursesService.requestToken.query().$promise.then(function (response) {
+        $scope.medicalCoursesUrl = Success.getObject(response);
+    }).catch(function(err){
+        $scope.resetAlert(Error.getMessage(err));
+    });
 
     $scope.closeModal=function(){
         $modalInstance.close();

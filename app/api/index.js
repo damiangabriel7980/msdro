@@ -4959,7 +4959,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         profesia: foundUser.profession ? foundUser.profession.display_name : null
                     };
                     request({
-                        url: my_config.onlineCoursesURL,
+                        url: my_config.onlineCoursesTokenUrl,
                         method: "POST",
                         json: true,
                         body: dataToSend
@@ -4967,7 +4967,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         if(error){
                             handleError(res,error,500);
                         }else{
-                            handleSuccess(res, response);
+                            handleSuccess(res, my_config.onlineCoursesRedirectUrl + '?msdToken=' + response.token);
                         }
                     });
                 }
