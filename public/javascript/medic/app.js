@@ -604,8 +604,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
         })
-        .state('pathologyResources.immunologyQA',{
+        .state('groupSpecialProduct.immunologyQA',{
             url:'/immunologyQA',
+            params: {
+                isResource: false
+            },
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
         })

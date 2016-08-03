@@ -27,14 +27,14 @@
                     <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Resurse</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="specialProductPage.speakers.length > 0" ng-class="{'active':$state.includes('pathologyResources.immunologyQA')}" ui-sref="pathologyResources.immunologyQA">
+            <accordion-group is-open="status.isFirstOpen" ng-if="!specialProductMenu.length" class="parent" ui-sref-active="active" ui-sref="groupSpecialProduct.immunologyQA({isResource: $state.params.isResource})">
                 <accordion-heading>
-                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Q & A</div>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Parerile expertilor</div>
                 </accordion-heading>
             </accordion-group>
         </accordion>
-        <accordion close-others="oneAtATime" ng-if="!$state.includes('pathologyResources')" class="productPageMenu hidden-xs hidden-sm">
-            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ng-class="{'active':$state.includes('groupSpecialProduct.sitemap')}" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id, isResource: $state.params.isResource})">
+        <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
+            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ui-sref-active="active" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id, isResource: $state.params.isResource})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
                 </accordion-heading>
@@ -82,9 +82,9 @@
                             <div><i class="glyphicon glyphicon-chevron-right" ></i>&nbsp;&nbsp;Resurse</div>
                         </accordion-heading>
                     </accordion-group>
-                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="specialProductPage.speakers.length > 0" ng-class="{'active':$state.includes('pathologyResources.immunologyQA')}" ng-click="navigateMobile('Q & A')">
+                    <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="$state.includes('groupSpecialProduct.immunologyQA')" ng-class="{'active':$state.includes('pathologyResources.immunologyQA')}" ng-click="navigateMobile('Q & A')">
                         <accordion-heading>
-                            <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Q & A</div>
+                            <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Parerile expertilor</div>
                         </accordion-heading>
                     </accordion-group>
                 </accordion>
