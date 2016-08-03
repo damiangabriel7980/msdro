@@ -44,7 +44,7 @@
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Inapoi la {{pathology.display_name}}</div>
                 </accordion-heading>
             </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
+            <accordion-group is-open="status.isFirstOpen" ng-if="!$state.params.isResource" class="parent oddParent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Vezi toate produsele</div>
                 </accordion-heading>
