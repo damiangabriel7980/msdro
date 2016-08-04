@@ -175,6 +175,8 @@ module.exports = function(){
                 dpocAppLink: "unavailable",
                 publicFolder: "public_min",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                onlineCoursesTokenUrl: "http://cursurimedicale.ro/staywell.php",
+                onlineCoursesRedirectUrl : "http://cursurimedicale.ro/inregistrare",
                 newsletter: {
                     scheduleInterval: 'everyMinute',
                     batch: {
@@ -214,6 +216,8 @@ module.exports = function(){
                 dpocAppLink: "https://msd-ios-distribution.s3.amazonaws.com/MSD_dpoc_InHouse/index.html",
                 publicFolder: "public_min",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                onlineCoursesTokenUrl: "http://cursurimedicale.ro/staywell.php",
+                onlineCoursesRedirectUrl : "http://cursurimedicale.ro/inregistrare",
                 newsletter: {
                     scheduleInterval: 'everyHour',
                     batch: {

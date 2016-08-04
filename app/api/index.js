@@ -69,8 +69,7 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 var crypto   = require('crypto');
 var Q = require('q');
-var Config = require('../../config/environment'),
-    my_config = new Config();
+var Config = require('../../config/environment');
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user){
@@ -4959,15 +4958,14 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         profesia: foundUser.profession ? foundUser.profession.display_name : null
                     };
                     request({
-                        url: my_config.onlineCoursesTokenUrl,
+                        url: Config().onlineCoursesTokenUrl,
                         method: "POST",
-                        json: true,
-                        body: dataToSend
+                        form: dataToSend
                     }, function (error, message, response) {
                         if(error){
                             handleError(res,error,500);
                         }else{
-                            handleSuccess(res, my_config.onlineCoursesRedirectUrl + '?msdToken=' + response.token);
+                            handleSuccess(res, Config().onlineCoursesRedirectUrl + '?msdToken=' + JSON.parse(response).token);
                         }
                     });
                 }
