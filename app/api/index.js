@@ -1471,7 +1471,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 q._id = req.query.id;
             }
-            specialProduct.find(q).populate('pathologiesID').deepPopulate('groups.profession').exec(function (err, products) {
+            specialProduct.find(q).populate('pathologiesID').exec(function (err, products) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -1519,6 +1519,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
+                    console.log(err);
                     handleError(res,err,500);
                 }else{
                     if(forAssociatedProd){
