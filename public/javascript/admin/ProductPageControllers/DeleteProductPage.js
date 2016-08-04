@@ -28,7 +28,7 @@ controllers.controller('DeleteProductPage', ['$scope', 'SpecialProductsService',
                 resetAlert("warning", "Se sterge produsul...");
                 SpecialProductsService.products.delete({id: idToDelete}).$promise.then(function (resp) {
                     $scope.actionCompleted = true;
-                    resetAlert("success", Success.getMessage(resp) + "S-au sters "+imageDeleteCount+" imagini");
+                    resetAlert("success", Success.getMessage(resp) + ". S-au sters "+imageDeleteCount+" imagini");
                 }).catch(function (resp) {
                     resetAlert("danger", Error.getMessage(resp));
                 });
