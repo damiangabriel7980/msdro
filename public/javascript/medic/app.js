@@ -148,6 +148,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'leaveStaywell',
+                files: [
+                    'javascript/medic/ModalControllers/medicalCoursesModal.js'
+                ]
+            },
+            {
                 name: 'Calendar',
                 files: [
                     'components/fullcalendar/dist/fullcalendar.css',
@@ -617,6 +623,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Brochure'])
             }
         })
+        .state('medicalCourses', {
+            url: '/accessMedicalCourses'
+        })
 }]);
 
 app.run(
@@ -686,6 +695,21 @@ app.run(
                     {
                       scrollPosCache[$state.current.templateUrl] = [$window.pageXOffset, $window.pageYOffset];
                     }
+
+                    if(toState.name === 'medicalCourses') {
+                        $modal.open({
+                            templateUrl: 'partials/medic/modals/leaveStaywell.html',
+                            keyboard: false,
+                            backdrop: 'static',
+                            windowClass: 'fade',
+                            controller: 'medicalCourses',
+                            resolve: {
+                                loadDeps: loadStateDeps(['leaveStaywell'])
+                            }
+                        });
+                        event.preventDefault();
+                    }
+
                 });
             //============================================================================================= intro modal
             $rootScope.showIntroPresentation = function (groupID) {

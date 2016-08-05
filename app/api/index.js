@@ -69,7 +69,7 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 var crypto   = require('crypto');
 var Q = require('q');
-
+var Config = require('../../config/environment');
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user){
@@ -4940,6 +4940,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res,err,500);
                 }else{
                     handleSuccess(res, brochureSections);
+                }
+            });
+        });
+
+    router.route('/medicalCourses')
+        .get(function (req, res) {
+            User.findOne({_id: req.user._id}).select("+citiesID").populate('specialty profession').deepPopulate('citiesID.county').exec(function (err, foundUser) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    var dataToSend = {
+                        nume : foundUser.name,
+                        specialitate : foundUser.specialty ? foundUser.specialty.name : null,
+                        email: foundUser.username,
+                        oras: foundUser.citiesID ? foundUser.citiesID[0].name : null,
+                        judet: foundUser.citiesID ? foundUser.citiesID[0].county.name : null,
+                        profesia: foundUser.profession ? foundUser.profession.display_name : null
+                    };
+                    request({
+                        url: Config().onlineCoursesTokenUrl,
+                        method: "POST",
+                        form: dataToSend
+                    }, function (error, message, response) {
+                        if(error){
+                            handleError(res,error,500);
+                        }else{
+                            handleSuccess(res, Config().onlineCoursesRedirectUrl + '?msdToken=' + JSON.parse(response).token);
+                        }
+                    });
                 }
             });
         });

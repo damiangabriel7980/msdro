@@ -60,7 +60,7 @@ userSchema.statics.findAndModify = function (query, sort, doc, options, callback
 };
 
 userSchema.plugin(deepPopulate, {
-    whitelist: ['profession', 'groupsID.profession']
+    whitelist: ['profession', 'groupsID.profession', 'citiesID.county']
 });
 
 userSchema.pre('save', function (next) {
