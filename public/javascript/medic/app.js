@@ -276,7 +276,11 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push('errorRecover');
 }]);
 
-app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.constant('STATECONST', {
+    'MEDICALCOURSES': 'medicalCourses'
+});
+
+app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($stateProvider, $urlRouterProvider, STATECONST) {
     $urlRouterProvider.otherwise("/");
     $urlRouterProvider
         .when(/articoleStiintifice/, ['$state','$match', function ($state, $match) {
@@ -617,14 +621,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Brochure'])
             }
         })
-        .state('medicalCourses', {
+        .state(STATECONST.MEDICALCOURSES, {
             url: '/accessMedicalCourses'
         })
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad', '$window', '$timeout', '$location', '$anchorScroll',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad, $window, $timeout, $location, $anchorScroll) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad', '$window', '$timeout', '$location', '$anchorScroll', 'STATECONST',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad, $window, $timeout, $location, $anchorScroll, STATECONST) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -690,7 +694,7 @@ app.run(
                       scrollPosCache[$state.current.templateUrl] = [$window.pageXOffset, $window.pageYOffset];
                     }
 
-                    if(toState.name === 'medicalCourses') {
+                    if(toState.name === STATECONST.MEDICALCOURSES) {
                         $modal.open({
                             templateUrl: 'partials/medic/modals/leaveStaywell.html',
                             keyboard: false,
