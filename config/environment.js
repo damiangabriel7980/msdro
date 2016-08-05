@@ -60,6 +60,8 @@ module.exports = function(){
                 dpocAppLink: "unavailable",
                 publicFolder: "public",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
+                onlineCoursesTokenUrl: "http://cursurimedicale.ro/staywell.php",
+                onlineCoursesRedirectUrl : "http://cursurimedicale.ro/inregistrare",
                 newsletter: {
                     scheduleInterval: 'everyMinute',
                     batch: {
