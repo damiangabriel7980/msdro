@@ -34,10 +34,10 @@
                 <li class="siteMapList no-text-decoration" ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" ng-click="navigateMobile('Speakers')">
                     Speakers
                 </li>
-                <li class="siteMapList no-text-decoration" ng-if="specialProductPage.speakers && specialProductPage.speakers.length > 0" ng-click="navigateMobile('Q&A')">
-                    Q & A
+                <li class="siteMapList no-text-decoration" ng-if="!specialProductMenu.length" ng-click="navigateMobile('Q & A')">
+                    Parerile expertilor
                 </li>
-                <li class="siteMapList no-text-decoration" ui-sref="groupSpecialProduct.sitemap({product_id: $stateParams.product_id})">
+                <li class="siteMapList no-text-decoration" ui-sref="groupSpecialProduct.sitemap({product_id: $stateParams.product_id, isResource: $state.params.isResource})">
                     Sitemap
                 </li>
             </ul>
