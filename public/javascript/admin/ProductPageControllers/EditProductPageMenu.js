@@ -98,6 +98,10 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
             "insertdatetime media table contextmenu paste charmap"
         ],
         height: 500,
+        valid_elements: "@[id|class|title|style]," +
+        "a[name|href|target|title|alt|scroll-on-click|header-id]," +
+        "#p,blockquote,-ol,-ul,-li,br,img[src|height|width],-sub,-sup,-b,-i,-u," +
+        "-span,hr",
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };
 
