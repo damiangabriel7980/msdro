@@ -10,4 +10,42 @@ app.directive('button', function () {
             });
         }
     };
-});
+})
+    .directive('compileTemplate', function($compile, $parse){
+        return {
+            link: function(scope, element, attr){
+                var parsed = $parse(attr.ngBindHtml);
+                function getStringValue() {
+                    return (parsed(scope) || '').toString();
+                }
+
+                //Recompile if the template changes
+                scope.$watch(getStringValue, function() {
+                    //The -9999 makes it skip directives so that we do not recompile ourselves
+                    $compile(element, null, -9999)(scope);
+                });
+            }
+        }
+    })
+    .directive('scrollOnClick', function() {
+        return {
+            restrict: 'A',
+            scope: {
+                headerId: "@"
+            },
+            link: function(scope, element, attrs) {
+                var idToScroll = attrs.href;
+                element.on('click', function(event) {
+                    event.preventDefault();
+                    var $target;
+                    if (idToScroll) {
+                        $target = angular.element(idToScroll);
+                    } else {
+                        $target = element;
+                    }
+                    angular.element("body").animate({scrollTop: $target.offset().top - angular.element(scope.headerId).outerHeight()}, "slow");
+                    return false;
+                });
+            }
+        }
+    });
