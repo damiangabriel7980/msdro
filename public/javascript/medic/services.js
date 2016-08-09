@@ -229,6 +229,14 @@ services.factory('eventsService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('coursesService', ['$resource', function($resource){
+    return {
+        requestToken: $resource('api/medicalCourses', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('FormatService', function () {
     return {
         formatMongoDate: function (date) {

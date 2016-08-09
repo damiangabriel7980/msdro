@@ -1,0 +1,19 @@
+<div class="modal-content col-md-12 noPadding">
+    <div class="modal-header col-md-12">
+        <h4>Parasire site Staywell</h4>
+    </div>
+
+    <div class="modal-body col-md-12">
+        <div class="col-md-12 noPadding">
+            <alert ng-if="modalAlert.show" type="{{modalAlert.type}}" close="modalAlert.show=false">{{modalAlert.message}}</alert>
+        </div>
+        <div class="col-md-12 noPadding">
+            Atentie! Acum parasiti platforma MSD Romania. MSD Romania nu face declaratii sau garantii cu privire la nicio alta platforma pe care o puteti accesa prin Staywell.ro.
+        </div>
+    </div>
+
+    <div class="modal-footer col-md-12">
+        <a class="btn btn-default pull-left" ng-click="closeModal()">Anuleaza</a>
+        <a class="btn btn-primary pull-right" href="{{medicalCoursesUrl}}" ng-click="closeModal()" target="_blank">Continua</a>
+    </div>
+</div>

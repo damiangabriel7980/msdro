@@ -714,6 +714,47 @@ services.factory('NewsletterService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('advancedNgTableFilter', [function () {
+    var filterByNestedObject =function (filterOrSortObj) {
+        var filters = {};
+        angular.forEach(filterOrSortObj, function(val,key){
+            var filter = filters;
+            var parts = key.split('.');
+            for (var i=0;i<parts.length;i++){
+                if (i!=parts.length-1) {
+                    filter[parts[i]] = {};
+                    filter = filter[parts[i]];
+                }
+                else {
+                    if(val.length){
+                        filter[parts[i]] = val;
+                    } else{
+                        delete filterOrSortObj[key];
+                    }
+                }
+            }
+        });
+        return filters;
+    };
+    return {
+        filterByNestedObject : filterByNestedObject
+    }
+}]);
+
+services.factory('translateProperty', ['Utils', function (Utils) {
+    var translatedProp =function (arrayOfObjects, propertyToTranslate, translatedValues) {
+        angular.forEach(arrayOfObjects, function(val,key){
+            if(translatedValues[arrayOfObjects[key][propertyToTranslate]]){
+                arrayOfObjects[key]['translated' + Utils.capitalizeFirstLetter(propertyToTranslate)] = translatedValues[arrayOfObjects[key][propertyToTranslate]];
+            }
+        });
+        return arrayOfObjects;
+    };
+    return {
+        translatedProp : translatedProp
+    }
+}]);
+
 services.factory('CSVParser', ['$q', function ($q) {
     var parseContent = function (contents, headers, separator) {
         console.log(contents);

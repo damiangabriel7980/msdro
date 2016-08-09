@@ -148,6 +148,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'leaveStaywell',
+                files: [
+                    'javascript/medic/ModalControllers/medicalCoursesModal.js'
+                ]
+            },
+            {
                 name: 'Calendar',
                 files: [
                     'components/fullcalendar/dist/fullcalendar.css',
@@ -270,7 +276,11 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push('errorRecover');
 }]);
 
-app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.constant('STATECONST', {
+    'MEDICALCOURSES': 'medicalCourses'
+});
+
+app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($stateProvider, $urlRouterProvider, STATECONST) {
     $urlRouterProvider.otherwise("/");
     $urlRouterProvider
         .when(/articoleStiintifice/, ['$state','$match', function ($state, $match) {
@@ -386,7 +396,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ProductDetail'
         })
         .state('biblioteca.articoleStiintifice',{
-            url: '/articoleStiintifice/:articleType',
+            url: '/despreMSD/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
             controller: 'ArticlesView',
             resolve: {
@@ -522,6 +532,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
+            params: {
+                isResource: false
+            },
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
         })
@@ -588,6 +601,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.sitemap', {
             url: '/sitemap',
+            params: {
+                isResource: false
+            },
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html'
         })
         .state('profileMobile',{
@@ -598,8 +614,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
             }
         })
-        .state('pathologyResources.immunologyQA',{
+        .state('groupSpecialProduct.immunologyQA',{
             url:'/immunologyQA',
+            params: {
+                isResource: false
+            },
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
         })
@@ -611,11 +630,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Brochure'])
             }
         })
+        .state(STATECONST.MEDICALCOURSES, {
+            url: '/accessMedicalCourses'
+        })
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad', '$window', '$timeout', '$location', '$anchorScroll',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad, $window, $timeout, $location, $anchorScroll) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad', '$window', '$timeout', '$location', '$anchorScroll', 'STATECONST',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad, $window, $timeout, $location, $anchorScroll, STATECONST) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -680,6 +702,21 @@ app.run(
                     {
                       scrollPosCache[$state.current.templateUrl] = [$window.pageXOffset, $window.pageYOffset];
                     }
+
+                    if(toState.name === STATECONST.MEDICALCOURSES) {
+                        $modal.open({
+                            templateUrl: 'partials/medic/modals/leaveStaywell.html',
+                            keyboard: false,
+                            backdrop: 'static',
+                            windowClass: 'fade',
+                            controller: 'medicalCourses',
+                            resolve: {
+                                loadDeps: loadStateDeps(['leaveStaywell'])
+                            }
+                        });
+                        event.preventDefault();
+                    }
+
                 });
             //============================================================================================= intro modal
             $rootScope.showIntroPresentation = function (groupID) {

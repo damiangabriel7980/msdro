@@ -10,24 +10,21 @@
                             <label>Nume produs:</label>
                             <input class="form-control" type="text" ng-model="newProductPage.product_name">
                         </div>
-                        <div class="col-md-12 noPadding">
-                            <!--<label>Grupuri curente:</label>{{newProductPage.groups}}-->
-                        </div>
-                        <div class="col-md-12 noPadding">
-                            <label>Schimba grupuri:</label>
-                            <my-multiple-select all-objects="groupsAvailable" selected-objects="selectedGroups"
-                                                track-by="_id" display-by="display_name" split-by="profession.display_name"
-                                                output="newProductPage.groups"></my-multiple-select>
+                        <div class="form-group col-md-12 noPadding">
+                            <label>Job ID:</label>
+                            <input type="text" class="form-control" ng-model="newProductPage.job_id">
                         </div>
                     </div>
                     <div class="col-md-6 noPaddingRight">
-                        <div class="form-group col-md-6 noPadding">
-                            <label>Header title:</label>
-                            <input type="text" class="form-control" ng-model="newProductPage.header_title">
+                        <div class="form-group col-md-6 noPaddingLeft">
+                            <label for="productType">Tip:</label>
+                            <select ng-model="newProductPage.productType" ng-options="productType as productTypeDisplayName(productType) for productType in productDisplayNames"
+                                    class="form-control col-md-12 noPadding" id="productType">
+                            </select>
                         </div>
-                        <div class="form-group col-md-6" style="padding: 0 0 0 10px">
-                            <label>Job ID:</label>
-                            <input type="text" class="form-control" ng-model="newProductPage.job_id">
+                        <div class="form-group col-md-6 noPadding">
+                            <label>Numar ordine: </label>
+                            <input type="number" class="form-control" ng-model="newProductPage.order_index">
                         </div>
                         <div class="col-md-12 noPadding" style="margin-top: 10px">
                             <div class="col-md-12 noPadding"><label>Afiseaza safety info pentru:</label></div>
@@ -79,7 +76,7 @@
         </div>
         <div class="col-md-12 marginTop10" ng-if="newProductPage.file_path">
             <div class="col-md-12 noPadding">
-                <a class="btn btn-default" href="{{pathAmazonDev+associatedProduct.file_path}}" target="_blank"><i
+                <a class="btn btn-default" href="{{pathAmazonDev+newProductPage.file_path}}" target="_blank"><i
                         class="glyphicon glyphicon-save-file"></i>&nbsp;Descarca RCP</a>
             </div>
         </div>
@@ -116,7 +113,7 @@
     <div class="modal-footer">
         <div class="col-xs-12">
             <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
-            <a class="btn btn-warning pull-right" ng-click="addPage()">Finalizeaza</a>
+            <a class="btn btn-warning pull-right" ng-click="addPage()">Salveaza</a>
             <a class="btn btn-warning pull-right" ng-click="addPage(true)">Modifica meniu</a>
             <a class="btn btn-warning pull-right" ng-click="renderView('resourcesList')">Lista Resurse</a>
             <a class="btn btn-warning pull-right" ng-click="renderView('viewGlossary')">Modifica glosar</a>

@@ -1,6 +1,6 @@
 <div ng-controller="ProductPageMenu">
     <div class="modal-header">
-        <div class="modal-title"><h3>Modifica meniu produs</h3></div>
+        <div class="modal-title"><h3>Modifica meniu {{sessionData.isResource ? 'resursa' : 'produs'}}</h3></div>
     </div>
     <div class="modal-body container" style="margin: 0; width: 100%">
         <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
@@ -24,7 +24,7 @@
     <div class="modal-footer">
         <div class="col-xs-12">
             <a class="btn btn-default pull-left" ng-click="closeModal(true)">Inchide</a>
-            <a class="btn btn-warning pull-right" ng-click="renderView('specialProductEdit')">Inapoi</a>
+            <a class="btn btn-warning pull-right" ng-click="renderView(sessionData.isResource ? 'resourceEdit' : 'specialProductEdit')">Inapoi</a>
         </div>
     </div>
 </div>

@@ -12,15 +12,24 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
         $scope.newProductPage = resp.specialProduct;
         $scope.associatedProduct = resp.associatedProduct ? resp.associatedProduct : null;
         $scope.myPathologies.selectedPathologies = $scope.newProductPage.pathologiesID;
-        $scope.selectedGroups = $scope.newProductPage.groups;
-        //get available groups (a group can have only one special product)
-        SpecialProductsService.groups.query().$promise.then(function (resp) {
-            $scope.groupsAvailable = Success.getObject(resp);
-        });
+        $scope.showTab($scope.newProductPage.productType === 'resource' ? 'prescription' : 'description');
     });
 
     $scope.myPathologies = {
         selectedPathologies: null
+    };
+
+    $scope.productDisplayNames = ["product", "resource"];
+
+    $scope.productTypeDisplayName = function (name) {
+        switch (name) {
+            case "product":
+                return "Produs special";
+                break;
+            case "resource":
+                return "Resursa";
+                break;
+        }
     };
 
     $scope.logoImageBody = null;
@@ -123,6 +132,6 @@ controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', '
     $scope.showTab = function (content) {
         $scope.activeTab = content;
     };
-    $scope.showTab('description');
+
 
 }]);

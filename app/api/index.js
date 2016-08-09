@@ -69,7 +69,7 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 var crypto   = require('crypto');
 var Q = require('q');
-
+var Config = require('../../config/environment');
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user){
@@ -174,6 +174,7 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                             general_description : singleItem.general_description,
                                             logo_path: singleItem.logo_path,
                                             product_name: singleItem.product_name,
+                                            order_index: singleItem.order_index,
                                             firstMenuItem: success
                                         };
                                         associatedItemsClean.push(itemToAdd);
@@ -187,6 +188,9 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 if(err){
                                     callback(err);
                                 } else {
+                                    associatedItemsClean = _.sortBy(associatedItemsClean, function(asociatedItemObject){
+                                        return asociatedItemObject.order_index;
+                                    });
                                     objectToPush['associated_items'] = associatedItemsClean;
                                     pathologiesToSend.push(objectToPush);
                                     callback();
@@ -203,8 +207,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                 if(err){
                     deferred.reject(err);
                 } else {
-                    pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
-                        return obj.order_index;
+                    pathologiesToSend = _.sortBy(pathologiesToSend, function(pathologyObj){
+                        return pathologyObj.order_index;
                     });
                     deferred.resolve(pathologiesToSend);
                 }
@@ -1467,7 +1471,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 q._id = req.query.id;
             }
-            specialProduct.find(q).populate('pathologiesID').deepPopulate('groups.profession').exec(function (err, products) {
+            specialProduct.find(q).populate('pathologiesID').exec(function (err, products) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -1493,7 +1497,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var toCreate = new specialProduct({
                 product_name: 'Untitled',
-                header_title: 'Untitled'
+                header_title: 'Untitled',
+                productType: req.body.productType
             });
             toCreate.save(function (err, saved) {
                 if(err){
@@ -1514,6 +1519,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
+                    console.log(err);
                     handleError(res,err,500);
                 }else{
                     if(forAssociatedProd){
@@ -4256,7 +4262,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             } else {
                 var itemQParams = {
                     query: {
-                        enabled: { $exists: true, $ne : false }
+                        enabled: { $exists: true, $ne : false },
+                        productType: 'product'
                     },
                     sort: {
                         product_name: 1
@@ -4911,6 +4918,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         product_name: 1
                     }
                 };
+                if(!req.query.id){
+                    itemQParams.query.productType = 'product';
+                }
                 getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
                     function (success) {
                         handleSuccess(res,success);
@@ -4930,6 +4940,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res,err,500);
                 }else{
                     handleSuccess(res, brochureSections);
+                }
+            });
+        });
+
+    router.route('/medicalCourses')
+        .get(function (req, res) {
+            User.findOne({_id: req.user._id}).select("+citiesID").populate('specialty profession').deepPopulate('citiesID.county').exec(function (err, foundUser) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    var dataToSend = {
+                        nume : foundUser.name,
+                        specialitate : foundUser.specialty ? foundUser.specialty.name : null,
+                        email: foundUser.username,
+                        oras: foundUser.citiesID ? foundUser.citiesID[0].name : null,
+                        judet: foundUser.citiesID ? foundUser.citiesID[0].county.name : null,
+                        profesia: foundUser.profession ? foundUser.profession.display_name : null
+                    };
+                    request({
+                        url: Config().onlineCoursesTokenUrl,
+                        method: "POST",
+                        form: dataToSend
+                    }, function (error, message, response) {
+                        if(error){
+                            handleError(res,error,500);
+                        }else{
+                            handleSuccess(res, Config().onlineCoursesRedirectUrl + '?msdToken=' + JSON.parse(response).token);
+                        }
+                    });
                 }
             });
         });

@@ -138,7 +138,7 @@
                     </form>
                 </li>
 
-                <li class="dropdown" ng-if="pathologies" ng-class="{'active': $state.includes('pathologies')}">
+                <li class="dropdown" ng-if="pathologies" ng-class="{'active': $state.includes('pathologies') || $state.params.isResource}">
                     <a class="dropdown-toggle " data-toggle="dropdown">
                         Patologii <b class="caret"></b>
                     </a>
@@ -149,7 +149,11 @@
                     </ul>
                 </li>
 
-                <bootstrap-subnav ng-if="pathologiesWithProducts" active-conditions="$state.includes('groupSpecialProduct') || $state.includes('productList')" objects-array="pathologiesWithProducts" menu-title="Produse" children-property="associated_items" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="product_name" no-children-state-name="productList.all.groupedByPathology" no-children-state-parameters-exist="true" no-children-state-parameters="idArea" no-children-state-parameters-values="0" state-parameters-exist="true" state-name="groupSpecialProduct.menuItem" state-parameters="product_id" state-parameters-values="_id"></bootstrap-subnav>
+                <bootstrap-subnav ng-if="pathologiesWithProducts" active-conditions="($state.includes('groupSpecialProduct') && !$state.params.isResource) || $state.includes('productList')" objects-array="pathologiesWithProducts"
+                                  menu-title="Produse" children-property="associated_items" click-on-final-child="closeNavbar" parent-display-name="display_name" child-display-name="product_name" no-children-state-name="productList.all.groupedByPathology"
+                                  no-children-state-parameters-exist="true" no-children-state-parameters="idArea" no-children-state-parameters-values="0" state-parameters-exist="true" state-name="groupSpecialProduct.menuItem" state-parameters="product_id" state-parameters-values="_id">
+
+                </bootstrap-subnav>
 
                 <li class="dropdown" ng-class="{'active': $state.includes('calendar') || $state.includes('conferinte')}">
                     <a class="dropdown-toggle " data-toggle="dropdown">
@@ -165,7 +169,7 @@
                         Resurse <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="closeNavbar()"><a>&nbsp;Articole stiintifice </a></li>
+                        <li ui-sref="biblioteca.articoleStiintifice.listaArticole({articleType:3})" ng-click="closeNavbar()"><a>&nbsp;Despre MSD </a></li>
                         <li ng-click="goToMerckSite()"><a ng-click="closeNavbar()">&nbsp;Manualul MSD</a></li>
                         <li ng-click="closeNavbar(); $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a>&nbsp;Multimedia</a></li>
                     </ul>
