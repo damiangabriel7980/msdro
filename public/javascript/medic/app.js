@@ -17,7 +17,8 @@ var app = angular.module('app',
         'widgetMostRead',
         'mobileContentList',
         'checklist-model',
-        'bootstrapSubnav'
+        'bootstrapSubnav',
+        'angularFloatingButton'
     ]);
 
 app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
