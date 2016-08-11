@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h4>{{pathologyName}}</h4>
+</div>
+
+<div class="modal-body col-md-12">
+    <div ng-class="{'noPadding':isMobile(true)}" class="col-md-12" >
+        <video class="marginTop25px" ng-src="{{pathologyVideo()}}" controls preload="auto" autoplay width="100%" height="100%">
+        </video>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-default float-left" ng-click="closeModal()">Inchide</a>
+</div>
