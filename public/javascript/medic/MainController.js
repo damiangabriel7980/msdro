@@ -4,6 +4,9 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.goToMerckSite=function(){
         $window.open('http://www.merckmanuals.com/','_blank');
     };
+    $scope.goToUnivadisSite=function(){
+        $window.open('http://www.univadis.com/','_blank');
+    };
     $scope.logoutUser=function(){
         $window.location.href='logout';
     };
