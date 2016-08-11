@@ -4966,7 +4966,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         if(error){
                             handleError(res,error,500);
                         }else{
-                            handleSuccess(res, Config().onlineCoursesRedirectUrl + '?msdToken=' + JSON.parse(response).token);
+                            var responseData = JSON.parse(response);
+                            var urlToRedirect = responseData.redirect_to.replace(/\\\//g, "/");
+                            handleSuccess(res, urlToRedirect);
                         }
                     });
                 }
