@@ -1,0 +1,92 @@
+.specialEffectsButtonBlue{
+  .mainButton{
+    padding: 0 5px !important;
+    color: #00042C;
+    height: 85px;
+    background-size: 200%;
+    background-image: linear-gradient(to right, #F4F3F3 40%, #137ABD 50%);
+    -webkit-transition: background-position 0.5s;
+    -moz-transition: background-position 0.5s;
+    transition: background-position 0.5s;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+  }
+  .readMoreButton{
+    padding: 0 5px !important;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    text-align: center;
+    color: #F4F3F3;
+    height: 85px;
+    font-size: 12px;
+    background-color: #F4F3F3;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+  }
+  .buttonsWrapper{
+    border-left: 10px solid #137ABD;
+    height: 85px;
+    &:hover{
+      border-left: 10px solid #065286;
+      .mainButton{
+        color: white;
+        border-left: 2px solid #065286;
+        background-position: -100%;
+      }
+      .readMoreButton{
+        color: white !important;
+        visibility: visible;
+        background-color: #065286;
+      }
+    }
+  }
+}
+.specialEffectsButtonRed{
+  .mainButton{
+    padding: 0 5px !important;
+    color: #00042C;
+    height: 85px;
+    background-size: 200%;
+    background-image: linear-gradient(to right, #F4F3F3 50%, #D6002F 50%);
+    background-attachment: fixed;
+    -webkit-transition: background-position 0.7s, color 0.7s;
+    -moz-transition: background-position 0.7s, color 0.7s;
+    transition: background-position 0.7s, color 0.7s;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+  }
+  .readMoreButton{
+    padding: 0 5px !important;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    text-align: center;
+    color: #F4F3F3;
+    height: 85px;
+    font-size: 12px;
+    background-color: #F4F3F3;
+    -webkit-transition: all 0.7s;
+    -moz-transition: all 0.7s;
+  }
+  .buttonsWrapper{
+    border-left: 12px solid #D6002F;
+    height: 85px;
+    &:hover{
+      border-left: 12px solid #9D0025;
+      .mainButton{
+        color: white;
+        background-position: -100%;
+      }
+      .readMoreButton{
+        color: white !important;
+        visibility: visible;
+        background-color: #9D0025;
+      }
+    }
+  }
+}
