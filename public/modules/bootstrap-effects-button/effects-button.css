@@ -1,22 +1,32 @@
+.specialEffectsButtonBlue {
+  cursor: pointer;
+}
 .specialEffectsButtonBlue .mainButton {
   padding: 0 5px !important;
   color: #00042C;
   height: 85px;
   background-size: 200%;
-  background-image: linear-gradient(to right, #F4F3F3 40%, #137ABD 50%);
-  -webkit-transition: background-position 0.5s;
-  -moz-transition: background-position 0.5s;
-  transition: background-position 0.5s;
+  background-image: linear-gradient(to right, #F4F3F3 50%, #137ABD 50%);
+  background-attachment: fixed;
+  -webkit-transition: background-position 0.5s, color 0.5s;
+  -moz-transition: background-position 0.5s, color 0.5s;
+  transition: background-position 0.5s, color 0.5s;
   text-align: center;
   display: -webkit-box;
+  display: -moz-box;
   -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-box-align: center;
+  -moz-box-align: center;
 }
 .specialEffectsButtonBlue .readMoreButton {
   padding: 0 5px !important;
   display: -webkit-box;
+  display: -moz-box;
   -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-box-align: center;
+  -moz-box-align: center;
   text-align: center;
   color: #F4F3F3;
   height: 85px;
@@ -24,6 +34,7 @@
   background-color: #F4F3F3;
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
+  transition: all 0.5s;
 }
 .specialEffectsButtonBlue .buttonsWrapper {
   border-left: 10px solid #137ABD;
@@ -42,6 +53,9 @@
   visibility: visible;
   background-color: #065286;
 }
+.specialEffectsButtonRed {
+  cursor: pointer;
+}
 .specialEffectsButtonRed .mainButton {
   padding: 0 5px !important;
   color: #00042C;
@@ -49,26 +63,33 @@
   background-size: 200%;
   background-image: linear-gradient(to right, #F4F3F3 50%, #D6002F 50%);
   background-attachment: fixed;
-  -webkit-transition: background-position 0.7s, color 0.7s;
-  -moz-transition: background-position 0.7s, color 0.7s;
-  transition: background-position 0.7s, color 0.7s;
+  -webkit-transition: background-position 0.5s, color 0.5s;
+  -moz-transition: background-position 0.5s, color 0.5s;
+  transition: background-position 0.5s, color 0.5s;
   text-align: center;
   display: -webkit-box;
+  display: -moz-box;
   -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-box-align: center;
+  -moz-box-align: center;
 }
 .specialEffectsButtonRed .readMoreButton {
   padding: 0 5px !important;
   display: -webkit-box;
+  display: -moz-box;
   -webkit-box-pack: center;
+  -moz-box-pack: center;
   -webkit-box-align: center;
+  -moz-box-align: center;
   text-align: center;
   color: #F4F3F3;
   height: 85px;
   font-size: 12px;
   background-color: #F4F3F3;
-  -webkit-transition: all 0.7s;
-  -moz-transition: all 0.7s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
 }
 .specialEffectsButtonRed .buttonsWrapper {
   border-left: 12px solid #D6002F;

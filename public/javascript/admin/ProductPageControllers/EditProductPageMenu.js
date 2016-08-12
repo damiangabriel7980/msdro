@@ -97,10 +97,8 @@ controllers.controller('EditProductPageMenu', ['$scope', 'SpecialProductsService
             "searchreplace visualblocks code fullscreen",
             "insertdatetime media table contextmenu paste charmap"
         ],
-        valid_elements: "@[id|class|title|style]," +
-        "a[name|href|target|title|alt|scroll-on-click|header-id]," +
-        "#p,blockquote,-ol,-ul,-li,br,img[src|height|width],-sub,-sup,-b,-i,-u," +
-        "-span,hr",
+        extended_valid_elements: 'div[class|name|href|target|title|alt|scroll-on-click|header-id|jump-to]',
+        valid_children: '+div[a|p|div|p|ul|ol|li|h1|h2|h3|h4|h5|h5|h6]',
         height: 500,
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     };

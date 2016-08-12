@@ -31,10 +31,11 @@ app.directive('button', function () {
         return {
             restrict: 'A',
             scope: {
-                headerId: "@"
+                headerId: "@",
+                jumpTo: "@"
             },
             link: function(scope, element, attrs) {
-                var idToScroll = attrs.href;
+                var idToScroll = scope.jumpTo;
                 element.on('click', function(event) {
                     event.preventDefault();
                     var $target;
