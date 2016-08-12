@@ -19,31 +19,15 @@
     </div>
             <div class="col-md-12 noPadding marginTop20">
                 <div class="col-md-12 noPadding">
-                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine header</button>
+                    <single-upload-manager label="imagine header" on-complete-function="headerIntroChanged(key)"
+                                                bucket="{{amazonBucket}}" on-delete-function="headerIntroChanged(key, true)"
+                                                path="{{'pathologies/'+pathology._id+'/pathology_header_image/'}}" file-name="{{'image' + pathology._id}}"></single-upload-manager>
                 </div>
-                <div class="col-md-12 marginTop20 noPadding">
-                    <img no-cache-src="{{pathAmazonDev + pathology.header_image}}" ng-if="pathology.header_image" width="100">
-                </div>
-                <div class="col-xs-12 noPadding" ng-if="pathology.header_image">
-                    <label>Link imagine header:</label>
-                    <ul>
-                        <li style="font-size: 12px" class="col-xs-12">
-                            {{pathAmazonDev + pathology.header_image}}&nbsp;
-                            <i class="glyphicon glyphicon-remove pointer" ng-click="deleteMultimedia(pathology.header_image)"></i>
-                        </li>
-                    </ul>
-                </div>
+
                 <div class="col-md-12 noPadding marginTop20">
-                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, true)" ngf-multiple="false" ngf-accept="'video/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca video intro</button>
-                </div>
-                <div class="col-xs-12 noPadding" ng-if="pathology.video_intro">
-                    <label>Link video intro:</label>
-                    <ul>
-                        <li style="font-size: 12px" class="col-xs-12">
-                            {{pathAmazonDev + pathology.video_intro}}&nbsp;
-                            <i class="glyphicon glyphicon-remove pointer" ng-click="deleteMultimedia(pathology.video_intro, true)"></i>
-                        </li>
-                    </ul>
+                    <single-upload-manager label="video intro" on-complete-function="headerIntroChanged(key)"
+                                           bucket="{{amazonBucket}}" on-delete-function="headerIntroChanged(key, true)"
+                                           path="{{'pathologies/'+pathology._id+'/pathology_video_intro/'}}" file-name="{{'video' + pathology._id}}"></single-upload-manager>
                 </div>
                 <div class="col-md-12 noPadding">
                     <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
@@ -58,8 +42,8 @@
             </div>
             <div class="col-xs-12 noPadding" ng-if="pathology.associated_multimedia">
                     <div class="col-md-12 noPadding">
-                        <enhanced-S3-Upload-Manager label="multimedia asociat" on-complete-function="onMultimediaUpdate(key)"
-                                                    bucket="{{amazonBucket}}" on-delete-function="onMultimediaUpdate(key, true)"
+                        <enhanced-S3-Upload-Manager label="multimedia asociat" on-complete-function="onMultimediaUpdate(key, false)"
+                                                    bucket="{{amazonBucket}}" on-delete-function="onMultimediaUpdate(key, false, true)"
                                                     path="{{'pathologies/'+pathology._id+'/pathology_images/'}}"></enhanced-S3-Upload-Manager>
                     </div>
             </div>

@@ -40,62 +40,6 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
         showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
     });
 
-    var uploadMultimedia = function (body, isVideo) {
-        AmazonService.getClient(function (s3) {
-            var extension = body.name.split('.').pop();
-            var key = isVideo ? "pathologies/"+$scope.pathology._id+ "/pathology_video_intro/video" +$scope.pathology._id+"."+extension : "pathologies/"+$scope.pathology._id + "/pathology_header_image/image"+$scope.pathology._id+"."+extension;
-            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
-                if (err) {
-                    console.log(err);
-                    showAlertMessage('uploadAlert', 'danger', 'Upload esuat!', true);
-                    $scope.$apply();
-                } else {
-                    //update database as well
-                    isVideo ? $scope.pathology.video_intro = key : $scope.pathology.header_image = key;
-                    $scope.updatePathology();
-                }
-            });
-            req.on('httpUploadProgress', function (evt) {
-                var progress = parseInt(100.0 * evt.loaded / evt.total);
-                $scope.$apply(function() {
-                    console.log(progress);
-                })
-            });
-        });
-    };
-
-    $scope.deleteMultimedia = function (path, isVideo, newFile) {
-        AmazonService.getClient(function (s3) {
-            s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:path}, function (err, data) {
-                if(err){
-                    showAlertMessage('uploadAlert', 'danger', isVideo ? 'Eroare la stergerea intro-ului!' : 'Eroare la stergerea pozei de header!', true);
-                    $scope.$apply();
-                }else{
-                    if(newFile){
-                        uploadMultimedia(newFile, isVideo);
-                    } else {
-                        isVideo ? $scope.pathology.video_intro = null : $scope.pathology.header_image = null;
-                        $scope.updatePathology();
-                    }
-                }
-            });
-        });
-    };
-
-    $scope.fileSelected = function($files, isVideo){
-        //make sure a file was actually loaded
-        if($files[0]){
-            var key = isVideo ? $scope.pathology.video_intro : $scope.pathology.header_image;
-            //if there already is a multimedia, delete it. Then upload new
-            if(key){
-                $scope.deleteMultimedia(key, isVideo, $files[0]);
-            }else{
-                uploadMultimedia($files[0], isVideo);
-            }
-        }
-
-    };
-
     $scope.updatePathology = function(closeModal){
         $scope.pathology.last_updated = Date.now();
         var id_apps = [];
@@ -112,6 +56,19 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
         }).catch(function(err){
             showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
         });
+    };
+
+    var checkIfVideo = function (stringToCheck) {
+        return (stringToCheck.indexOf('video') > -1)
+    };
+
+    $scope.headerIntroChanged = function (key, deleteItem) {
+        if(deleteItem){
+            checkIfVideo(key) ? $scope.pathology.video_intro = null : $scope.pathology.header_image = null;
+        } else {
+            checkIfVideo(key) ? $scope.pathology.video_intro = key : $scope.pathology.header_image = key;
+        }
+        $scope.updatePathology();
     };
 
     $scope.onMultimediaUpdate = function(key, toDelete){
