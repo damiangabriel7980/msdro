@@ -163,7 +163,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 description: pathology.description,
                                 header_image: pathology.header_image,
                                 specialApps: pathology.specialApps,
-                                order_index: pathology.order_index
+                                order_index: pathology.order_index,
+                                video_intro: pathology.video_intro
                             };
                             var associatedItemsClean = [];
                             async.each(associated, function(singleItem, callbackItem){

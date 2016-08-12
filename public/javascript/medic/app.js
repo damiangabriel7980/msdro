@@ -17,7 +17,8 @@ var app = angular.module('app',
         'widgetMostRead',
         'mobileContentList',
         'checklist-model',
-        'bootstrapSubnav'
+        'bootstrapSubnav',
+        'angularFloatingButton'
     ]);
 
 app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
@@ -237,6 +238,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 files: [
                     'components/video-js/dist/video-js/video-js.min.css',
                     'components/video-js/dist/video-js/video.js'
+                ]
+            },
+            {
+                name: 'PathologyModal',
+                files: [
+                    'javascript/medic/ModalControllers/PathologyModal.js'
                 ]
             }
 
