@@ -11,7 +11,7 @@ app.directive('button', function () {
         }
     };
 })
-    .directive('compileTemplate', function($compile, $parse){
+    .directive('compileTemplate', ['$compile', '$parse', function($compile, $parse){
         return {
             link: function(scope, element, attr){
                 var parsed = $parse(attr.ngBindHtml);
@@ -26,7 +26,7 @@ app.directive('button', function () {
                 });
             }
         }
-    })
+    }])
     .directive('scrollOnClick', function() {
         return {
             restrict: 'A',
