@@ -4951,11 +4951,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res, err);
                 }else{
                     var dataToSend = {
-                        nume : foundUser.name,
+                        nume : foundUser.name ? foundUser.name : null,
                         specialitate : foundUser.specialty ? foundUser.specialty.name : null,
                         email: foundUser.username,
-                        oras: foundUser.citiesID ? foundUser.citiesID[0].name : null,
-                        judet: foundUser.citiesID ? foundUser.citiesID[0].county.name : null,
+                        oras: foundUser.citiesID && foundUser.citiesID[0] ? foundUser.citiesID[0].name : null,
+                        judet: foundUser.citiesID && foundUser.citiesID[0] ? foundUser.citiesID[0].county.name : null,
                         profesia: foundUser.profession ? foundUser.profession.display_name : null
                     };
                     request({
