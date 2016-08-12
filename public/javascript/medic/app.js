@@ -239,6 +239,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'components/video-js/dist/video-js/video-js.min.css',
                     'components/video-js/dist/video-js/video.js'
                 ]
+            },
+            {
+                name: 'PathologyModal',
+                files: [
+                    'javascript/medic/ModalControllers/PathologyModal.js'
+                ]
             }
 
 
