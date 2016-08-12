@@ -8,6 +8,7 @@ var PathologiesSchema		= new Schema({
     display_name: String,
     description:  String,
     header_image: String,
+    video_intro: String,
     associated_multimedia: Array,
     last_updated: Date,
     enabled: Boolean,

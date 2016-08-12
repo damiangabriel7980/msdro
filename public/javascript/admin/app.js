@@ -23,7 +23,8 @@ var app = angular.module('app',
         'ui.select',
         'ngSanitize',
         'actionButtons',
-        'bulkOperations'
+        'bulkOperations',
+        'singleUploadManager'
     ]);
 
 app.config(['$locationProvider', function($location) {

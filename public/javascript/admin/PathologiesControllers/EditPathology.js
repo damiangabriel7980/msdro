@@ -31,8 +31,6 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
 
     PathologiesService.pathologies.query({id: idToEdit}).$promise.then(function(response){
         $scope.pathology = Success.getObject(response);
-        if($scope.pathology.header_image)
-            $scope.header_image = $rootScope.pathAmazonDev + $scope.pathology.header_image;
         $scope.myApps.selectedApps = $scope.pathology.specialApps;
         SpecialAppsService.apps.query().$promise.then(function (resp) {
             $scope.apps = Success.getObject(resp);
@@ -41,62 +39,6 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
     }).catch(function(err){
         showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
     });
-
-    var putLogoS3 = function (body) {
-        AmazonService.getClient(function (s3) {
-            var extension = body.name.split('.').pop();
-            var key = "pathologies/"+$scope.pathology._id+"/pathology_header_image/image"+$scope.pathology._id+"."+extension;
-            var req = s3.putObject({Bucket: $rootScope.amazonBucket, Key: key, Body: body, ACL:'public-read'}, function (err, data) {
-                if (err) {
-                    console.log(err);
-                    showAlertMessage('uploadAlert', 'danger', 'Upload esuat!', true);
-                    $scope.$apply();
-                } else {
-                    //update database as well
-                    PathologiesService.pathologies.update({id:$scope.pathology._id},{header_image: key}).$promise.then(function (resp) {
-                        showAlertMessage('uploadAlert', 'success', "Header image updated!", true);
-                        console.log("Upload complete");
-                        $scope.header_image = $rootScope.pathAmazonDev + key;
-                        $scope.pathology.header_image = key;
-                        $scope.$applyAsync();
-                    }).catch(function(err){
-                        showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
-                    });
-                }
-            });
-            req.on('httpUploadProgress', function (evt) {
-                var progress = parseInt(100.0 * evt.loaded / evt.total);
-                $scope.$apply(function() {
-                    console.log(progress);
-                })
-            });
-        });
-    };
-
-    $scope.fileSelected = function($files, $event){
-        //make sure group data is loaded. we need to access it to form the amazon key
-        //make sure a file was actually loaded
-        if($files[0]){
-            AmazonService.getClient(function (s3) {
-                var key;
-                //if there already is a logo, delete it. Then upload new
-                if($scope.pathology.header_image){
-                    key = $scope.pathology.header_image;
-                    s3.deleteObject({Bucket: $rootScope.amazonBucket, Key:key}, function (err, data) {
-                        if(err){
-                            showAlertMessage('uploadAlert', 'danger', 'Eroare la stergerea pozei vechi!', true);
-                            $scope.$apply();
-                        }else{
-                            putLogoS3($files[0]);
-                        }
-                    });
-                }else{
-                    putLogoS3($files[0]);
-                }
-            });
-        }
-
-    };
 
     $scope.updatePathology = function(closeModal){
         $scope.pathology.last_updated = Date.now();
@@ -109,11 +51,24 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
             if(closeModal){
                 $scope.closeModal();
             } else {
-                showAlertMessage('uploadAlert', 'success', 'Elementele multimedia asociate au fost actualizate cu succes!', true);
+                showAlertMessage('uploadAlert', 'success', 'Elementele multimedia au fost actualizate cu succes!', true);
             }
         }).catch(function(err){
             showAlertMessage('statusAlert', 'danger', Error.getMessage(err), true);
         });
+    };
+
+    var checkIfVideo = function (stringToCheck) {
+        return (stringToCheck.indexOf('video') > -1)
+    };
+
+    $scope.headerIntroChanged = function (key, deleteItem) {
+        if(deleteItem){
+            checkIfVideo(key) ? $scope.pathology.video_intro = null : $scope.pathology.header_image = null;
+        } else {
+            checkIfVideo(key) ? $scope.pathology.video_intro = key : $scope.pathology.header_image = key;
+        }
+        $scope.updatePathology();
     };
 
     $scope.onMultimediaUpdate = function(key, toDelete){
