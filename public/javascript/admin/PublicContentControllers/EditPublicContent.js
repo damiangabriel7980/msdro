@@ -1,4 +1,4 @@
-controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', 'therapeuticAreas', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService, Success, Error, therapeuticAreas){
+controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicContentService', '$modalInstance', '$state', 'idToEdit', 'AmazonService', 'Success', 'Error', 'therapeuticAreas', 'tinyMCEConfig', function($scope, $rootScope, publicContentService, $modalInstance, $state, idToEdit, AmazonService, Success, Error, therapeuticAreas, tinyMCEConfig){
 
     $scope.idToEdit = idToEdit;
     var contentDataLoaded = false;
@@ -12,15 +12,7 @@ controllers.controller('EditPublicContent', ['$scope', '$rootScope', 'publicCont
         selectedAreas: []
     };
 
-    $scope.tinymceOptions = {
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        height: 500,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
 
     //----------------------------------------------------------------------------------------------------- get content
     publicContentService.publicContent.query({id: idToEdit}).$promise.then(function (resp) {

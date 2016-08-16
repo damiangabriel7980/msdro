@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 18.05.2015.
  */
-controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', 'Success', 'Error', 'PathologiesService', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit,Success,Error,PathologiesService){
+controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdminService','GroupsService','$stateParams','$sce','$filter','$modalInstance','$state','therapeuticAreaService','AmazonService','idToEdit', 'Success', 'Error', 'PathologiesService', 'tinyMCEConfig', function($scope,$rootScope,MultimediaAdminService,GroupsService,$stateParams,$sce,$filter,$modalInstance,$state,therapeuticAreaService,AmazonService,idToEdit,Success,Error,PathologiesService, tinyMCEConfig){
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertVideo = {newAlert:false, type:"", message:""};
     $scope.myAreas = {
@@ -201,14 +201,5 @@ controllers.controller('EditMultimedia', ['$scope','$rootScope' ,'MultimediaAdmi
         $state.go('elearning.multimedia',{},{reload: true});
     };
 
-    $scope.tinymceOptions = {
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        height: 500,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
 }]);

@@ -2,8 +2,8 @@
  * Created by miricaandrei23 on 25.11.2014.
  */
 controllers
-  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal', 'PathologiesService',
-  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal, PathologiesService){
+  .controller('EditProduct', ['$scope','ProductService','idToEdit','$modalInstance','$state','therapeuticAreaService','AmazonService','$rootScope', 'GroupsService', 'Success', 'Error','$modal','ActionModal', 'PathologiesService', 'tinyMCEConfig',
+  function($scope, ProductService, idToEdit, $modalInstance, $state, therapeuticAreaService, AmazonService, $rootScope, GroupsService, Success, Error, $modal, ActionModal, PathologiesService, tinyMCEConfig){
     $scope.uploadAlert = { newAlert: false, type: "", message: "" };
 
     $scope.uploadAlertRPC = { newAlert: false, type: "", message: "" };
@@ -295,15 +295,6 @@ controllers
       $state.reload();
     };
 
-    $scope.tinymceOptions = {
-      selector: "textarea",
-      plugins: [
-        "advlist autolink lists link image charmap print preview anchor",
-        "searchreplace visualblocks code fullscreen",
-        "insertdatetime media table contextmenu paste charmap"
-      ],
-      height: 500,
-      toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
 
   }]);
