@@ -1,0 +1,25 @@
+.titleWrapper .mainSubtitle {
+  background: #157ABD;
+  color: white;
+  font-size: 13px;
+  text-align: center;
+  letter-spacing: 0.1em;
+  padding: 10px;
+}
+.titleWrapper .mainTitle {
+  border: 3px solid #157ABD;
+  border-top: 0;
+  padding: 15px;
+  color: #157ABD;
+  font-size: 17px;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+.titleWrapper .redBack {
+  background: #D6002F;
+}
+.titleWrapper .redBorderAndText {
+  border: 3px solid #D6002F;
+  color: #D6002F;
+  border-top: 0;
+}

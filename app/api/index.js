@@ -69,7 +69,7 @@ var AWS = require('aws-sdk');
 var fs = require('fs');
 var crypto   = require('crypto');
 var Q = require('q');
-
+var Config = require('../../config/environment');
 //=========================================================================================== functions for user groups
 
 var getNonSpecificUserGroupsIds = function(user){
@@ -91,7 +91,7 @@ var getNonSpecificUserGroupsIds = function(user){
 var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     var deferred = Q.defer();
     //first get non specific content groups only
-    var myCursor = Content.find({enable: {$ne: false}, type: content_type});
+    var myCursor = Content.find({enable: {$exists:true, $ne: false}, type: content_type});
     if(sortDescendingByAttribute){
         var attr = {};
         attr[sortDescendingByAttribute] = -1;
@@ -108,12 +108,43 @@ var getUserContent = function (content_type, limit, sortDescendingByAttribute) {
     return deferred.promise;
 };
 
+var getSpecialProductMenu = function (productID, onlyFirstItem) {
+    var deferred = Q.defer();
+    specialProductMenu.distinct('children_ids', function (err,allChildren) {
+        if(err)
+        {
+            deferred.reject(err);
+        }
+        else {
+            specialProductMenu.find({product: productID,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
+                if(err) {
+                    deferred.reject(err);
+                }
+                else
+                {
+                    if(onlyFirstItem){
+                        if(details[0] && details[0].children_ids && details[0].children_ids.length){
+                            deferred.resolve(details[0].children_ids[0]);
+                        } else {
+                            deferred.resolve(details[0]);
+                        }
+                    } else {
+                        deferred.resolve(details);
+                    }
+
+                }
+            });
+        }
+    });
+    return deferred.promise;
+};
+
 var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQParams){
     var deferred = Q.defer();
     var pathologiesToSend = [];
     var queryPathology = pathQParams ? pathQParams : { enabled: true };
     //get pathologies and for each get list of products
-    Pathologies.find(queryPathology).sort('display_name').populate('specialApps').exec(function(err, pathologies){
+    Pathologies.find(queryPathology).sort({order_index: 1}).populate('specialApps').exec(function(err, pathologies){
         if(err)
         {
             deferred.reject(err);
@@ -131,11 +162,41 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 display_name: pathology.display_name,
                                 description: pathology.description,
                                 header_image: pathology.header_image,
-                                specialApps: pathology.specialApps
+                                specialApps: pathology.specialApps,
+                                order_index: pathology.order_index,
+                                video_intro: pathology.video_intro
                             };
-                            objectToPush['associated_items'] = associated;
-                            pathologiesToSend.push(objectToPush);
-                            callback();
+                            var associatedItemsClean = [];
+                            async.each(associated, function(singleItem, callbackItem){
+                                getSpecialProductMenu(singleItem._id, true).then(
+                                    function (success) {
+                                        var itemToAdd = {
+                                            _id: singleItem._id,
+                                            general_description : singleItem.general_description,
+                                            logo_path: singleItem.logo_path,
+                                            product_name: singleItem.product_name,
+                                            order_index: singleItem.order_index,
+                                            firstMenuItem: success
+                                        };
+                                        associatedItemsClean.push(itemToAdd);
+                                        callbackItem();
+                                    },
+                                    function (err) {
+                                        callbackItem(err);
+                                    }
+                                )
+                            }, function (err) {
+                                if(err){
+                                    callback(err);
+                                } else {
+                                    associatedItemsClean = _.sortBy(associatedItemsClean, function(asociatedItemObject){
+                                        return asociatedItemObject.order_index;
+                                    });
+                                    objectToPush['associated_items'] = associatedItemsClean;
+                                    pathologiesToSend.push(objectToPush);
+                                    callback();
+                                }
+                            });
                         } else {
                             if(queryPathology._id)
                                 pathologiesToSend.push(pathology);
@@ -147,8 +208,8 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                 if(err){
                     deferred.reject(err);
                 } else {
-                    pathologiesToSend = _.sortBy(pathologiesToSend, function(obj){
-                        return obj.display_name;
+                    pathologiesToSend = _.sortBy(pathologiesToSend, function(pathologyObj){
+                        return pathologyObj.order_index;
                     });
                     deferred.resolve(pathologiesToSend);
                 }
@@ -1411,7 +1472,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             if(req.query.id){
                 q._id = req.query.id;
             }
-            specialProduct.find(q).populate('pathologiesID').deepPopulate('groups.profession').exec(function (err, products) {
+            specialProduct.find(q).populate('pathologiesID').exec(function (err, products) {
                 if(err){
                     handleError(res,err,500);
                 }else{
@@ -1437,7 +1498,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         .post(function (req, res) {
             var toCreate = new specialProduct({
                 product_name: 'Untitled',
-                header_title: 'Untitled'
+                header_title: 'Untitled',
+                productType: req.body.productType
             });
             toCreate.save(function (err, saved) {
                 if(err){
@@ -1458,6 +1520,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
+                    console.log(err);
                     handleError(res,err,500);
                 }else{
                     if(forAssociatedProd){
@@ -4200,7 +4263,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             } else {
                 var itemQParams = {
                     query: {
-                        enabled: { $exists: true, $ne : false }
+                        enabled: { $exists: true, $ne : false },
+                        productType: 'product'
                     },
                     sort: {
                         product_name: 1
@@ -4223,24 +4287,14 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
     router.route('/specialProductMenu')
         .get(function(req, res) {
-            specialProductMenu.distinct('children_ids', function (err,allChildren) {
-                if(err)
-                {
+            getSpecialProductMenu(req.query.id).then(
+                function (success) {
+                    handleSuccess(res,success);
+                },
+                function (err) {
                     handleError(res,err,500);
                 }
-                else{
-                    specialProductMenu.find({product: req.query.id,_id:{$nin:allChildren}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function(err, details) {
-                        if(err) {
-                            handleError(res,err,500);
-                        }
-                        else
-                        {
-                            handleSuccess(res,details);
-                        }
-                    });
-                }
-
-            });
+            )
         });
     router.route('/specialProductDescription')
         .get(function(req, res) {
@@ -4568,16 +4622,24 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     router.route('/userHomeSearch/')
         .get(function(req,res){
             var data=req.query.data;
-            var arr_of_items=[Products,Multimedia,Content,Events];
+            var arr_of_items=[specialProduct,Multimedia,Content,Events];
             var ObjectOfResults={};
             async.each(arr_of_items, function (item, callback) {
                 var hydrateOp;
-                if(item == Events){
-                    hydrateOp = {find: {enable:{ $exists: true, $ne : false },start:{$gt: new Date()}}};
-                }else{
-                    hydrateOp = {find: {enable:{ $exists: true, $ne : false } }};
+                switch (item) {
+                    case Events :
+                        hydrateOp = {find: {enable:{ $exists: true, $ne : false },start:{$gt: new Date()}}};
+                        break;
+                    case Content :
+                        hydrateOp = {find: {enable:{ $exists: true, $ne : false } , type: 3}};
+                        break;
+                    case specialProduct:
+                        hydrateOp = {find: {enabled:{ $exists: true, $ne : false }}};
+                        break;
+                    default :
+                        hydrateOp = {find: {enable:{ $exists: true, $ne : false } }};
+                        break;
                 }
-
                 item.search({
 
                     query_string: {
@@ -4841,7 +4903,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
             if(req.query.forDropdown){
                 queryPathObject.description = { $exists: true, $ne : '' };
-                Pathologies.find(queryPathObject).sort('display_name').exec(function (err, pathologies) {
+                Pathologies.find(queryPathObject).sort({order_index: 1}).exec(function (err, pathologies) {
                     if(err){
                         handleError(res,err,500);
                     }else{
@@ -4857,6 +4919,9 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         product_name: 1
                     }
                 };
+                if(!req.query.id){
+                    itemQParams.query.productType = 'product';
+                }
                 getPathologiesWithItems(specialProduct, itemQParams, queryPathObject).then(
                     function (success) {
                         handleSuccess(res,success);
@@ -4876,6 +4941,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res,err,500);
                 }else{
                     handleSuccess(res, brochureSections);
+                }
+            });
+        });
+
+    router.route('/medicalCourses')
+        .get(function (req, res) {
+            User.findOne({_id: req.user._id}).select("+citiesID").populate('specialty profession').deepPopulate('citiesID.county').exec(function (err, foundUser) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    var dataToSend = {
+                        nume : foundUser.name,
+                        specialitate : foundUser.specialty ? foundUser.specialty.name : null,
+                        email: foundUser.username,
+                        oras: foundUser.citiesID ? foundUser.citiesID[0].name : null,
+                        judet: foundUser.citiesID ? foundUser.citiesID[0].county.name : null,
+                        profesia: foundUser.profession ? foundUser.profession.display_name : null
+                    };
+                    request({
+                        url: Config().onlineCoursesTokenUrl,
+                        method: "POST",
+                        form: dataToSend
+                    }, function (error, message, response) {
+                        if(error){
+                            handleError(res,error,500);
+                        }else{
+                            var responseData = JSON.parse(response);
+                            var urlToRedirect = responseData.redirect_to.replace(/\\\//g, "/");
+                            handleSuccess(res, urlToRedirect);
+                        }
+                    });
                 }
             });
         });

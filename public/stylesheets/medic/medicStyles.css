@@ -7840,6 +7840,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper #descriptionDiv #initialDescriptionDiv {
   margin-right: -30px;
 }
+.specialProductMainWrapper #descriptionDiv .marginTop20 {
+  margin-top: 20px;
+}
 .specialProductMainWrapper #descriptionDiv .noPadding {
   padding: 0;
 }
@@ -7882,6 +7885,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureNoImage {
   position: relative;
   padding: 0;
+  margin-bottom: 15px;
 }
 .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .job_id {
   margin-top: 20px;

@@ -11,26 +11,29 @@
                     <input ng-model="pathology.display_name" type="text" class="form-control col-xs-12">
                 </div>
             </div>
+    <div class="col-xs-12 noPadding">
+        <div class="col-xs-12 noPadding">
+            <label>Ordine:</label>
+            <input ng-model="pathology.order_index" type="number" class="form-control col-xs-12">
+        </div>
+    </div>
             <div class="col-md-12 noPadding marginTop20">
                 <div class="col-md-12 noPadding">
-                    <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca imagine header</button>
+                    <single-upload-manager label="imagine header" on-complete-function="headerIntroChanged(key)"
+                                                bucket="{{amazonBucket}}" on-delete-function="headerIntroChanged(key, true)"
+                                                path="{{'pathologies/'+pathology._id+'/pathology_header_image/'}}" file-name="{{'image' + pathology._id}}"></single-upload-manager>
                 </div>
-                <div class="col-md-12 marginTop20 noPadding">
-                    <img no-cache-src="{{header_image}}" ng-if="header_image" style="width:100px;">
-                </div>
-                <div class="col-xs-12 noPadding" ng-if="header_image">
-                    <label>Link imagine header:</label>
-                    <ul>
-                        <li style="font-size: 12px" class="col-xs-12">
-                            {{pathAmazonDev + pathology.header_image}}&nbsp;
-                        </li>
-                    </ul>
+
+                <div class="col-md-12 noPadding marginTop20">
+                    <single-upload-manager label="video intro" on-complete-function="headerIntroChanged(key)"
+                                           bucket="{{amazonBucket}}" on-delete-function="headerIntroChanged(key, true)"
+                                           path="{{'pathologies/'+pathology._id+'/pathology_video_intro/'}}" file-name="{{'video' + pathology._id}}"></single-upload-manager>
                 </div>
                 <div class="col-md-12 noPadding">
                     <alert ng-if="uploadAlert.newAlert" type="{{uploadAlert.type}}" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
                 </div>
             </div>
-            <div class="col-md-12 noPadding">
+            <div class="col-md-12 noPadding marginTop20">
                 <div class="form-group">
                     <label>Aplicatii asociate:</label>
                     <my-multiple-select all-objects="apps" selected-objects="myApps.selectedApps" track-by="_id" display-by="name"
@@ -39,8 +42,8 @@
             </div>
             <div class="col-xs-12 noPadding" ng-if="pathology.associated_multimedia">
                     <div class="col-md-12 noPadding">
-                        <enhanced-S3-Upload-Manager label="multimedia asociat" on-complete-function="onMultimediaUpdate(key)"
-                                                    bucket="{{amazonBucket}}" on-delete-function="onMultimediaUpdate(key, true)"
+                        <enhanced-S3-Upload-Manager label="multimedia asociat" on-complete-function="onMultimediaUpdate(key, false)"
+                                                    bucket="{{amazonBucket}}" on-delete-function="onMultimediaUpdate(key, false, true)"
                                                     path="{{'pathologies/'+pathology._id+'/pathology_images/'}}"></enhanced-S3-Upload-Manager>
                     </div>
             </div>
@@ -51,7 +54,7 @@
 </div>
 <div class="modal-footer">
     <div class="col-xs-12">
-        <a class="btn pull-left btn-primary" ng-click="closeModal(true)">Inchide</a>
+        <a class="btn pull-left btn-primary" ng-click="closeModal()">Inchide</a>
         <a class="btn pull-right btn-primary" ng-click="updatePathology(true)">Actualizeaza patologie</a>
     </div>
 </div>

@@ -6,9 +6,9 @@
     </div>
     <div class="col-xs-12 noPadding" ng-if="!isMobile(true)">
         <div ng-show="products && products.length>0" ng-repeat="product in products track by $index" ng-if="product" class="col-md-12 col-xs-12 col-sm-12 result">
-            <horizontal-content-list content="product" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
-                                     title-attr="name" text-attr="description" bold-attr-hardcoded="Categorie: Produs" button-label="Vezi detalii"
-                                     date-attr="last_updated" navigate="navigateToProduct" smaller-image with-background drop-shadow></horizontal-content-list>
+            <horizontal-content-list content="product" image-path-attr="logo_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
+                                     title-attr="product_name" bold-attr-hardcoded="Categorie: Produs" button-label="Vezi detalii"
+                                     navigate="navigateToProduct" smaller-image with-background drop-shadow></horizontal-content-list>
         </div>
         <div ng-show="calendarEv && calendarEv.length>0" ng-repeat="calendar in calendarEv track by $index" ng-if="calendar" class="col-md-12 col-xs-12 col-sm-12 result">
             <horizontal-content-list content-type="event" content="calendar" title-attr="name" text-attr="description" date-attr="start" bold-attr-hardcoded="Categorie: Eveniment"
@@ -19,7 +19,7 @@
                                      title-attr="title" text-attr="text" bold-attr-hardcoded="Categorie: Articol" button-label="Vezi detalii"
                                      date-attr="last_updated" navigate="navigateToArticle" smaller-image with-background drop-shadow></horizontal-content-list>
         </div>
-        <div ng-show="multimedia && multimedia.length>0" ng-repeat="media in multimedia track by $index" ng-if="media" class="col-md-12 col-xs-12 col-sm-12 noPadding">
+        <div ng-show="multimedia && multimedia.length>0" ng-repeat="media in multimedia track by $index" ng-if="media" class="col-md-12 col-xs-12 col-sm-12 result">
             <horizontal-content-list content="media" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{media.type==1?defaultVideoImage:defaultSlideImage}}"
                                      title-attr="title" text-attr="description" bold-attr-hardcoded="Categorie: Multimedia" button-label="Vezi material"
                                      date-attr="last_updated" navigate="navigateToMultimedia" smaller-image with-background drop-shadow></horizontal-content-list>
@@ -28,8 +28,8 @@
     <div class="col-xs-12 noPadding" ng-if="isMobile(true)">
         <mobile-content-list ng-if="calendarEv && calendarEv.length>0" content="calendarEv" title-attr="name" date-attr="start"
                              category="event" text-attr="description" navigate="navigateToEvent"></mobile-content-list>
-        <mobile-content-list ng-if="products && products.length>0" content="products" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultProductImage}}" title-attr="name"
-                             category="product" text-attr="description" navigate="navigateToProduct"></mobile-content-list>
+        <mobile-content-list ng-if="products && products.length>0" content="products" image-attr="logo_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultProductImage}}" title-attr="product_name"
+                             category="product" navigate="navigateToProduct"></mobile-content-list>
         <mobile-content-list ng-if="articles && articles.length>0" content="articles" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
                              category="article" text-attr="text" navigate="navigateToArticle"></mobile-content-list>
         <mobile-content-list ng-if="multimedia && multimedia.length>0" content="multimedia" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{media.type==1?defaultVideoImage:defaultSlideImage}}" title-attr="title"

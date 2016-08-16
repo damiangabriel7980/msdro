@@ -5,7 +5,8 @@
                 ng-options="profession._id as profession.display_name for profession in professions" id="profession"></select>
     </div>
     <div class="form-group-sm col-md-6">
-        <label>&nbsp;Cod de activare<sup>*</sup>:</label>
+        <label popover="{{codeTooltip}}" popover-trigger="mouseenter" popover-placement="bottom"
+               style="visibility: visible; display: inline-block"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;Cod de activare<sup>*</sup>:</label>
         <input id="code" type="text" ng-model="user.temp.activationCode" class="form-control">
     </div>
     <!--<div class="col-md-6 noPadding" ng-show="proofRequired">-->
@@ -26,13 +27,8 @@
             <!--</a>-->
         <!--</div>-->
     <!--</div>-->
-    <!--<div class="form-group-sm col-md-6" ng-if="groups.length > 0">-->
-        <!--<label for="group">Specialitate<sup>*</sup>:</label>-->
-        <!--<select ng-model="user.groupsID" class="form-control"-->
-                <!--ng-options="group._id as group.display_name for group in groups" id="group"></select>-->
-    <!--</div>-->
     <div class="form-group-sm col-md-6" ng-if="specialties.length > 0">
-        <label for="specialty">Specializare<sup>*</sup>:</label>
+        <label for="specialty">Specialitate<sup>*</sup>:</label>
         <select ng-model="user.specialty" class="form-control"
                 ng-options="specialty._id as specialty.name for specialty in specialties" id="specialty"></select>
     </div>
@@ -40,7 +36,7 @@
         <label>Tip de practica:</label>
         <select ng-model="user.practiceType" class="form-control" ng-options="practice.number as practice.name for practice in practices"></select>
     </div>
-    <div class="form-group col-md-12">
+    <div class="form-group-sm col-md-12">
         <label>Loc de munca<sup>*</sup>:</label>
         <input type="text" class="form-control" ng-model="user.job"/>
     </div>
@@ -80,7 +76,7 @@
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="nonUser.termsMSD">
-        <span>Accept <a href="apiPublic/termsAndConditionsMSD" target="_blank">politica MSD privind datele profesionale</a>&nbsp;<sup>*</sup></span>
+        <span>Accept <a href="apiPublic/termsAndConditionsMSD" target="_blank">politica de confidentialitate a MSD privind datele cu caracter personal</a>&nbsp;<sup>*</sup></span>
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="user.subscriptions.newsletterStaywell">

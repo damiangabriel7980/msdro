@@ -219,10 +219,8 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
             callback("Va rugam introduceti codul de activare");
         }else if(proofRequired && user.temp.proofType == "file" && !user.temp.proofFile){
             callback("Va rugam incarcati dovada");
-        }else if(!user.groupsID && options.groupRequired){
-            callback("Va rugam selectati un grup preferat");
         }else if(!user.specialty){
-            callback("Va rugam selectati o specializare");
+            callback("Va rugam selectati o specialitate");
         }else if(!user.address){
             callback("Va rugam introduceti o adresa");
         }else if(!county){

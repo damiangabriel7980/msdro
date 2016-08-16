@@ -17,7 +17,8 @@ var app = angular.module('app',
         'widgetMostRead',
         'mobileContentList',
         'checklist-model',
-        'bootstrapSubnav'
+        'bootstrapSubnav',
+        'angularFloatingButton'
     ]);
 
 app.config(['$controllerProvider', '$filterProvider', function ($controllerProvider, $filterProvider) {
@@ -148,6 +149,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'leaveStaywell',
+                files: [
+                    'javascript/medic/ModalControllers/medicalCoursesModal.js'
+                ]
+            },
+            {
                 name: 'Calendar',
                 files: [
                     'components/fullcalendar/dist/fullcalendar.css',
@@ -232,6 +239,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                     'components/video-js/dist/video-js/video-js.min.css',
                     'components/video-js/dist/video-js/video.js'
                 ]
+            },
+            {
+                name: 'PathologyModal',
+                files: [
+                    'javascript/medic/ModalControllers/PathologyModal.js'
+                ]
             }
 
 
@@ -270,22 +283,26 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.interceptors.push('errorRecover');
 }]);
 
-app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+app.constant('STATECONST', {
+    'MEDICALCOURSES': 'medicalCourses'
+});
+
+app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($stateProvider, $urlRouterProvider, STATECONST) {
     $urlRouterProvider.otherwise("/");
     $urlRouterProvider
         .when(/articoleStiintifice/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
             if(parsedURL.length < 5)
-                $state.go('biblioteca.articoleStiintifice.listaArticole', {articleType: 3});
+                $state.go('biblioteca.articoleStiintifice.listaArticole', {articleType: 3}, {location: 'replace'});
             else
-                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]});
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[2], articleId: parsedURL[4]}, {location: 'replace'});
         }])
         .when(/noutati/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
             if(parsedURL[1] == 3)
-                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[1], articleId: parsedURL[3]});
+                $state.go('biblioteca.articoleStiintifice.articol', {articleType: parsedURL[1], articleId: parsedURL[3]}, {location: 'replace'});
             else
-                $state.go('noutati.articol', {articleType: parsedURL[1], articleId: parsedURL[3], fromHome: 1})
+                $state.go('noutati.articol', {articleType: parsedURL[1], articleId: parsedURL[3], fromHome: 1}, {location: 'replace'})
         }])
         .when(/produse/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
@@ -386,7 +403,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             controller: 'ProductDetail'
         })
         .state('biblioteca.articoleStiintifice',{
-            url: '/articoleStiintifice/:articleType',
+            url: '/despreMSD/:articleType',
             templateUrl: 'partials/medic/noutati/noutati.ejs',
             controller: 'ArticlesView',
             resolve: {
@@ -522,8 +539,29 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.menuItem', {
             url: '/menuItem/:menuId/:childId',
+            params: {
+                isResource: false
+            },
             templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
             controller: 'ProductPageMenu'
+        })
+        .state('pathologyResources', {
+            url: '/pathologyResources/:product_id',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct.html',
+            controller: 'ProductPage',
+            resolve: {
+                loadDeps: loadStateDeps(['ProductPage'])
+            }
+        })
+        .state('pathologyResources.menuItem', {
+            url: '/menuItem/:menuId/:childId',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_Menu.html',
+            controller: 'ProductPageMenu'
+        })
+        .state('pathologyResources.glossary', {
+            url: '/selectedGlossary',
+            templateUrl: 'partials/medic/groupFeatures/specialProduct_glossary.html',
+            controller: 'ProductPageGlossary'
         })
         .state('productList', {
             abstract: true,
@@ -549,11 +587,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['ProductPageList'])
             }
         })
-        .state('groupSpecialProduct.speakers', {
+        .state('pathologyResources.speakers', {
             url: '/speakers',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakers.html'
         })
-        .state('groupSpecialProduct.speakerDetails', {
+        .state('pathologyResources.speakerDetails', {
             url: '/speakerDetails/:speaker_id',
             templateUrl: 'partials/medic/groupFeatures/specialProduct_speakerDetails.html',
             controller: 'ProductPageSpeaker'
@@ -570,6 +608,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.sitemap', {
             url: '/sitemap',
+            params: {
+                isResource: false
+            },
             templateUrl: 'partials/medic/groupFeatures/specialProduct_sitemap.html'
         })
         .state('profileMobile',{
@@ -582,6 +623,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
         .state('groupSpecialProduct.immunologyQA',{
             url:'/immunologyQA',
+            params: {
+                isResource: false
+            },
             templateUrl:'partials/medic/groupFeatures/immunologyQA.html',
             controller:'ProductPageQA'
         })
@@ -593,11 +637,14 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 loadDeps: loadStateDeps(['Brochure'])
             }
         })
+        .state(STATECONST.MEDICALCOURSES, {
+            url: '/accessMedicalCourses'
+        })
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad', '$window', '$timeout', '$location', '$anchorScroll',
-        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad, $window, $timeout, $location, $anchorScroll) {
+    [            '$rootScope', '$state', '$stateParams', '$modal','$sce','PrintService','Utils', 'SpecialFeaturesService','$modalStack', '$ocLazyLoad', '$window', '$timeout', '$location', '$anchorScroll', 'STATECONST',
+        function ($rootScope,   $state,   $stateParams,   $modal,  $sce, PrintService, Utils, SpecialFeaturesService, $modalStack, $ocLazyLoad, $window, $timeout, $location, $anchorScroll, STATECONST) {
 
             // It's very handy to add references to $state and $stateParams to the $rootScope
             // so that you can access them from any scope within your applications.For example,
@@ -662,6 +709,21 @@ app.run(
                     {
                       scrollPosCache[$state.current.templateUrl] = [$window.pageXOffset, $window.pageYOffset];
                     }
+
+                    if(toState.name === STATECONST.MEDICALCOURSES) {
+                        $modal.open({
+                            templateUrl: 'partials/medic/modals/leaveStaywell.html',
+                            keyboard: false,
+                            backdrop: 'static',
+                            windowClass: 'fade',
+                            controller: 'medicalCourses',
+                            resolve: {
+                                loadDeps: loadStateDeps(['leaveStaywell'])
+                            }
+                        });
+                        event.preventDefault();
+                    }
+
                 });
             //============================================================================================= intro modal
             $rootScope.showIntroPresentation = function (groupID) {

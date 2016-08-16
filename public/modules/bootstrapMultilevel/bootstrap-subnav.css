@@ -39,9 +39,18 @@
   border-radius: 0 !important;
   background-color: #00a39e !important;
 }
+.parentMenu {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+@media (max-width: 1367px) {
+  .parentMenu {
+    max-height: 480px;
+  }
+}
 .parentMenu > li {
   height: auto !important;
-  min-width: 230px !important;
+  min-width: 255px !important;
   position: static;
   padding: 5px 0 !important;
 }
