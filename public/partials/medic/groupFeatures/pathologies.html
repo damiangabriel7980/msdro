@@ -21,5 +21,6 @@
         <div class="col-md-10 noPadding col-sm-6 col-xs-6" ng-if="pathology.specialApps" ng-repeat="app in pathology.specialApps">
             <img class="img-responsive img-thumbnail customBorder handCursor col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" ng-src="{{defaultProofImage}}" />
         </div>
+        <angular-floating-button class="col-md-12 noPadding"></angular-floating-button>
     </div>
 </div>
