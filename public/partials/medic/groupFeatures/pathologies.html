@@ -9,7 +9,7 @@
             <div class="col-xs-12">
                 <img class="col-xs-12 noPadding" no-cache-src="{{pathAmazonDev+pathology.header_image}}" />
             </div>
-            <div class="col-xs-12 justify marginTop20" ng-if="pathology.description!=undefined" convert-special conver="pathology.description" ng-bind-html="trustAsHtml(pathology.description)">
+            <div class="col-xs-12 justify marginTop20" ng-if="pathology.description!=undefined" convert-special conver="pathology.description" ng-bind-html="trustAsHtml(pathology.description)" compile-template>
 
             </div>
         </div>
