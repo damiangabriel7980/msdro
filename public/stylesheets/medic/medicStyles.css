@@ -7246,6 +7246,18 @@ body .btn {
   padding-top: 10%;
   padding-bottom: 10%;
 }
+.widgets .univadisImage {
+  padding: 10px 50px 10px 60px;
+  border: none;
+}
+@media (max-device-width: 767px) {
+  .widgets .univadisImage {
+    padding: 5px 0 5px 0;
+  }
+}
+.widgets .paddingBottom20 {
+  padding-bottom: 20px;
+}
 .widgets .widgetImage {
   width: 100%;
   margin-bottom: 10px;
@@ -7257,7 +7269,7 @@ body .btn {
 }
 .widgets .merckImageWrapper {
   vertical-align: middle;
-  text-align: left;
+  text-align: center;
 }
 @media (max-width: 991px) {
   .widgets .merckImageWrapper {
