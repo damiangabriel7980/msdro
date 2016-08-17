@@ -1,4 +1,4 @@
-controllers.controller('EditPublicContentCategory', ['$scope', '$state', '$modalInstance', 'publicContentService', 'category', 'Success', 'Error', 'AmazonService', '$rootScope', '$timeout', function ($scope, $state, $modalInstance, publicContentService, category, Success, Error,AmazonService, $rootScope, $timeout) {
+controllers.controller('EditPublicContentCategory', ['$scope', '$state', '$modalInstance', 'publicContentService', 'category', 'Success', 'Error', 'AmazonService', '$rootScope', '$timeout', 'tinyMCEConfig', function ($scope, $state, $modalInstance, publicContentService, category, Success, Error,AmazonService, $rootScope, $timeout, tinyMCEConfig) {
 
     $scope.category = category;
 
@@ -12,15 +12,7 @@ controllers.controller('EditPublicContentCategory', ['$scope', '$state', '$modal
 
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
 
-    $scope.tinymceOptions = {
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        height: 500,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
     console.log($scope.category);
     $scope.editCategory = function () {
         console.log(this.category);

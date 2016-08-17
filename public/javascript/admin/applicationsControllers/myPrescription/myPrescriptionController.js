@@ -1,4 +1,4 @@
-controllers.controller('myPrescriptionController',['$scope','myPrescriptionService','Success','$timeout',function($scope, myPrescriptionService,Success,$timeout){
+controllers.controller('myPrescriptionController',['$scope','myPrescriptionService','Success','$timeout', 'tinyMCEConfig', function($scope, myPrescriptionService,Success,$timeout, tinyMCEConfig){
 
 
 	myPrescriptionService.info.query().$promise.then(function(resp){
@@ -85,15 +85,5 @@ controllers.controller('myPrescriptionController',['$scope','myPrescriptionServi
 		$scope.info.telefon.splice(index,1);
 	};
 
-	$scope.tinymceOptions = {
-		selector: "textarea",
-		plugins: [
-			"advlist autolink lists link image charmap print preview anchor",
-			"searchreplace visualblocks code fullscreen",
-			"insertdatetime media table contextmenu paste charmap"
-		],
-		height: 240,
-		width:770,
-		toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-	};
+	$scope.tinymceOptions = tinyMCEConfig.standardConfig();
 }]);

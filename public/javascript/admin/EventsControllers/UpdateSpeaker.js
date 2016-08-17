@@ -1,4 +1,4 @@
-controllers.controller('UpdateSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', 'idToUpdate', 'Success', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService, idToUpdate, Success){
+controllers.controller('UpdateSpeaker', ['$scope','$rootScope' ,'EventsService', '$state', '$modalInstance', 'AmazonService', 'idToUpdate', 'Success', 'tinyMCEConfig', function($scope, $rootScope, EventsService, $state, $modalInstance, AmazonService, idToUpdate, Success, tinyMCEConfig){
 
     EventsService.speakers.query({id: idToUpdate}).$promise.then(function (resp) {
         $scope.speaker = Success.getObject(resp);
@@ -86,13 +86,5 @@ controllers.controller('UpdateSpeaker', ['$scope','$rootScope' ,'EventsService',
         $modalInstance.close();
     };
 
-    $scope.tinymceOptions = {
-        selector: "textarea",
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
 }]);

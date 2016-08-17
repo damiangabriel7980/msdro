@@ -1,4 +1,4 @@
-controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', function($scope, SpecialProductsService, AmazonService, Success) {
+controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'tinyMCEConfig', function($scope, SpecialProductsService, AmazonService, Success, tinyMCEConfig) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
@@ -69,18 +69,6 @@ controllers.controller('ProductPageMenu', ['$scope', 'SpecialProductsService', '
         })
     };
 
-    $scope.tinymceOptions = {
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        valid_elements: "@[id|class|title|style]," +
-        "a[name|href|target|title|alt|scroll-on-click|header-id]," +
-        "#p,blockquote,-ol,-ul,-li,br,img[src|height|width],-sub,-sup,-b,-i,-u," +
-        "-span,hr",
-        height: 500,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
 
 }]);

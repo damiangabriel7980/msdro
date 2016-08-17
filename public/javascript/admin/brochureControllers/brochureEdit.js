@@ -4,20 +4,11 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('brochureEdit', ['$scope','$rootScope' ,'brochureService','$modalInstance','$state','AmazonService', 'idToEdit', 'Success', 'Error', function($scope,$rootScope,brochureService,$modalInstance,$state,AmazonService,idToEdit,Success,Error){
+controllers.controller('brochureEdit', ['$scope','$rootScope' ,'brochureService','$modalInstance','$state','AmazonService', 'idToEdit', 'Success', 'Error', 'tinyMCEConfig', function($scope,$rootScope,brochureService,$modalInstance,$state,AmazonService,idToEdit,Success,Error, tinyMCEConfig){
 
     $scope.section = {};
 
-    $scope.tinymceOptions = {
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        image_advtab: true,
-        height: 500,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
 
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
