@@ -92,7 +92,7 @@ gulp.task('copy_partials', function () {
 });
 
 gulp.task('copy_module_templates', function () {
-    return gulp.src('./public/modules/**/*.{html,eot,svg,ttf,woff}')
+    return gulp.src('./public/modules/**/*.{html,eot,svg,ttf,woff,png,jpg,jpeg}')
         .pipe(gulp.dest('./public_min/modules'));
 });
 
