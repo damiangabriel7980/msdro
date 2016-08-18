@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 27.02.2015.
  */
-controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToView','$modalInstance','GroupsService', 'Success', 'Error', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToView,$modalInstance,GroupsService,Success,Error){
+controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$stateParams','$sce','$filter','$state','idToView','$modalInstance','GroupsService', 'Success', 'Error', 'tinyMCEConfig', function($scope,$rootScope,IntroService,$stateParams,$sce,$filter,$state,idToView,$modalInstance,GroupsService,Success,Error, tinyMCEConfig){
     $scope.intro = {};
 
     IntroService.intros.query({id: idToView}).$promise.then(function(resp){
@@ -40,15 +40,7 @@ controllers.controller('IntroDetails', ['$scope','$rootScope' ,'IntroService','$
             $scope.statusAlert.newAlert = true;
         });
     };
-    $scope.tinymceOptions = {
-        plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste charmap"
-        ],
-        height : 400,
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-    };
+    $scope.tinymceOptions = tinyMCEConfig.standardConfig();
     $scope.closeModal=function(){
       $modalInstance.close();
         $state.reload();
