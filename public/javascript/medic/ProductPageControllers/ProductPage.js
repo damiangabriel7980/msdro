@@ -1,4 +1,4 @@
-app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', 'Success', 'Error', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService,Success,Error){
+app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', 'Success', 'Utils', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService,Success, Utils){
     $scope.oneAtATime = true; //open accordion groups one at a time
     $scope.isCollapsed = {
         isFirstOpen: false
@@ -52,7 +52,10 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
     };
 
     specialProductService.SpecialProductMenu.query({id:$stateParams.product_id}).$promise.then(function(resp){
-        $scope.specialProductMenu = Success.getObject(resp);
+        $scope.specialProductMenu = Utils.bindAccordionToCollection(Success.getObject(resp), {open : false});
+        if($state.params.menuId){
+            Utils.toggleAccordionBindedToArray($scope.specialProductMenu, 'open', $state.params.menuId);
+        }
     });
 
     $scope.selectFirstMenuItem = function () {
@@ -69,6 +72,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
                     $scope.mobileMenuTitle = menu[0].title;
             }
             $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem', {product_id: $stateParams.product_id, menuId: firstParentId, childId: firstChildId, isResource: $state.params.isResource}, {location: 'replace'});
+            Utils.toggleAccordionBindedToArray($scope.specialProductMenu, 'open', firstParentId);
         } else {
             $state.go('groupSpecialProduct.immunologyQA', {product_id: $stateParams.product_id, isResource: $state.params.isResource}, {location: 'replace'});
         }

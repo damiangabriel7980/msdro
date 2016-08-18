@@ -144,6 +144,21 @@ services.factory('Utils', ['$sce', function ($sce) {
     var capitalizeFirstLetter = function (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
+    var bindAccordionToCollection = function (collection, propertyObject) {
+        var propertyName = Object.keys(propertyObject)[0];
+        angular.forEach(collection, function (value, key) {
+            collection[key][propertyName] = propertyObject[propertyName];
+        });
+        return collection;
+    };
+    var toggleAccordionBindedToArray = function (collection, keyForToggle, idToSearch) {
+        angular.forEach(collection, function (item, key) {
+            if(idToSearch === item._id){
+                collection[key][keyForToggle] = true;
+            }
+        });
+        return true;
+    };
     return{
         fileToBase64: function (file, callback) {
             var reader = new FileReader();
@@ -198,6 +213,8 @@ services.factory('Utils', ['$sce', function ($sce) {
                 }
             }
         },
+        bindAccordionToCollection : bindAccordionToCollection,
+        toggleAccordionBindedToArray : toggleAccordionBindedToArray,
         getMonthsArray: getMonthsArray,
         customDateFormat : customDateFormat,
         trustAsHtml: trustAsHtml,
