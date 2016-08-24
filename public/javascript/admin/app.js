@@ -24,7 +24,8 @@ var app = angular.module('app',
         'ngSanitize',
         'actionButtons',
         'bulkOperations',
-        'singleUploadManager'
+        'singleUploadManager',
+        'angularBootstrapTabs'
     ]);
 
 app.config(['$locationProvider', function($location) {

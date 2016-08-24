@@ -1,0 +1,26 @@
+.newAccountsTabs {
+  width: 100%;
+  float: left;
+  border-bottom: 1px solid darkgray;
+}
+.newAccountsTabs .tab {
+  cursor: pointer;
+  float: left;
+  padding: 5px;
+}
+.newAccountsTabs .tab.active {
+  border-left: 1px solid darkgray;
+  border-top: 1px solid darkgray;
+  border-right: 1px solid darkgray;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  position: relative;
+}
+.newAccountsTabs .tab.active:after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  border: 1px solid white;
+}
