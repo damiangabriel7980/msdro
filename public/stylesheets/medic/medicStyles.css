@@ -7247,13 +7247,16 @@ body .btn {
   padding-bottom: 10%;
 }
 .widgets .univadisImage {
-  padding: 10px 50px 10px 60px;
+  padding: 0 15px;
   border: none;
 }
 @media (max-device-width: 767px) {
   .widgets .univadisImage {
-    padding: 5px 0 5px 0;
+    padding: 0 5px;
   }
+}
+.widgets .univadisTitle {
+  padding-bottom: 15px;
 }
 .widgets .paddingBottom20 {
   padding-bottom: 20px;
