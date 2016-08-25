@@ -1,0 +1,20 @@
+<div class="row-fluid specialProductMainWrapper col-xs-offset-0">
+    <div class="col-md-12 col-xs-12" id="descriptionDiv">
+        <div class="col-xs-12 well well-lg DescriptionWrapper">
+            <div class="col-xs-12">
+                <img class="col-xs-12 noPadding" ng-src="{{contentToDisplay.header_image ? pathAmazonDev + contentToDisplay.header_image : defaultArticleHeaderImage}}" />
+            </div>
+            <div class="col-xs-12">
+                <h3 class="specialProductTitle" convert-special to-convert="contentToDisplay.title" ng-bind-html="trustAsHtml(contentToDisplay.title)">
+
+                </h3>
+            </div>
+            <div class="col-xs-12 justify marginTop20" convert-special to-convert="contentToDisplay.short_description" ng-bind-html="trustAsHtml(contentToDisplay.short_description)" compile-template>
+
+            </div>
+            <div class="col-xs-12">
+                <a class="btn btn-default pull-right" href="{{urlPro}}">Citeste mai mult</a>
+            </div>
+        </div>
+    </div>
+</div>

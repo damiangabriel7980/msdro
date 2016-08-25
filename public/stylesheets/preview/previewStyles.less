@@ -1,0 +1,63 @@
+//import our customizable variables
+@import '../public/publicVariables';
+
+//import stripped-from-variables version of bootstrap, which will use our custom variables
+@import '../../modules/bootstrap_noVariables/less/bootstrap';
+
+.handCursor{
+  cursor: pointer;
+}
+
+#publicContentWrapper{
+  position: absolute;
+  padding: 70px 0 0 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  .container{
+    padding: 0;
+  }
+  #publicContent{
+    width: 100%;
+    max-width: @max-content-width;
+    margin: 0 auto;
+    padding-bottom: 30px;
+  }
+}
+
+.specialProductMainWrapper {
+  margin-top: 20px;
+  .customBorder{
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid lightgrey;
+  }
+  #descriptionDiv {
+    #initialDescriptionDiv {
+      margin-right: -30px;
+    }
+    .marginTop20{
+      margin-top: 20px;
+    }
+    .noPadding {
+      padding: 0;
+    }
+    .specialProductTitle {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      color: @green;
+      .fontXXL;
+      font-weight: bold
+    }
+    .justify {
+      text-align: justify;
+    }
+    .DescriptionWrapper {
+      background-color: @body-bg;
+      border-radius: 0px;
+      .prescription {
+        margin-top: 15px
+      }
+    }
+  }
+}

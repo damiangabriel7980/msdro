@@ -96,6 +96,7 @@ require('./app/apiJanuvia.js')(app, logger, express.Router());
 require('./app/apiAplicationUpgrade.js')(app, logger, express.Router());
 require('./app/apiGuidelines.js')(app,logger,express.Router());
 require('./app/apiMyPrescription.js')(app,logger,express.Router());
+require('./app/apiPreview.js')(app, my_config, logger, sessionSecret, express.Router());
 // socket comm test =================================================================
 // require('./app/socketComm.js')(secureServer, tokenSecret, logger);
 
