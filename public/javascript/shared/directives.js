@@ -27,7 +27,7 @@ app.directive('button', function () {
             }
         }
     }])
-    .directive('scrollOnClick', function() {
+    .directive('scrollOnClick', function($window) {
         return {
             restrict: 'A',
             scope: {
@@ -44,7 +44,7 @@ app.directive('button', function () {
                     } else {
                         $target = element;
                     }
-                    angular.element("body").animate({scrollTop: $target.offset().top - angular.element(scope.headerId).outerHeight()}, "slow");
+                    angular.element("body,html").stop().animate({'scrollTop': $target.offset().top - angular.element(scope.headerId).outerHeight()});
                     return false;
                 });
             }
