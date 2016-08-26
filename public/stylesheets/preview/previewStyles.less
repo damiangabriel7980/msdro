@@ -10,7 +10,7 @@
 
 #publicContentWrapper{
   position: absolute;
-  padding: 70px 0 0 0;
+  padding: 0;
   left: 0;
   top: 0;
   width: 100%;
@@ -25,6 +25,30 @@
   }
 }
 
+.navbar-brand{
+  padding: 0;
+  img{
+    width: 125px;
+  }
+  @media (max-width: @grid-float-breakpoint-max) {
+    padding: 5px 0 0 0;
+    img{
+      width: 95px;
+    }
+  }
+}
+
+.accessAccount{
+  margin-top: 25px;
+  color: #a0a0a0;
+  text-decoration: none;
+  &:hover{
+    color: #006d69;
+    background-color: #ffffff;
+    text-decoration: none;
+  }
+}
+
 .specialProductMainWrapper {
   margin-top: 20px;
   .customBorder{
@@ -34,6 +58,7 @@
   }
   #menuDiv {
     margin-left: 0;
+    margin-top: 25px;
     .menuMarginBottom {
       margin-bottom: 0;
     }
@@ -149,6 +174,7 @@
     }
   }
   #descriptionDiv {
+    margin-top: 25px;
     #initialDescriptionDiv {
       margin-right: -30px;
     }

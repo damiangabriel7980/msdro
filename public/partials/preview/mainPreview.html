@@ -1,5 +1,9 @@
 <div class="row-fluid specialProductMainWrapper col-xs-offset-0">
-    <div class="col-xs-12 col-md-2" id="menuDiv" ng-if="contentToDisplay.menuItems">
+    <div class="col-md-12 col-xs-12 noPadding">
+        <a class="navbar-brand pull-left"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}"></a>
+        <a class="navbar-link pull-right accessAccount" href="/pro">Intra in cont</a>
+    </div>
+    <div class="col-xs-12 col-md-3" id="menuDiv" ng-if="contentToDisplay.menuItems">
         <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
             <accordion-group is-open="parent.open" class="parent" ng-repeat="parent in contentToDisplay.menuItems">
                 <accordion-heading>
@@ -16,7 +20,7 @@
             </accordion-group>
         </accordion>
     </div>
-    <div ng-class="{'col-xs-12 col-md-10' : contentToDisplay.menuItems, 'col-md-12 col-xs-12' : !contentToDisplay.menuItems}" id="descriptionDiv">
+    <div ng-class="{'col-xs-12 col-md-9' : contentToDisplay.menuItems, 'col-md-12 col-xs-12' : !contentToDisplay.menuItems}" id="descriptionDiv">
         <div class="col-xs-12 well well-lg DescriptionWrapper">
             <div class="col-xs-12">
                 <img class="col-xs-12 noPadding" ng-src="{{contentToDisplay.header_image ? pathAmazonDev + contentToDisplay.header_image : defaultArticleHeaderImage}}" />

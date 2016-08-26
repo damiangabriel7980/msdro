@@ -6310,7 +6310,7 @@ button.close {
 }
 #publicContentWrapper {
   position: absolute;
-  padding: 70px 0 0 0;
+  padding: 0;
   left: 0;
   top: 0;
   width: 100%;
@@ -6324,6 +6324,30 @@ button.close {
   margin: 0 auto;
   padding-bottom: 30px;
 }
+.navbar-brand {
+  padding: 0;
+}
+.navbar-brand img {
+  width: 125px;
+}
+@media (max-width: 1023px) {
+  .navbar-brand {
+    padding: 5px 0 0 0;
+  }
+  .navbar-brand img {
+    width: 95px;
+  }
+}
+.accessAccount {
+  margin-top: 25px;
+  color: #a0a0a0;
+  text-decoration: none;
+}
+.accessAccount:hover {
+  color: #006d69;
+  background-color: #ffffff;
+  text-decoration: none;
+}
 .specialProductMainWrapper {
   margin-top: 20px;
 }
@@ -6334,6 +6358,7 @@ button.close {
 }
 .specialProductMainWrapper #menuDiv {
   margin-left: 0;
+  margin-top: 25px;
 }
 .specialProductMainWrapper #menuDiv .menuMarginBottom {
   margin-bottom: 0;
@@ -6438,6 +6463,9 @@ button.close {
   padding: 0;
   background-color: transparent;
   border: 0px solid lightgrey;
+}
+.specialProductMainWrapper #descriptionDiv {
+  margin-top: 25px;
 }
 .specialProductMainWrapper #descriptionDiv #initialDescriptionDiv {
   margin-right: -30px;
