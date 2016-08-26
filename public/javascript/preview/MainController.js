@@ -27,7 +27,7 @@ controllers.controller('MainController', ['$scope', '$state', 'PreviewService', 
             if(firstMenuItem.children_ids.length){
                 firstChildMenu = firstMenuItem.children_ids[0];
             }
-            $scope.urlPro = STATECONST.STAYWELLPRO + STATECONST.PRODUCTMENUMAIN + $scope.contentToDisplay._id + STATECONST.PRODUCTMENUITEM + firstMenuItem._id + '/' + firstChildMenu;
+            $scope.urlPro = STATECONST.STAYWELLPRO + STATECONST.PRODUCTMENUMAIN + $scope.contentToDisplay._id + STATECONST.PRODUCTMENUITEM + firstMenuItem._id + '/' + firstChildMenu._id;
         }
         if($scope.contentToDisplay.productType === 'resource'){
             $state.params.isResource = true;
