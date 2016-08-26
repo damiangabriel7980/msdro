@@ -4,6 +4,7 @@
 var Content     = require('./models/articles');
 var Pathologies = require('./models/pathologies');
 var specialProduct = require('./models/specialProduct');
+var specialProductMenu = require('./models/specialProduct_Menu');
 
 module.exports = function(app, env, logger, sessionSecret, router) {
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
@@ -44,11 +45,31 @@ module.exports = function(app, env, logger, sessionSecret, router) {
                 }else{
                     if(resp){
                         var objectToSend = {
+                            _id : resp._id,
                             title : resp[titleField],
                             short_description: resp.short_description,
                             header_image : resp.header_image ? resp.header_image : null
                         };
-                        handleSuccess(res,objectToSend);
+                        if(req.query.type === 'product'){
+                            specialProductMenu.distinct("children_ids", function (err, children_ids) {
+                                if(err){
+                                    handleError(res,err,500);
+                                }else{
+                                    //next, get all menu items that are not children; populate their children_ids attribute
+                                    specialProductMenu.find({product: queryObject._id, _id: {$nin: children_ids}}).sort({order_index: 1}).populate({path: 'children_ids', options: { sort: {order_index: 1}}}).exec(function (err, menuItems) {
+                                        if(err){
+                                            handleError(res,err,500);
+                                        }else{
+                                            //now you got the full menu nicely organised
+                                            objectToSend.menuItems = menuItems;
+                                            handleSuccess(res, objectToSend);
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            handleSuccess(res,objectToSend);
+                        }
                     } else {
                         handleError(res,err,404,1);
                     }

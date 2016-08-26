@@ -6332,6 +6332,113 @@ button.close {
   border: none;
   border-bottom: 1px solid lightgrey;
 }
+.specialProductMainWrapper #menuDiv {
+  margin-left: 0;
+}
+.specialProductMainWrapper #menuDiv .menuMarginBottom {
+  margin-bottom: 0;
+}
+.specialProductMainWrapper #menuDiv .panel-body {
+  padding: 0;
+}
+.specialProductMainWrapper #menuDiv .list-group {
+  margin-bottom: 0px;
+}
+.specialProductMainWrapper #menuDiv .borderRadiusSpecial {
+  border-radius: 0px;
+}
+.specialProductMainWrapper #menuDiv .panel-heading {
+  background-color: #fcfcfc;
+  padding: 15px 15px;
+}
+.specialProductMainWrapper #menuDiv .panel {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+.specialProductMainWrapper #menuDiv span {
+  outline: none;
+}
+.specialProductMainWrapper #menuDiv .panel-group .panel {
+  margin-top: -1px;
+}
+.specialProductMainWrapper #menuDiv .panel-group div {
+  border: 0;
+  border-radius: 0px;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent a {
+  text-decoration: none;
+  outline: none !important;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent .panel-heading {
+  color: #006d69;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent .panel-heading .panel-title {
+  font-size: inherit;
+  color: #696969;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent.active {
+  background-color: #00a39e;
+  color: white;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading {
+  background-color: #00a39e;
+  color: white !important;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading .MSDgreenDarker {
+  color: #fff !important;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading .panel-title {
+  color: white;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading {
+  background-color: #01877B;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading .panel-title {
+  color: white;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading.active {
+  background-color: #00a39e !important;
+  color: white;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .child {
+  color: #006d69;
+  cursor: pointer;
+  font-size: 12px;
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  background-color: #fff;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .child a {
+  text-decoration: none;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .child.active {
+  color: darkorange;
+}
+.specialProductMainWrapper #menuDiv .mobileDropdown {
+  padding-bottom: 10px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.specialProductMainWrapper #menuDiv .mobileDropdown .glyphicon-Special-Product {
+  margin-top: 2px;
+}
+.specialProductMainWrapper #menuDiv .mobileDropdown .my-dropdown-menu {
+  padding: 0;
+  background-color: transparent;
+  border: 0px solid #cccccc;
+  border: 0px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-clip: border-box;
+  list-style: none;
+}
+.specialProductMainWrapper #menuDiv .mobileDropdown .my-dropdown-menu .my-list-menu-item {
+  padding: 0;
+  background-color: transparent;
+  border: 0px solid lightgrey;
+}
 .specialProductMainWrapper #descriptionDiv #initialDescriptionDiv {
   margin-right: -30px;
 }

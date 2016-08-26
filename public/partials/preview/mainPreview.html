@@ -1,5 +1,22 @@
 <div class="row-fluid specialProductMainWrapper col-xs-offset-0">
-    <div class="col-md-12 col-xs-12" id="descriptionDiv">
+    <div class="col-xs-12 col-md-2" id="menuDiv" ng-if="contentToDisplay.menuItems">
+        <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
+            <accordion-group is-open="parent.open" class="parent" ng-repeat="parent in contentToDisplay.menuItems">
+                <accordion-heading>
+                <span ng-click="parent.children_ids.length==0 ? goToMenuItem(parent._id):null">
+                    <i ng-class="{'glyphicon glyphicon-chevron-down': parent.open&&parent.children_ids.length!=0,
+                                  'glyphicon glyphicon-chevron-right': !parent.open||parent.children_ids.length==0}"></i>&nbsp;&nbsp;{{parent.title}}
+                </span>
+                </accordion-heading>
+                <div class="menuMarginBottom">
+                    <div class="child" ng-repeat="subItem in parent.children_ids" ng-click="goToMenuItem(parent._id, subItem._id)">
+                        &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right fontS"></i>&nbsp;&nbsp;{{subItem.title}}
+                    </div>
+                </div>
+            </accordion-group>
+        </accordion>
+    </div>
+    <div ng-class="{'col-xs-12 col-md-10' : contentToDisplay.menuItems, 'col-md-12 col-xs-12' : !contentToDisplay.menuItems}" id="descriptionDiv">
         <div class="col-xs-12 well well-lg DescriptionWrapper">
             <div class="col-xs-12">
                 <img class="col-xs-12 noPadding" ng-src="{{contentToDisplay.header_image ? pathAmazonDev + contentToDisplay.header_image : defaultArticleHeaderImage}}" />

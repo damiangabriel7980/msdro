@@ -14,7 +14,9 @@ app.config(['$locationProvider', function($location) {
 }]);
 
 app.constant('STATECONST', {
-    'STAYWELLPRO': 'pro#!'
+    'STAYWELLPRO': 'pro#!',
+    'PRODUCTMENUITEM' : '/menuItem/',
+    'PRODUCTMENUMAIN' : '/groupSpecialProduct/'
 });
 
 app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($stateProvider, $urlRouterProvider, STATECONST) {
@@ -30,7 +32,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($sta
         }])
         .when(/groupSpecialProduct/, ['$state','$match', function ($state, $match) {
             var parsedURL = $match.input.split('/').filter(Boolean);
-            $state.go('specialProducts', {product_id: parsedURL[1], menuId: parsedURL[3] ? parsedURL[3] : null, childId: parsedURL[4] ? parsedURL[4] : null, urlPro : STATECONST.STAYWELLPRO + $match.input});
+            $state.go('specialProducts', {product_id: parsedURL[1], urlPro : STATECONST.STAYWELLPRO + $match.input});
         }]);
     $stateProvider
         .state('resurse', {
@@ -52,11 +54,12 @@ app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($sta
             templateUrl : 'partials/preview/mainPreview.html'
         })
         .state('specialProducts', {
-            url: '/groupSpecialProduct/:product_id/menuItem/:menuId/:childId',
+            url: '/groupSpecialProduct/:product_id',
             controller: 'MainController',
             params : {
                 urlPro : '',
-                type: 'product'
+                type: 'product',
+                isResource: false
             },
             templateUrl : 'partials/preview/mainPreview.html'
         })
