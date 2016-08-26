@@ -1,8 +1,8 @@
 <div class="row-fluid specialProductMainWrapper col-xs-offset-0">
     <div class="col-xs-12 col-md-2" id="menuDiv">
         <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
-            <accordion-group is-open="parent.open" class="parent" ng-repeat="parent in specialProductMenu"
-                             ng-class="{'active': ($state.includes('pathologyResources.menuItem') || $state.includes('groupSpecialProduct.menuItem')) && $state.params.menuId==parent._id}">
+            <accordion-group ng-if="specialProductMenu" is-open="parent.open" class="parent {{($state.includes('pathologyResources.menuItem') || $state.includes('groupSpecialProduct.menuItem')) && ($state.params.menuId === parent._id) ? 'active' : ''}}" ng-repeat="parent in specialProductMenu"
+                             >
                 <accordion-heading>
                 <span ng-click="parent.children_ids.length==0? ($state.includes('pathologyResources') ? $state.go('pathologyResources.menuItem',{menuId: parent._id, childId:''}) : $state.go('groupSpecialProduct.menuItem',{menuId: parent._id, childId:'', isResource: $state.params.isResource})):null">
                     <i ng-class="{'glyphicon glyphicon-chevron-down': parent.open&&parent.children_ids.length!=0,
