@@ -47,10 +47,7 @@
                                                     path="{{'pathologies/'+pathology._id+'/pathology_images/'}}"></enhanced-S3-Upload-Manager>
                     </div>
             </div>
-            <div class="col-md-12 noPadding">
-                <label>Descriere:</label>
-                <textarea ui-tinymce="tinymceOptions" ng-model="pathology.description"></textarea>
-            </div>
+    <angular-bootstrap-tabs tabs="editableTabs" editor-options="tinymceOptions"></angular-bootstrap-tabs>
 </div>
 <div class="modal-footer">
     <div class="col-xs-12">

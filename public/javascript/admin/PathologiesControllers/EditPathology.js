@@ -23,6 +23,18 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
     PathologiesService.pathologies.query({id: idToEdit}).$promise.then(function(response){
         $scope.pathology = Success.getObject(response);
         $scope.myApps.selectedApps = $scope.pathology.specialApps;
+        $scope.editableTabs = [
+            {
+                title: 'Descriere',
+                model: $scope.pathology.description,
+                propertyUsedToBind : 'description'
+            },
+            {
+                title: 'Short description',
+                model: $scope.pathology.short_description,
+                propertyUsedToBind : 'short_description'
+            }
+        ];
         SpecialAppsService.apps.query().$promise.then(function (resp) {
             $scope.apps = Success.getObject(resp);
         });
@@ -37,6 +49,9 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
         for(var j=0;j<$scope.myApps.selectedApps.length;j++){
             id_apps.push($scope.myApps.selectedApps[j]._id);
         }
+        angular.forEach($scope.editableTabs, function (value, key) {
+            $scope.pathology[value.propertyUsedToBind] = value.model;
+        });
         $scope.pathology.specialApps = id_apps;
         PathologiesService.pathologies.update({id: idToEdit}, $scope.pathology).$promise.then(function (resp) {
             if(closeModal){

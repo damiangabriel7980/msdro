@@ -20,6 +20,18 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
 
     ContentService.content.query({id: idToEdit}).$promise.then(function(response){
         $scope.article = Success.getObject(response);
+        $scope.editableTabs = [
+            {
+                title: 'Text',
+                model: $scope.article.text,
+                propertyUsedToBind : 'text'
+            },
+            {
+                title: 'Short description',
+                model: $scope.article.short_description,
+                propertyUsedToBind : 'short_description'
+            }
+        ];
         $scope.imagePath = $rootScope.pathAmazonDev+Success.getObject(response).image_path;
         var userGroups = Success.getObject(response).groupsID;
         $scope.$applyAsync();
@@ -250,6 +262,9 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
         for(var j=0;j<$scope.myPathologies.selectedPathologies.length;j++){
             id_pathologies.push($scope.myPathologies.selectedPathologies[j]._id);
         }
+        angular.forEach($scope.editableTabs, function (value, key) {
+            $scope.article[value.propertyUsedToBind] = value.model;
+        });
         $scope.article.groupsID = id_groups;
         $scope.article.pathologiesID = id_pathologies;
         $scope.article.last_updated = Date.now();
