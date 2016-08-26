@@ -25,9 +25,9 @@ controllers.controller('MainController', ['$scope', '$state', 'PreviewService', 
             var firstMenuItem = $scope.contentToDisplay.menuItems[0];
             var firstChildMenu = '';
             if(firstMenuItem.children_ids.length){
-                firstChildMenu = firstMenuItem.children_ids[0];
+                firstChildMenu = firstMenuItem.children_ids[0]._id;
             }
-            $scope.urlPro = STATECONST.STAYWELLPRO + STATECONST.PRODUCTMENUMAIN + $scope.contentToDisplay._id + STATECONST.PRODUCTMENUITEM + firstMenuItem._id + '/' + firstChildMenu._id;
+            $scope.urlPro = STATECONST.STAYWELLPRO + STATECONST.PRODUCTMENUMAIN + $scope.contentToDisplay._id + STATECONST.PRODUCTMENUITEM + firstMenuItem._id + '/' + firstChildMenu;
         }
         if($scope.contentToDisplay.productType === 'resource'){
             $state.params.isResource = true;
