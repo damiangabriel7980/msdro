@@ -95,6 +95,14 @@ module.exports = function(app, logger, passport) {
         }
 	});
 
+    app.get('/preview', function (req, res) {
+        if(req.isAuthenticated()) {
+            res.redirect('/pro');
+        } else {
+            redirectToPreview(req, res);
+        }
+    });
+
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {
         //delete presentations viewed status from current session
@@ -383,4 +391,8 @@ var transportUser = function (req, res) {
             res.redirect('/');
         }
     });
+};
+
+var redirectToPreview = function (req, res) {
+    res.render("preview/main.ejs", {amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
 };

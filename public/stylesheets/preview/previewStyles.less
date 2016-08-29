@@ -1,0 +1,205 @@
+//import our customizable variables
+@import '../public/publicVariables';
+
+//import stripped-from-variables version of bootstrap, which will use our custom variables
+@import '../../modules/bootstrap_noVariables/less/bootstrap';
+
+.handCursor{
+  cursor: pointer;
+}
+
+#publicContentWrapper{
+  position: absolute;
+  padding: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  .container{
+    padding: 0;
+  }
+  #publicContent{
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+  }
+}
+
+.navbar-brand{
+  padding: 0;
+  img{
+    width: 125px;
+  }
+  @media (max-width: @grid-float-breakpoint-max) {
+    padding: 5px 0 0 0;
+    img{
+      width: 95px;
+    }
+  }
+}
+
+.accessAccount{
+  margin-top: 25px;
+  color: #a0a0a0;
+  text-decoration: none;
+  &:hover{
+    color: #006d69;
+    background-color: #ffffff;
+    text-decoration: none;
+  }
+}
+
+.specialProductMainWrapper {
+  margin-top: 20px;
+  .customBorder{
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid lightgrey;
+  }
+  #menuDiv {
+    margin-left: 0;
+    margin-top: 25px;
+    .menuMarginBottom {
+      margin-bottom: 0;
+    }
+    .panel-body {
+      padding: 0;
+    }
+    .list-group {
+      margin-bottom: 0px;
+    }
+    .borderRadiusSpecial {
+      border-radius: 0px;
+    }
+    .panel-heading {
+      background-color: #fcfcfc;
+      padding: 15px 15px;
+    }
+    .panel{
+      box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+    span{
+      outline: none;
+    }
+    .panel-group {
+      .panel {
+        margin-top: -1px;
+      }
+      div {
+        border: 0;
+        border-radius: 0px;
+      }
+    }
+
+    .productPageMenu {
+      .parent {
+        a {
+          text-decoration: none;
+          outline: none !important;
+        }
+        .panel-heading {
+          color: @green-darker;
+          .panel-title {
+            font-size: inherit;
+            color: #696969;
+          }
+        }
+        &.active {
+          background-color: #00a39e;
+          color: white;
+          .panel-heading {
+            background-color: #00a39e;
+            color: white !important;
+            .MSDgreenDarker {
+              color: @body-bg !important;
+            }
+            .panel-title {
+              color: white;
+            }
+          }
+        }
+      }
+      .oddParent {
+        .panel-heading {
+          background-color: @green;
+          .panel-title {
+            color: white;
+          }
+          &.active {
+            background-color: #00a39e !important;
+            color: white;
+          }
+        }
+      }
+      .child {
+        a {
+          text-decoration: none;
+        }
+        color: @green-darker;
+        .handCursor;
+        .fontS;
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+        background-color: @body-bg;
+        &.active {
+          color: darkorange;
+        }
+      }
+    }
+    .mobileDropdown {
+      padding-bottom: 10px;
+      padding-left: 0;
+      padding-right: 0;
+      .glyphicon-Special-Product {
+        margin-top: 2px;
+      }
+      .my-dropdown-menu {
+        padding: 0;
+        background-color: transparent;
+        border: 0px solid #cccccc;
+        border: 0px solid rgba(0, 0, 0, 0.15);
+        border-radius: 0px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        background-clip: border-box;
+        list-style: none;
+        .my-list-menu-item {
+          padding: 0;
+          background-color: transparent;
+          border: 0px solid lightgrey;
+        }
+      }
+    }
+  }
+  #descriptionDiv {
+    margin-top: 25px;
+    #initialDescriptionDiv {
+      margin-right: -30px;
+    }
+    .marginTop20{
+      margin-top: 20px;
+    }
+    .noPadding {
+      padding: 0;
+    }
+    .specialProductTitle {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      color: @green;
+      .fontXXL;
+      font-weight: bold
+    }
+    .justify {
+      text-align: justify;
+    }
+    .DescriptionWrapper {
+      background-color: @body-bg;
+      border-radius: 0px;
+      .prescription {
+        margin-top: 15px
+      }
+    }
+  }
+}

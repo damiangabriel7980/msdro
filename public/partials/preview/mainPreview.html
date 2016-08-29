@@ -1,0 +1,41 @@
+<div class="row-fluid specialProductMainWrapper col-xs-offset-0">
+    <div class="col-md-12 col-xs-12 noPadding">
+        <a class="navbar-brand pull-left"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}"></a>
+        <a class="navbar-link pull-right accessAccount" href="/pro">Intra in cont</a>
+    </div>
+    <div class="col-xs-12 col-md-3" id="menuDiv" ng-if="contentToDisplay.menuItems">
+        <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
+            <accordion-group is-open="parent.open" class="parent" ng-repeat="parent in contentToDisplay.menuItems">
+                <accordion-heading>
+                <span ng-click="parent.children_ids.length==0 ? goToMenuItem(parent._id):null">
+                    <i ng-class="{'glyphicon glyphicon-chevron-down': parent.open&&parent.children_ids.length!=0,
+                                  'glyphicon glyphicon-chevron-right': !parent.open||parent.children_ids.length==0}"></i>&nbsp;&nbsp;{{parent.title}}
+                </span>
+                </accordion-heading>
+                <div class="menuMarginBottom">
+                    <div class="child" ng-repeat="subItem in parent.children_ids" ng-click="goToMenuItem(parent._id, subItem._id)">
+                        &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right fontS"></i>&nbsp;&nbsp;{{subItem.title}}
+                    </div>
+                </div>
+            </accordion-group>
+        </accordion>
+    </div>
+    <div ng-class="{'col-xs-12 col-md-9' : contentToDisplay.menuItems, 'col-md-12 col-xs-12' : !contentToDisplay.menuItems}" id="descriptionDiv">
+        <div class="col-xs-12 well well-lg DescriptionWrapper">
+            <div class="col-xs-12">
+                <img class="col-xs-12 noPadding" ng-src="{{contentToDisplay.header_image ? pathAmazonDev + contentToDisplay.header_image : defaultArticleHeaderImage}}" />
+            </div>
+            <div class="col-xs-12">
+                <h3 class="specialProductTitle" convert-special to-convert="contentToDisplay.title" ng-bind-html="trustAsHtml(contentToDisplay.title)">
+
+                </h3>
+            </div>
+            <div class="col-xs-12 marginTop20" convert-special to-convert="contentToDisplay.short_description" ng-bind-html="trustAsHtml(contentToDisplay.short_description)" compile-template>
+
+            </div>
+            <div class="col-xs-12">
+                <a class="btn btn-default pull-right" href="{{urlPro}}">Citeste mai mult</a>
+            </div>
+        </div>
+    </div>
+</div>

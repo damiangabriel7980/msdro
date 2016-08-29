@@ -43,22 +43,7 @@
             <span ng-if="logoImageBody">{{logoImageBody.name}}</span>
             <span ng-if="!logoImageBody">{{newProductPage.logo_path}}</span>
         </div>
-        <div class="col-md-12" style="margin-top: 15px">
-            <div class="newAccountsTabs">
-                <div class="tab" ng-class="{'active': activeTab == 'prescription'}" ng-click="showTab('prescription')">
-                    <span>Footer description</span>
-                </div>
-                <div class="tab" ng-class="{'active': activeTab == 'site_map'}" ng-click="showTab('site_map')">
-                    <span>Site map description</span>
-                </div>
-            </div>
-            <div class="col-md-12 noPadding" ng-class="{'hidden': activeTab != 'prescription'}">
-                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.prescription"></textarea>
-            </div>
-            <div class="col-md-12 noPadding" ng-class="{'hide': activeTab != 'site_map'}">
-                <textarea ui-tinymce="tinymceOptions" ng-model="newProductPage.site_map_description"></textarea>
-            </div>
-        </div>
+        <angular-bootstrap-tabs tabs="editableTabs" editor-options="tinymceOptions"></angular-bootstrap-tabs>
 
     </div>
     <div class="modal-footer">

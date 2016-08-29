@@ -1,0 +1,10 @@
+<div class="col-md-12" style="margin-top: 15px">
+    <div class="newAccountsTabs">
+        <div class="tab" ng-repeat="tab in tabs track by $index" ng-class="{'active': activeTab === tab.title}" ng-click="showTab(tab.title)">
+            <span>{{tab.title}}</span>
+        </div>
+    </div>
+    <div class="col-md-12 noPadding" ng-repeat="tab in tabs track by $index" ng-class="{'hidden': activeTab != tab.title}">
+        <textarea ui-tinymce="editorOptions" ng-model="tab.model"></textarea>
+    </div>
+</div>

@@ -12,22 +12,16 @@
   -moz-transition: background-position 0.5s, color 0.5s;
   transition: background-position 0.5s, color 0.5s;
   text-align: center;
-  display: -webkit-box;
-  display: -moz-box;
-  -webkit-box-pack: center;
-  -moz-box-pack: center;
-  -webkit-box-align: center;
-  -moz-box-align: center;
   font-size: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .specialEffectsButtonBlue .readMoreButton {
   padding: 0 5px !important;
-  display: -webkit-box;
-  display: -moz-box;
-  -webkit-box-pack: center;
-  -moz-box-pack: center;
-  -webkit-box-align: center;
-  -moz-box-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   color: #F4F3F3;
   height: 85px;
@@ -68,22 +62,16 @@
   -moz-transition: background-position 0.5s, color 0.5s;
   transition: background-position 0.5s, color 0.5s;
   text-align: center;
-  display: -webkit-box;
-  display: -moz-box;
-  -webkit-box-pack: center;
-  -moz-box-pack: center;
-  -webkit-box-align: center;
-  -moz-box-align: center;
   font-size: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .specialEffectsButtonRed .readMoreButton {
   padding: 0 5px !important;
-  display: -webkit-box;
-  display: -moz-box;
-  -webkit-box-pack: center;
-  -moz-box-pack: center;
-  -webkit-box-align: center;
-  -moz-box-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   color: #F4F3F3;
   height: 85px;
