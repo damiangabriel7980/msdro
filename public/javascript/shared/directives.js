@@ -27,7 +27,7 @@ app.directive('button', function () {
             }
         }
     }])
-    .directive('scrollOnClick', function($window) {
+    .directive('scrollOnClick', function() {
         return {
             restrict: 'A',
             scope: {
