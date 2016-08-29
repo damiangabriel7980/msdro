@@ -6,7 +6,7 @@
   color: #00042C;
   height: 85px;
   background-size: 200%;
-  background-image: linear-gradient(to right, #F4F3F3 50%, #D6002F 50%);
+  background-image: linear-gradient(to right, #F4F3F3 50%, #137ABD 50%);
   background-attachment: fixed;
   -webkit-transition: background-position 0.5s, color 0.5s;
   -moz-transition: background-position 0.5s, color 0.5s;
