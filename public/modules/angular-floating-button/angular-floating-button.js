@@ -20,7 +20,8 @@
 
                 angular.element($window).bind("scroll", function() {
                     //if the scroll has reached the triggering point, display the scroll to top button
-                    if ($window.scrollY > (scope.triggeringPoint ? scope.triggeringPoint : 0)) {
+                    var scrollPosition = $window.scrollY || $window.pageYOffset;
+                    if (scrollPosition > (scope.triggeringPoint ? scope.triggeringPoint : 0)) {
                         scope.showButton = true;
                     } else {
                         scope.showButton = false;
