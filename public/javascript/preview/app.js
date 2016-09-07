@@ -6,7 +6,9 @@ var app = angular.module('app',
         'ui.router',
         'controllers',
         'services',
-        'ngAnimate'
+        'ngAnimate',
+        'angulartics',
+        'angulartics.google.analytics'
     ]);
 
 app.config(['$locationProvider', function($location) {
@@ -17,6 +19,13 @@ app.constant('STATECONST', {
     'STAYWELLPRO': 'pro#!',
     'PRODUCTMENUITEM' : '/menuItem/',
     'PRODUCTMENUMAIN' : '/groupSpecialProduct/'
+});
+
+app.config(function ($analyticsProvider) {
+    //configure Google Analytics to track URL including the preview prefix in order to distinguish
+    //preview calls from pro calls
+    $analyticsProvider.firstPageview(true); /* Records pages that don't use $state or $route */
+    $analyticsProvider.withAutoBase(true);  /* Records full path */
 });
 
 app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($stateProvider, $urlRouterProvider, STATECONST) {
