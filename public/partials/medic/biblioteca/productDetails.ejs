@@ -5,13 +5,13 @@
     <div class="col-md-3 col-sm-4 imageAndRCP">
         <a class="thumbnail"><img ng-src="{{selectedProduct.image_path?pathAmazonDev + selectedProduct.image_path:defaultProductImage}}" alt="{{selectedProduct.name}}"/></a>
         <a ng-if="selectedProduct.file_path" ng-href="{{pathAmazonDev + selectedProduct.file_path}}" target="_blank" class="btn btn-default">
-            <i class="glyphicon glyphicon-share"></i>&nbsp;Descarca RCP
+            <i class="glyphicon glyphicon-share"></i>&nbsp;Descarc&#259; RCP
         </a>
         <hr>
     </div>
     <div class="col-md-9 col-sm-8" convert-special conver="selectedProduct.description" ng-bind-html="trustAsHtml(selectedProduct.description)">
     </div>
     <div class="col-xs-12 text-center" ng-if="isMobile(true)">
-        <a class="btn btn-default" ng-click="backToProducts()">Inapoi la produse</a>
+        <a class="btn btn-default" ng-click="backToProducts()">&#206;napoi la produse</a>
     </div>
 </div>

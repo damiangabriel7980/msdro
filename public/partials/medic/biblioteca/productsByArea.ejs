@@ -1,5 +1,5 @@
 <div class="col-sm-11 productsView">
-    <div class="col-md-12 noProducts" ng-if="products.length == 0"><h4>Nu exista produse conform criteriilor selectate</h4></div>
+    <div class="col-md-12 noProducts" ng-if="products.length == 0"><h4>Nu exist&#259; produse conform criteriilor selectate</h4></div>
     <div class="col-xs-12 noPadding" ng-if="!isMobile(true)">
         <div class="col-md-3 col-sm-4 product" ng-repeat="prod in products | orderBy:'name'|limitTo: lmt">
             <vertical-content-list content="prod" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"

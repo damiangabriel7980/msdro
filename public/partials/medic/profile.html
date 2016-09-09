@@ -20,7 +20,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12 col-xs-12" style="margin-top: 5px">
-                                <a class="btn btn-default" style="width: 100%" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca o poza</a>
+                                <a class="btn btn-default" style="width: 100%" type="file" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false" ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;&#206;ncarc&#259; o poz&#259;</a>
                             </div>
                             <div class="col-md-12 col-xs-12" style="margin-top: 5px">
                                 <alert type="{{uploadAlert.type}}" ng-if="uploadAlert.newAlert" close="uploadAlert.newAlert=false">{{uploadAlert.message}}</alert>
@@ -36,18 +36,18 @@
                                 <div class="form-group-sm col-md-9 col-sm-12 col-xs-12" ng-class="{'has-error': profileForm.nume.$error.pattern  || profileForm.nume.$error.required}">
                                     <label>Nume<sup>*</sup>:</label>
                                     <input type="text" class="form-control" id="nume" name="nume" ng-model="fullname" ng-pattern="nameValidator" ng-required="true">
-                                    <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu contine caractere valide/are mai putin de 3 caractere!</p>
+                                    <p class="" ng-show="profileForm.nume.$error.pattern">Numele nu con&#355;ine caractere valide/are mai pu&#355;in de 3 caractere!</p>
                                     <p class="" ng-show="profileForm.nume.$error.required">Numele este obligatoriu!</p>
                                 </div>
                             </div>
                             <div class="form-group-sm col-md-6 col-sm-12 col-xs-12" ng-class="{'has-error': profileForm.telefon.$error.pattern}">
                                 <label for="telefon">Telefon:</label>
                                 <input type="text" class="form-control" id="telefon" name="telefon" ng-model="phone" ng-pattern="phoneValidator">
-                                <p class="" ng-show="profileForm.telefon.$error.pattern">Numarul de telefon trebuie sa contina minim 10 cifre!</p>
-                                <p class="" ng-show="profileForm.telefon.$error.required">Numarul de telefon este obligatoriu!</p>
+                                <p class="" ng-show="profileForm.telefon.$error.pattern">Num&#259;rul de telefon trebuie s&#259; con&#355;in&#259; minim 10 cifre!</p>
+                                <p class="" ng-show="profileForm.telefon.$error.required">Num&#259;rul de telefon este obligatoriu!</p>
                             </div>
                             <div class="form-group-sm col-md-6 col-sm-12 col-xs-12">
-                                <label>Tip de practica:</label>
+                                <label>Tip de practic&#259;:</label>
                                 <select ng-model="userData.practiceType" class="form-control" ng-options="practice.number as practice.name for practice in practices"></select>
                             </div>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -64,7 +64,7 @@
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group-sm">
-                                <label>Judet<sup>*</sup>:</label>
+                                <label>Jude&#355;<sup>*</sup>:</label>
                                 <angular-select-autocomplete ng-model="selectedCounty" ng-options="counties" id-attr="_id" title-attr="name" on-option-select="countyWasSelected"></angular-select-autocomplete>
                                 <!-- <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" ng-required="true">
                                     <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group-sm">
-                                <label>Oras<sup>*</sup>:</label>
+                                <label>Ora&#351;<sup>*</sup>:</label>
                                 <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name" ng-disabled="!selectedCounty || !selectedCounty._id"></angular-select-autocomplete>
                                 <!--<ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">-->
                                     <!--<ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>-->
@@ -104,68 +104,68 @@
                         </div>
                         <div class="col-md-12 col-xs-12 form-group-sm" style="padding-bottom: 0">
                             <input type="checkbox" ng-model="userData.subscriptions.infoMSD"/>
-                            <span>Abonat la informatii MSD</span>
+                            <span>Abonat la informa&#355;ii MSD</span>
                         </div>
                         <div class="col-md-12 col-xs-12 form-group-sm" style="padding-bottom: 0">
                             <input type="checkbox" name="rememberOption" ng-model="rememberOption">
-                            <span>Afiseaza prezentarea initiala</span>
+                            <span>Afiseaz&#259; prezentarea ini&#355;ial&#259;</span>
                         </div>
                     </div>
                     <div class="col-md-12 col-xs-12" style="margin-top: 15px">
-                        <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaza</button>
+                        <button type="submit" ng-click="submitProfileForm(profileForm.$valid)" class="btn btn-primary pull-right">Salveaz&#259;</button>
                     </div>
                 </form>
             </accordion-group>
             <accordion-group class="no-text-decoration">
-                <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-lock"></i>&nbsp;&nbsp;Loc de munca</p></accordion-heading>
+                <accordion-heading class="no-text-decoration"><p class="no-text-decoration"><i class="glyphicon glyphicon-lock"></i>&nbsp;&nbsp;Loc de munc&#259;</p></accordion-heading>
                 <div class="col-md-12 col-xs-12">
                     <alert ng-if="userJobAlert.newAlert" type="{{userJobAlert.type}}" close="userJobAlert.newAlert=false">{{userJobAlert.message}}</alert>
                 </div>
                 <form name="jobForm" novalidate>
                     <div class="col-md-12 col-xs-12 noPadding">
                         <div class="form-group-sm col-md-6 col-xs-12">
-                            <label for="tipLoc">Tip loc de munca:</label>
+                            <label for="tipLoc">Tip loc de munc&#259;:</label>
                             <select ng-model="selectedJob" name="tip_munca" ng-options="job.number as job.name for job in jobTypes"
                                     class="form-control" id="tipLoc" style="width: 100%;">
                             </select>
-                            <p class="" ng-show="jobForm.tip_munca.$invalid && !jobForm.tip_munca.$pristine">Tipul locului de munca este invalid!</p>
+                            <p class="" ng-show="jobForm.tip_munca.$invalid && !jobForm.tip_munca.$pristine">Tipul locului de munc&#259; este invalid!</p>
                         </div>
                         <div class="form-group-sm col-md-6 col-xs-12" ng-class="{'has-error':jobForm.locMunca.$error.required || jobForm.locMunca.$error.pattern}">
-                            <label for="locMunca">Loc de munca<sup>*</sup>:</label>
+                            <label for="locMunca">Loc de munc&#259;<sup>*</sup>:</label>
                             <input type="text" class="form-control" id="locMunca" name="locMunca" ng-pattern="jobNameValidator" ng-model="job.job_name" ng-required="true">
-                            <p class="" ng-show="jobForm.locMunca.$error.required">Locul de munca este obligatoriu!</p>
-                            <p class="" ng-show="jobForm.locMunca.$error.pattern">Locul de munca  trebuie sa contina intre 3 si 30 caractere/contine caractere invalide!</p>
+                            <p class="" ng-show="jobForm.locMunca.$error.required">Locul de munc&#259; este obligatoriu!</p>
+                            <p class="" ng-show="jobForm.locMunca.$error.pattern">Locul de munc&#259; trebuie s&#259; con&#355;in&#259; &#238;ntre 3 &#351;i 30 caractere/con&#355;ine caractere invalide!</p>
 
                         </div>
                     </div>
                     <div class="col-md-12 noPadding col-xs-12">
                         <div class="form-group-sm col-md-4 col-xs-12" ng-class="{'has-error':jobForm.numeStrada.$error.required || jobForm.numeStrada.$error.pattern}">
-                            <label for="numeStrada">Numele strazii:</label>
+                            <label for="numeStrada">Numele str&#259;zii:</label>
                             <input type="text" class="form-control" name="numeStrada" id="numeStrada" ng-pattern="streetNameValidator" ng-model="job.street_name" >
-                            <p class="" ng-show="jobForm.numeStrada.$error.required">Numele strazii este obligatoriu!</p>
-                            <p class="" ng-show="jobForm.numeStrada.$error.pattern">Numele strazii trebuie sa contina intre 1 si 50 caractere/contine caractere invalide!</p>
+                            <p class="" ng-show="jobForm.numeStrada.$error.required">Numele str&#259;zii este obligatoriu!</p>
+                            <p class="" ng-show="jobForm.numeStrada.$error.pattern">Numele str&#259;zii trebuie s&#259; con&#355;in&#259; &#238;ntre 1 &#351;i 50 caractere/con&#355;ine caractere invalide!</p>
                         </div>
                         <div class="form-group-sm col-md-4 col-xs-12" ng-class="{'has-error':jobForm.numarStrada.$error.required || jobForm.numarStrada.$error.pattern}">
-                            <label for="numarStrada">Numarul strazii:</label>
+                            <label for="numarStrada">Num&#259;rul str&#259;zii:</label>
                             <input type="text" class="form-control" id="numarStrada" name="numarStrada" ng-pattern="jobNumberValidator"  ng-model="job.street_number" >
-                            <p class="" ng-show="jobForm.numarStrada.$error.required">Numarul strazii este obligatoriu!</p>
-                            <p class="" ng-show="jobForm.numarStrada.$error.pattern">Numarul strazii trebuie sa contina intre 1 si 5 caractere/contine caractere invalide!</p>
+                            <p class="" ng-show="jobForm.numarStrada.$error.required">Num&#259;rul str&#259;zii este obligatoriu!</p>
+                            <p class="" ng-show="jobForm.numarStrada.$error.pattern">Num&#259;rul str&#259;zii trebuie s&#259; con&#355;in&#259; &#238;ntre 1 &#351;i 5 caractere/con&#355;ine caractere invalide!</p>
                         </div>
                         <div class="form-group-sm col-md-4 col-xs-12" ng-class="{'has-error':jobForm.codPostal.$error.required || jobForm.codPostal.$error.pattern}">
-                            <label for="codPostal">Cod postal</label>
+                            <label for="codPostal">Cod po&#351;tal</label>
                             <input type="text" class="form-control" id="codPostal" name="codPostal" ng-model="job.postal_code" ng-pattern="/^\d+$/">
-                            <p class="" ng-show="jobForm.codPostal.$error.required">Codul postal este obligatoriu!</p>
-                            <p class="" ng-show="jobForm.codPostal.$error.pattern">Codul postal trebuie sa contina numai cifre!</p>
+                            <p class="" ng-show="jobForm.codPostal.$error.required">Codul po&#351;tal este obligatoriu!</p>
+                            <p class="" ng-show="jobForm.codPostal.$error.pattern">Codul po&#351;tal trebuie s&#259; contin&#259; numai cifre!</p>
                         </div>
                     </div>
                     <div class="col-md-12 noPadding col-xs-12">
                         <div class="form-group-sm col-md-12">
-                            <label for="codPostal">Alte informatii, adresa:</label>
+                            <label for="codPostal">Alte informa&#355;ii, adresa:</label>
                             <input type="text" class="form-control" id="alteInfoAdr" ng-model="job.job_address">
                         </div>
                     </div>
                     <div class="col-md-12 col-xs-12" style="margin-top: 15px">
-                        <button ng-click="submitJobForm(jobForm.$valid)" class="btn btn-primary pull-right">Salveaza loc de munca</button>
+                        <button ng-click="submitJobForm(jobForm.$valid)" class="btn btn-primary pull-right">Salveaz&#259; loc de munc&#259;</button>
                     </div>
                 </form>
             </accordion-group>
@@ -179,7 +179,7 @@
                         <div class="form-group-sm col-md-12 col-xs-12">
                             <label for="emailNew">Adresa de e-mail:</label>
                             <input type="text" class="form-control" id="emailNew" name="emailNew" ng-model="username" disabled>
-                            <p class="" ng-show="emailForm.emailNew.$invalid && !emailForm.emailNew.$pristine ">Introduceti un email valid!</p>
+                            <p class="" ng-show="emailForm.emailNew.$invalid && !emailForm.emailNew.$pristine ">Introduce&#355;i un email valid!</p>
                         </div>
                         <!--<div class="form-group-sm col-md-6">-->
                         <!--<label for="changeEmailPass"><sup>*</sup>Parola:</label>-->
@@ -191,7 +191,7 @@
                 </form>
                 <div class="col-md-12 col-xs-12">
                     <hr style="margin: 10px 0"/>
-                    <label style="margin-bottom: 15px">Schimba parola</label>
+                    <label style="margin-bottom: 15px">Schimb&#259; parola</label>
                 </div>
                 <div class="col-md-12 col-xs-12">
                     <alert ng-if="userChangePassAlert.newAlert" type="{{userChangePassAlert.type}}" close="userChangePassAlert.newAlert=false">{{userChangePassAlert.message}}</alert>
@@ -200,28 +200,28 @@
                     <div class="form-group-sm col-md-12 col-xs-12" ng-class="{'has-error': changePassForm.oldPass.$error.required && showerrorPass}">
                         <label for="oldPass">Parola<sup>*</sup>:</label>
                         <input type="password" class="form-control" id="oldPass" name="oldPass" ng-model="oldPass" ng-required="true">
-                        <p class="" ng-show="changePassForm.oldPass.$error.required && showerrorPass">Introduceti vechea parola!</p>
+                        <p class="" ng-show="changePassForm.oldPass.$error.required && showerrorPass">Introduce&#355;i vechea parol&#259;!</p>
                     </div>
                     <div class="col-md-12 noPadding col-xs-12">
                         <div class="form-group-sm col-md-6" ng-class="{'has-error':changePassForm.newPass.$error.required && showerrorPass}">
-                            <label for="newPass">Parola noua<sup>*</sup>:</label>
+                            <label for="newPass">Parola nou&#259;<sup>*</sup>:</label>
                             <input type="password" class="form-control" id="newPass" name="newPass" ng-model="newPass" ng-required="true">
-                            <p class="" ng-show="changePassForm.newPass.$error.required && showerrorPass">Introduceti noua parola!</p>
+                            <p class="" ng-show="changePassForm.newPass.$error.required && showerrorPass">Introduce&#355;i noua parol&#259;!</p>
                         </div>
                         <div class="form-group-sm col-md-6 col-xs-12" ng-class="{'has-error':changePassForm.confirmPass.$error.required && showerrorPass}">
-                            <label for="confirmPass">Repeta parola<sup>*</sup>:</label>
+                            <label for="confirmPass">Repet&#259; parola<sup>*</sup>:</label>
                             <input type="password" class="form-control" id="confirmPass" name="confirmPass" ng-model="confirmPass" ng-required="true">
-                            <p class="" ng-show="changePassForm.confirmPass.$error.required && showerrorPass">Reintroduceti noua parola!</p>
+                            <p class="" ng-show="changePassForm.confirmPass.$error.required && showerrorPass">Reintroduce&#355;i noua parol&#259;!</p>
                         </div>
                     </div>
                     <div class="col-md-12 col-xs-12" style="margin-top: 15px">
-                        <button type="submit" ng-click="submitChangePassForm(changePassForm.$valid)" class="btn btn-danger pull-right">Schimba parola</button>
+                        <button type="submit" ng-click="submitChangePassForm(changePassForm.$valid)" class="btn btn-danger pull-right">Schimb&#259; parola</button>
                     </div>
                 </form>
             </accordion-group>
         </accordion>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default positionMiddle right" ng-click="$state.includes('profileMobile')? goHome() : $close()">Inchide</a>
+        <a class="btn btn-default positionMiddle right" ng-click="$state.includes('profileMobile')? goHome() : $close()">&#206;nchide</a>
     </div>
 </div>
