@@ -6394,6 +6394,19 @@ button.close {
   text-decoration: none;
   outline: none !important;
 }
+.specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemWrapper {
+  font-weight: bold;
+  width: 100%;
+  display: flex;
+  display: -webkit-flex;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemArrow {
+  width: 15px;
+  top: 0;
+}
+.specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemText {
+  margin-left: 6px;
+}
 .specialProductMainWrapper #menuDiv .productPageMenu .parent .panel-heading {
   color: #006d69;
 }
