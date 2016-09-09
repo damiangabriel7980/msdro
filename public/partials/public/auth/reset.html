@@ -1,7 +1,7 @@
 <form ng-submit="reset()">
     <div class="modal-header">
         <div class="noPatientsLogo"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}" ng-click="renderView('login')"></div>
-        <div class="modal-title"><h3><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Reseteaza parola</h3></div>
+        <div class="modal-title"><h3><i class="glyphicon glyphicon-lock" style="font-size: 20px"></i>&nbsp;Reseteaz&#259; parola</h3></div>
     </div>
     <div class="modal-body">
         <alert type="{{alert.type}}" ng-if="alert.show" close="alert.show=false">{{alert.text}}</alert>
@@ -11,13 +11,13 @@
         </div>
         <div>
             <ul class="pointerLinks" style="margin: 10px 0">
-                <li>Nu ai cont? <a ng-click="showSignup()">Creaza cont nou</a></li>
-                <li>Ai deja un cont creat? <a ng-click="renderView('login')">Acceseaza contul</a></li>
+                <li>Nu ai cont? <a ng-click="showSignup()">Creeaz&#259; cont nou</a></li>
+                <li>Ai deja un cont creat? <a ng-click="renderView('login')">Acceseaz&#259; contul</a></li>
             </ul>
         </div>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-default pull-left" ng-click="closeModal()">Inchide</a>
-        <button class="btn btn-primary pull-right" type="submit">Reseteaza parola</button>
+        <a class="btn btn-default pull-left" ng-click="closeModal()">&#206;nchide</a>
+        <button class="btn btn-primary pull-right" type="submit">Reseteaz&#259; parola</button>
     </div>
 </form>

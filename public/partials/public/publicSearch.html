@@ -1,14 +1,14 @@
 <div class="col-sm-12 searchResults">
-    <div class="col-sm-12 mainTitle">REZULTATE CAUTARE</div>
+    <div class="col-sm-12 mainTitle">REZULTATE C&#258;UTARE</div>
 
     <div class="col-sm-12 noPadding" ng-if="!searchResults || searchResults.length == 0">
-        Cautarea nu a returnat nici un rezultat
+        C&#259;utarea nu a returnat nici un rezultat
     </div>
     <div class="col-sm-12 noPadding" ng-if="searchResults && searchResults.length > 0">
         <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
             <div ng-repeat="item in searchResults track by $index" class="col-sm-12 noPadding">
                 <horizontal-content-list content="item" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
-                                         title-attr="title" text-attr="text" bold-attr-hardcoded="{{getCategory(item.type)}}" bold-attr-2="author" date-attr="date_added" button-label="Vizualizeaza"
+                                         title-attr="title" text-attr="text" bold-attr-hardcoded="{{getCategory(item.type)}}" bold-attr-2="author" date-attr="date_added" button-label="Vizualizeaz&#259;"
                                          show-divider="$index!=articlesLimit-1 && $index!=searchResults.length-1" navigate="sref"></horizontal-content-list>
             </div>
         </div>

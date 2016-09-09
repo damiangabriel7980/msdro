@@ -2,18 +2,18 @@
     <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
         <div class="col-sm-12 article" ng-repeat="n in news | limitTo:articlesLimit track by $index">
             <horizontal-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
-                                     title-attr="title" text-attr="text" bold-attr-1="author" date-attr="date_added" button-label="Vezi stire"
+                                     title-attr="title" text-attr="text" bold-attr-1="author" date-attr="date_added" button-label="Vezi &#351;tire"
                                      show-divider="$index!=articlesLimit-1 && $index!=news.length-1" navigate="navigateToNews"></horizontal-content-list>
         </div>
     </div>
     <div class="col-sm-12 noPadding mobileArea" ng-if="isMobile(true)">
         <div class="col-xs-12 category">
-            <div class="col-xs-12 name">NOUTATI</div>
+            <div class="col-xs-12 name">NOUT&#258;&#538;I</div>
             <mobile-content-list content="news" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
                                  text-attr="text" navigate="navigateTo" limit="articlesLimit"></mobile-content-list>
         </div>
     </div>
 </div>
 <div class="col-sm-12 text-center" ng-style="{'display':articlesLimit<news.length?'initial':'none'}">
-    <a class="btn btn-default" ng-click="articlesLimit=articlesLimit+3">Mai multe stiri</a>
+    <a class="btn btn-default" ng-click="articlesLimit=articlesLimit+3">Mai multe &#351;tiri</a>
 </div>
