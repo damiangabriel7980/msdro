@@ -1,4 +1,4 @@
-app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', '$sanitize', function($scope, AuthService, $window, Utils, Success, $sanitize) {
+app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', function($scope, AuthService, $window, Utils, Success) {
 
     //================================================================================================== init variables
     $scope.user = {
