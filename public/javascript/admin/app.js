@@ -32,6 +32,10 @@ app.config(['$locationProvider', function($location) {
     $location.hashPrefix('!');
 }]);
 
+app.constant('DATEFIELDCONST', {
+    'DATEFIELD': 'last_updated'
+});
+
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/users/manageAccounts");
     $stateProvider
