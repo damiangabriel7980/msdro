@@ -746,11 +746,11 @@ app.run(
             var pdfResources = {
                 Pharma: {
                     link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf",
-                    title: "Farmacovigilenta"
+                    title: "Farmacovigilență"
                 },
                 Terms: {
                     link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf",
-                    title: "Termeni si conditii"
+                    title: "Termeni și condiții"
                 },
                 MerckManual: {
                     link: "/merckManual",
