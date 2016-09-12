@@ -131,6 +131,10 @@ var loadStateDeps = function (deps) {
     }]
 };
 
+app.constant('TEMPLATECONST', {
+    'SIGNUPPOPOVERURL': 'partials/public/auth/popoverSignUp.html'
+});
+
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.rule(function ($injector, $location) {
         //console.log($location.url());
@@ -279,8 +283,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService', '$ocLazyLoad',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService,   $ocLazyLoad) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService', '$ocLazyLoad', 'TEMPLATECONST',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService,   $ocLazyLoad, TEMPLATECONST) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
 
@@ -309,6 +313,8 @@ app.run(
                 else
                     $state.go('publicSearch',{},{reload: true});
             };
+
+            $rootScope.signUpPopoverTemplate = TEMPLATECONST.SIGNUPPOPOVERURL;
 
             //global functions
             $rootScope.htmlToPlainText = Utils.htmlToPlainText;

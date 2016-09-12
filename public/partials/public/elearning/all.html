@@ -1,11 +1,11 @@
 <div ng-cloak class="col-md-12 text-center" ng-if="elearning && elearning.length==0">
-    <h4>Nu exista materiale multimedia conform criteriilor selectate!</h4>
+    <h4>Nu există materiale multimedia conform criteriilor selectate!</h4>
 </div>
 <div class="col-sm-12 elearningList">
     <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
         <div class="col-sm-12 entry" ng-repeat="n in elearning | limitTo:contentLimit track by $index">
             <horizontal-content-list content="n" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultSlideImage}}"
-                                     title-attr="title" text-attr="description" bold-attr-1="author" date-attr="date_added" button-label="Vizualizeaza"
+                                     title-attr="title" text-attr="description" bold-attr-1="author" date-attr="date_added" button-label="Vizualizează"
                                      show-divider="$index!=contentLimit-1 && $index!=elearning.length-1" navigate="navigateToElearning"></horizontal-content-list>
         </div>
     </div>
