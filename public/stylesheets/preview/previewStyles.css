@@ -6397,8 +6397,11 @@ button.close {
 .specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemWrapper {
   font-weight: bold;
   width: 100%;
-  display: flex;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: -webkit-flex;
+  display: flex;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemArrow {
   width: 15px;
