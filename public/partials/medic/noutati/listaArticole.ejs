@@ -4,7 +4,7 @@
     <div class="col-xs-12 articlesListWrapper" ng-repeat="cont in content | limitTo: lmt">
         <horizontal-content-list content="cont" image-path-attr="image_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultArticleImage}}"
                                  title-attr="title" text-attr="text" bold-attr-1="author" date-attr="last_updated"
-                                 button-label="{{cont.type != 3?'Vezi &#351;tire':'Vezi articol'}}" navigate="navigateToContent"></horizontal-content-list>
+                                 button-label="{{cont.type != 3?'Vezi ştire':'Vezi articol'}}" navigate="navigateToContent"></horizontal-content-list>
     </div>
 </div>
 <div class="col-xs-12 noPadding" ng-if="isMobile(true)">
@@ -12,5 +12,5 @@
                          text-attr="text" navigate="navigateToContent" limit="lmt"></mobile-content-list>
 </div>
 <div class="articlesMoreNews" align="center">
-    <a class="btn btn-default" style="margin-top: 20px" ng-class="{'hide': content.length <= lmt}" ng-click="increaseLimit()">Mai multe &#351;tiri</a>
+    <a class="btn btn-default" style="margin-top: 20px" ng-class="{'hide': content.length <= lmt}" ng-click="increaseLimit()">Mai multe ştiri</a>
 </div>

@@ -1,5 +1,5 @@
 <div ng-cloak class="col-sm-12 text-center" ng-if="news && news.length==0 && !isMobile(true)">
-    <h4>Nu exist&#259; articole conform criteriilor selectate!</h4>
+    <h4>Nu există articole conform criteriilor selectate!</h4>
 </div>
 <div class="col-sm-12 articlesList">
     <div class="col-sm-12 noPadding" ng-if="!isMobile(true)">
@@ -13,7 +13,7 @@
         <div class="col-xs-12 category">
             <div class="col-xs-12 name">DESPRE - {{categoryName}}</div>
             <div ng-cloak class="col-sm-12 text-center" ng-if="news && news.length==0">
-                <h4>Nu exist&#259; articole conform criteriilor selectate!</h4>
+                <h4>Nu există articole conform criteriilor selectate!</h4>
             </div>
             <mobile-content-list content="news" image-attr="image_path" image-prefix="{{pathAmazonDev}}" default-image="{{defaultArticleImage}}" title-attr="title"
                                  text-attr="text" navigate="navigateTo" limit="articlesLimit"></mobile-content-list>

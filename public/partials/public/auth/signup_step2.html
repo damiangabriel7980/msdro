@@ -33,11 +33,11 @@
                 ng-options="specialty._id as specialty.name for specialty in specialties" id="specialty"></select>
     </div>
     <div class="form-group-sm col-md-6">
-        <label>Tip de practic&#259;:</label>
+        <label>Tip de practică:</label>
         <select ng-model="user.practiceType" class="form-control" ng-options="practice.number as practice.name for practice in practices"></select>
     </div>
     <div class="form-group-sm col-md-12">
-        <label>Loc de munc&#259;<sup>*</sup>:</label>
+        <label>Loc de muncă<sup>*</sup>:</label>
         <input type="text" class="form-control" ng-model="user.job"/>
     </div>
     <div class="form-group-sm col-md-12">
@@ -46,13 +46,13 @@
     </div>
     <div class="col-md-6">
         <div class="form-group-sm">
-            <label>Jude&#539;<sup>*</sup>: </label>
+            <label>Județ<sup>*</sup>: </label>
             <angular-select-autocomplete ng-model="selectedCounty" ng-options="counties" id-attr="_id" title-attr="name" on-option-select="countyWasSelected"></angular-select-autocomplete>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group-sm">
-            <label>Ora&#351;<sup>*</sup>: </label>
+            <label>Oraş<sup>*</sup>: </label>
             <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name" ng-disabled="!selectedCounty || !selectedCounty._id"></angular-select-autocomplete>
         </div>
     </div>
@@ -62,7 +62,7 @@
     </div>
     <div class="col-md-6 noPadding">
         <div class="form-group-sm col-md-6">
-            <label>Surs&#259; de informare:</label>
+            <label>Sursă de informare:</label>
             <select ng-model="infoSource.type" ng-options="i as i.name for i in infoSources" class="form-control"></select>
         </div>
         <div class="form-group-sm col-md-6">
@@ -72,18 +72,18 @@
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="nonUser.termsStaywell">
-        <span>Accept <a href="apiPublic/termsAndConditionsStaywell" target="_blank">termenii &#351;i condi&#539;iile Staywell</a>&nbsp;<sup>*</sup></span>
+        <span>Accept <a href="apiPublic/termsAndConditionsStaywell" target="_blank">termenii şi condițiile Staywell</a>&nbsp;<sup>*</sup></span>
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="nonUser.termsMSD">
-        <span>Accept <a href="apiPublic/termsAndConditionsMSD" target="_blank">politica de confiden&#539;ialitate a MSD privind datele cu caracter personal</a>&nbsp;<sup>*</sup></span>
+        <span>Accept <a href="apiPublic/termsAndConditionsMSD" target="_blank">politica de confidențialitate a MSD privind datele cu caracter personal</a>&nbsp;<sup>*</sup></span>
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="user.subscriptions.newsletterStaywell">
-        <span>Sunt de acord s&#259; primesc newsletter Staywell</span>
+        <span>Sunt de acord să primesc newsletter Staywell</span>
     </div>
     <div class="form-group-sm col-md-6">
         <input type="checkbox" ng-model="user.subscriptions.infoMSD">
-        <span>Sunt de acord s&#259; primesc informa&#539;ii de la MSD</span>
+        <span>Sunt de acord să primesc informații de la MSD</span>
     </div>
 </div>

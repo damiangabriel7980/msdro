@@ -29,7 +29,7 @@
             </accordion-group>
             <accordion-group is-open="status.isFirstOpen" ng-if="!specialProductMenu.length" class="parent" ui-sref-active="active" ui-sref="groupSpecialProduct.immunologyQA({isResource: $state.params.isResource})">
                 <accordion-heading>
-                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;P&#259;rerile exper&#355;ilor</div>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Părerile experţilor</div>
                 </accordion-heading>
             </accordion-group>
         </accordion>
@@ -41,7 +41,7 @@
             </accordion-group>
             <accordion-group is-open="status.isFirstOpen" ng-repeat="pathology in specialProductPage.pathologiesID" ng-if="pathology.description" class="parent oddParent" ui-sref="pathologies({pathology_id: pathology._id})">
                 <accordion-heading>
-                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;&#206;napoi la {{pathology.display_name}}</div>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Înapoi la {{pathology.display_name}}</div>
                 </accordion-heading>
             </accordion-group>
             <accordion-group is-open="status.isFirstOpen" ng-if="!$state.params.isResource" class="parent oddParent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
@@ -84,7 +84,7 @@
                     </accordion-group>
                     <accordion-group is-open="status.isFirstOpen" class="parent" ng-if="$state.includes('groupSpecialProduct.immunologyQA')" ng-class="{'active':$state.includes('pathologyResources.immunologyQA')}" ng-click="navigateMobile('Q & A')">
                         <accordion-heading>
-                            <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;P&#259;rerile exper&#355;ilor</div>
+                            <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Părerile experţilor</div>
                         </accordion-heading>
                     </accordion-group>
                 </accordion>
