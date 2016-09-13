@@ -6402,6 +6402,14 @@ button.close {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -webkit-flex-flow: inherit;
+  -ms-flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-flow: inherit;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemArrow {
   width: 15px;
@@ -6409,6 +6417,7 @@ button.close {
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemText {
   margin-left: 6px;
+  width: 160px;
 }
 .specialProductMainWrapper #menuDiv .productPageMenu .parent .panel-heading {
   color: #006d69;
