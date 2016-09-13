@@ -2,13 +2,13 @@
     <h3 class="modal-title">{{speaker.name}}</h3>
 </div>
 <div class="modal-body">
-    <div ng-class="{'noPadding':isMobile(true)}" class="col-md-12" >
         <video class="video-js vjs-default-skin vjs-big-play-centered marginTop25px" controls preload="auto" autoplay width="100%" height="100%">
             <source ng-src="{{getVideoSrc(speaker)}}" type="video/mp4">
             <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
         </video>
-    </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" type="button" ng-click="cancel()">Close</button>
+    <div class="col-xs-12 noPadding">
+        <button class="btn btn-default" type="button" ng-click="cancel()">Închide</button>
+    </div>
 </div>

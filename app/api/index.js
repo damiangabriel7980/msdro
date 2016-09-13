@@ -51,6 +51,7 @@ var ConferencesModule = require('../modules/Conferences');
 var ModelInfos = require('../modules/modelInfos');
 var ContentVerifier = require('../modules/contentVerifier');
 var januviaImport = require('../modules/importJanuviaUsers');
+var searchIndex = require('../modules/mongoosasticIndex/index');
 
 //special Products
 var specialProduct = require('../models/specialProduct');
@@ -1420,6 +1421,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         if (err){
                             handleError(res,err,500);
                         }else{
+                            searchIndex.mongoosasticIndex(Content);
                             handleSuccess(res, {}, 3);
                         }
                     });
@@ -1523,6 +1525,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     console.log(err);
                     handleError(res,err,500);
                 }else{
+                    searchIndex.mongoosasticIndex(specialProduct);
                     if(forAssociatedProd){
                         Products.update({_id: prodKey},{$set:forAssociatedProd}, function (err, wRes) {
                             if(err){
@@ -2248,6 +2251,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 if(err){
                     handleError(res,err);
                 }else{
+                    searchIndex.mongoosasticIndex(Events);
                     handleSuccess(res,{updateCount: wres},3);
                 }
             });
@@ -2691,6 +2695,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         if(err){
                             handleError(res,err,500);
                         }else{
+                            searchIndex.mongoosasticIndex(Multimedia);
                             handleSuccess(res, {}, 3);
                         }
                     });
