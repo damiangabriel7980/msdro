@@ -62,6 +62,21 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         {number: 4, name: "Dr"}
     ];
 
+    var getCities = function (county, reset) {
+        ProfileService.Cities.query({county_name: county.name}).$promise.then(function (resp) {
+            $scope.cities = Success.getObject(resp).sort(function(a,b){
+                if ( a.name < b.name )
+                    return -1;
+                if ( a.name > b.name )
+                    return 1;
+                return 0;
+            });
+            if(reset){
+                $scope.city.selected = {};
+            }
+        });
+    };
+
     //------------------------------------------------------------------------------ retrieve personal info
     ProfileService.UserData.query({cache: new Date()}).$promise.then(function (resp) {
         var userData = Success.getObject(resp);
@@ -86,7 +101,9 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
             },
             init: true
         };
-
+        if($scope.city.selected._id){
+            getCities($scope.county.selected);
+        }
         if(userData.job){
             $scope.job = userData.job;
             $scope.selectedJob = userData.job.job_type;
@@ -120,16 +137,7 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
 
     $scope.countyWasSelected = function (county) {
         if(county && county._id){
-            ProfileService.Cities.query({county_name: county.name}).$promise.then(function (resp) {
-                $scope.cities = Success.getObject(resp).sort(function(a,b){
-                    if ( a.name < b.name )
-                        return -1;
-                    if ( a.name > b.name )
-                        return 1;
-                    return 0;
-                });
-                $scope.city.selected = {};
-            });
+            getCities(county, true);
         }else if(!($scope.city.selected && $scope.city.init)){
             $scope.cities = [];
             $scope.city.selected = {};
