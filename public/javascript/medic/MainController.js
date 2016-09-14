@@ -51,7 +51,7 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
             windowClass: 'fade modal-responsive MyProfileModal',
             controller: 'Profile',
             resolve: {
-                loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'FileUpload', 'TherapeuticSelect'])
+                loadDeps: loadStateDeps(['Profile', 'uiSelect', 'FileUpload', 'TherapeuticSelect'])
             }
         });
     };

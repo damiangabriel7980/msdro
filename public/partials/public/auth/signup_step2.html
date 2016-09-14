@@ -47,13 +47,33 @@
     <div class="col-md-6">
         <div class="form-group-sm">
             <label>Județ<sup>*</sup>: </label>
-            <angular-select-autocomplete ng-model="selectedCounty" ng-options="counties" id-attr="_id" title-attr="name" on-option-select="countyWasSelected"></angular-select-autocomplete>
+            <ui-select class="noPadding" ng-model="county.selected"
+                       theme="bootstrap"
+                       ng-disabled="false"
+                       reset-search-input="true"
+                       on-select="countyWasSelected(county.selected)">
+                <ui-select-match placeholder="Alegeti un judet">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="county in counties | filter: {name: $select.search}"
+                                   refresh-delay="0">
+                    <div ng-bind-html="county.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group-sm">
             <label>Oraş<sup>*</sup>: </label>
-            <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name" ng-disabled="!selectedCounty || !selectedCounty._id"></angular-select-autocomplete>
+            <ui-select class="noPadding" ng-model="city.selected"
+                       theme="bootstrap"
+                       ng-disabled="!county.selected || !county.selected._id"
+                       reset-search-input="true"
+            >
+                <ui-select-match placeholder="Alegeti un oras">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="city in cities | filter: {name: $select.search}"
+                                   refresh-delay="0">
+                    <div ng-bind-html="city.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
         </div>
     </div>
     <div class="form-group-sm col-md-6">
