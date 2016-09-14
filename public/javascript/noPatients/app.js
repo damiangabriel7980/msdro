@@ -31,6 +31,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'selectAutocomplete',
                 files: [
+                    'modules/angular-select-autocomplete/directive.js',
+                    'modules/angular-select-autocomplete/styles.css'
+                ]
+            },
+            {
+                name: 'uiSelect',
+                files: [
                     'components/ui-select/dist/select.js',
                     'components/ui-select/dist/select.css'
                 ]
@@ -105,7 +112,7 @@ app.run(
                         intent: function () {
                             return intent;
                         },
-                        loadDeps: loadStateDeps(['Auth', 'selectAutocomplete', 'FileUpload'])
+                        loadDeps: loadStateDeps(['Auth', 'uiSelect', 'FileUpload'])
                     }
                 });
             };
