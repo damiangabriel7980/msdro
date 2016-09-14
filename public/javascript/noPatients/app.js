@@ -13,6 +13,10 @@ app.config(['$controllerProvider', '$filterProvider', function ($controllerProvi
     app.filterProvider = $filterProvider;
 }]);
 
+app.constant('TEMPLATECONST', {
+    'SIGNUPPOPOVERURL': 'partials/public/auth/popoverSignUp.html'
+});
+
 app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
     $ocLazyLoadProvider.config({
         //debug: true,
@@ -29,6 +33,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 files: [
                     'modules/angular-select-autocomplete/directive.js',
                     'modules/angular-select-autocomplete/styles.css'
+                ]
+            },
+            {
+                name: 'uiSelect',
+                files: [
+                    'components/ui-select/dist/select.js',
+                    'components/ui-select/dist/select.css'
                 ]
             },
             {
@@ -52,8 +63,8 @@ var loadStateDeps = function (deps) {
 };
 
 app.run(
-    [            '$rootScope', '$modal', '$sce', '$location',
-        function ($rootScope,   $modal,   $sce,   $location) {
+    [            '$rootScope', '$modal', '$sce', '$location', 'TEMPLATECONST',
+        function ($rootScope,   $modal,   $sce,   $location, TEMPLATECONST) {
 
             //amazon service paths
             $rootScope.amazonBucket = DEFAULT_AMAZON_BUCKET;
@@ -61,6 +72,7 @@ app.run(
             $rootScope.pathAmazonResources = $rootScope.pathAmazonDev+"resources/";
 
             $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merckManual.jpg";
+            $rootScope.signUpPopoverTemplate = TEMPLATECONST.SIGNUPPOPOVERURL;
 
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
@@ -100,7 +112,7 @@ app.run(
                         intent: function () {
                             return intent;
                         },
-                        loadDeps: loadStateDeps(['Auth', 'selectAutocomplete', 'FileUpload'])
+                        loadDeps: loadStateDeps(['Auth', 'uiSelect', 'FileUpload'])
                     }
                 });
             };

@@ -65,14 +65,17 @@
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group-sm">
                                 <label>Judeţ<sup>*</sup>:</label>
-                                <angular-select-autocomplete ng-model="selectedCounty" ng-options="counties" id-attr="_id" title-attr="name" on-option-select="countyWasSelected"></angular-select-autocomplete>
-                                <!-- <ui-select ng-model="county.selected" name="judet" theme="select2" ng-disabled="false" style="width: 100%;" id="county" ng-required="true">
-                                    <ui-select-match placeholder="Selecteaza un judet">{{$select.selected.name}}</ui-select-match>
-                                    <ui-select-choices repeat="county in counties | propsFilter: {name: $select.search}">
+                                <ui-select class="noPadding" ng-model="county.selected"
+                                           theme="bootstrap"
+                                           ng-disabled="false"
+                                           reset-search-input="true"
+                                           on-select="countyWasSelected(county.selected)">
+                                    <ui-select-match placeholder="Alegeti un judet">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="county in counties | filter: {name: $select.search}"
+                                                       refresh-delay="0">
                                         <div ng-bind-html="trustAsHtml((county.name | highlight: $select.search))"></div>
                                     </ui-select-choices>
-                                </ui-select> -->
-                                 <!--<p class="" ng-show="profileForm.judet.$invalid && !profileForm.judet.$pristine">Judetul nu este valid!</p>-->
+                                </ui-select>
                             </div>
                             <!-- <div class="form-group-sm" ng-show="isMobileDevice">
                                 <label>Judet<sup>*</sup>: </label>
@@ -82,14 +85,17 @@
                         <div class="col-md-6 col-xs-12">
                             <div class="form-group-sm">
                                 <label>Oraş<sup>*</sup>:</label>
-                                <angular-select-autocomplete ng-model="selectedCity" ng-options="cities" id-attr="_id" title-attr="name" ng-disabled="!selectedCounty || !selectedCounty._id"></angular-select-autocomplete>
-                                <!--<ui-select ng-model="city.selected" name="oras" theme="select2" ng-disabled="false" style="width: 100%;" id="city" ng-required="true">-->
-                                    <!--<ui-select-match placeholder="Selecteaza un oras">{{$select.selected.name}}</ui-select-match>-->
-                                    <!--<ui-select-choices repeat="city in cities | propsFilter: {name: $select.search}">-->
-                                        <!--<div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>-->
-                                    <!--</ui-select-choices>-->
-                                <!--</ui-select>-->
-                                <!--<p class="" ng-show="profileForm.oras.$invalid && !profileForm.oras.$pristine">Orasul nu este valid!</p>-->
+                                <ui-select class="noPadding" ng-model="city.selected"
+                                           theme="bootstrap"
+                                           ng-disabled="!county.selected || !county.selected._id"
+                                           reset-search-input="true"
+                                >
+                                    <ui-select-match placeholder="Alegeti un oras">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="city in cities | filter: {name: $select.search}"
+                                                       refresh-delay="0">
+                                        <div ng-bind-html="trustAsHtml((city.name | highlight: $select.search))"></div>
+                                    </ui-select-choices>
+                                </ui-select>
                             </div>
                             <!--<div class="form-group-sm" ng-show="isMobileDevice">-->
                                 <!--<label>Oras<sup>*</sup>: </label>-->

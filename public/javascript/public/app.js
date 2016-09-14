@@ -102,6 +102,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'uiSelect',
+                files: [
+                    'components/ui-select/dist/select.js',
+                    'components/ui-select/dist/select.css'
+                ]
+            },
+            {
                 name: 'FileUpload',
                 files: [
                     'components/ng-file-upload/ng-file-upload.min.js'
@@ -350,7 +357,7 @@ app.run(
                             intent: function () {
                                 return intent;
                             },
-                            loadDeps: loadStateDeps(['Auth', 'selectAutocomplete', 'FileUpload'])
+                            loadDeps: loadStateDeps(['Auth', 'uiSelect', 'FileUpload'])
                         }
                     })
                     .result.finally(function () {
