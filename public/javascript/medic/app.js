@@ -198,6 +198,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'uiSelect',
+                files: [
+                    'components/ui-select/dist/select.js',
+                    'components/ui-select/dist/select.css'
+                ]
+            },
+            {
                 name: 'vAccordion',
                 files: [
                     'components/v-accordion/dist/v-accordion.min.css',
@@ -618,7 +625,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($sta
             templateUrl: 'partials/medic/profile.html',
             controller: 'Profile',
             resolve: {
-                loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
+                loadDeps: loadStateDeps(['Profile', 'uiSelect', 'TherapeuticSelect', 'FileUpload'])
             }
         })
         .state('groupSpecialProduct.immunologyQA',{

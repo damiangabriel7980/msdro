@@ -74,8 +74,8 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
 
     //=================================================================================================== county / city
 
-    $scope.selectedCity = {};
-    $scope.selectedCounty = {};
+    $scope.city = {};
+    $scope.county = {};
 
     // get counties and cities
     AuthService.counties.query().$promise.then(function (resp) {
@@ -92,6 +92,7 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
                         return 1;
                     return 0;
                 });
+                $scope.city.selected = {};
             });
         }else{
             $scope.cities = [];

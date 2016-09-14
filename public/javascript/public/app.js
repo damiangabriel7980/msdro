@@ -97,8 +97,8 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
             {
                 name: 'selectAutocomplete',
                 files: [
-                    'modules/angular-select-autocomplete/directive.js',
-                    'modules/angular-select-autocomplete/styles.css'
+                    'components/ui-select/dist/select.js',
+                    'components/ui-select/dist/select.css'
                 ]
             },
             {

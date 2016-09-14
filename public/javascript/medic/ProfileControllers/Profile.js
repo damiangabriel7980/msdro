@@ -73,13 +73,17 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         $scope.imageUser = imagePre + userData.image_path;
         $scope.selectedAreas = userData['therapeutic-areasID'] || [];
         $scope.address = userData.address;
-        $scope.selectedCounty = {
-            name: userData.county_name,
-            _id: userData.county_id
+        $scope.county = {
+            selected : {
+                name: userData.county_name,
+                _id: userData.county_id
+            }
         };
-        $scope.selectedCity = {
-            name: userData.city_name,
-            _id: userData.city_id,
+        $scope.city = {
+            selected : {
+                name: userData.city_name,
+                _id: userData.city_id
+            },
             init: true
         };
 
@@ -124,12 +128,13 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
                         return 1;
                     return 0;
                 });
+                $scope.city.selected = {};
             });
-        }else if(!($scope.selectedCity && $scope.selectedCity.init)){
+        }else if(!($scope.city.selected && $scope.city.init)){
             $scope.cities = [];
-            $scope.selectedCity = {};
+            $scope.city.selected = {};
         }else{
-            $scope.selectedCity.init = false;
+            $scope.city.init = false;
         }
     };
 
@@ -148,9 +153,9 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
         };
     };
     $scope.submitProfileForm = function (isValid) {
-        if(!this.selectedCounty || !this.selectedCounty._id){
+        if(!this.county.selected || !this.county.selected._id){
             resetProfileAlert("Va rugam selectati un judet");
-        }else if(!this.selectedCity || !this.selectedCity._id){
+        }else if(!this.city.selected || !this.city.selected._id){
             resetProfileAlert("Va rugam selectati un oras");
         }else if(isValid){
             if(this.rememberOption){
@@ -163,7 +168,7 @@ app.controllerProvider.register('Profile', ['$scope', '$rootScope', 'ProfileServ
             toSend.title = this.userData.title;
             toSend.phone = this.phone;
             toSend['therapeutic-areasID'] = this.newAreas;
-            toSend.citiesID = [this.selectedCity._id];
+            toSend.citiesID = [this.city.selected._id];
             toSend.address = this.address;
             toSend.subscriptions = this.userData.subscriptions;
             toSend.practiceType = this.userData.practiceType;

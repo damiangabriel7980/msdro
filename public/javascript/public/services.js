@@ -172,8 +172,8 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         var data = {
             user: thiz.user || {},
             nonUser: thiz.nonUser || {},
-            county: thiz.selectedCounty,
-            city: thiz.selectedCity
+            county: thiz.county.selected,
+            city: thiz.city.selected
         };
         data = JSON.parse(JSON.stringify(data));
         data.user.temp = temp;
