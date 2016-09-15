@@ -39,4 +39,15 @@
     <div class="col-xs-12 justify job_id" ng-if="specialProductPage.job_id" convert-special conver="specialProductPage.job_id">
         {{specialProductPage.job_id}}
     </div>
+    <div class="col-xs-12">
+        <h3>
+            CITEȘTE ȘI:
+        </h3>
+    </div>
+    <div class="col-xs-12 justify noPadding">
+        <div class="col-md-3 col-sm-6 product" ng-repeat="prod in relatedProducts | orderBy: 'product_name' | filter : {_id: '!' + specialProductPage._id}">
+            <vertical-content-list content="prod" image-path-attr="logo_path" image-path-prefix="{{pathAmazonDev}}" default-image-path="{{defaultProductImage}}"
+                                   title-attr="product_name" text-attr="general_description" navigate="goToSpecialProduct" with-background></vertical-content-list>
+        </div>
+    </div>
 </div>

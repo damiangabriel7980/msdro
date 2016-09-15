@@ -1,4 +1,4 @@
-app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', 'Success', 'Utils', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService,Success, Utils){
+app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateParams', 'specialProductService', '$state','$sce','$window','PrintService', 'Success', 'Utils', 'PathologiesService', function($scope, $rootScope, $stateParams, specialProductService, $state,$sce,$window,PrintService,Success, Utils, PathologiesService){
     $scope.oneAtATime = true; //open accordion groups one at a time
     $scope.isCollapsed = {
         isFirstOpen: false
@@ -9,10 +9,16 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
         if($scope.specialProductPage.productType === 'resource'){
             $state.params.isResource = true;
         }
+        PathologiesService.pathologies.query({id: $scope.specialProductPage.pathologiesID[0]._id}).$promise.then(function(result){
+            $scope.relatedProducts = Success.getObject(result)[0].associated_items;
+        })
     }).catch(function(){
         $state.reload();
     });
     $scope.mobileMenuTitle="";
+    $scope.goToSpecialProduct = function (product) {
+        $state.go('groupSpecialProduct.menuItem', {product_id: product._id}, {inherit: false,reload: true});
+    }
     $scope.goToMenuItemWithNoChildren=function(parent,event){
         if(parent.children_ids.length==0){
             $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:'', isResource: $state.params.isResource});
