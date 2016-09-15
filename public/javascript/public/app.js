@@ -102,6 +102,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'uiSelect',
+                files: [
+                    'components/ui-select/dist/select.js',
+                    'components/ui-select/dist/select.css'
+                ]
+            },
+            {
                 name: 'FileUpload',
                 files: [
                     'components/ng-file-upload/ng-file-upload.min.js'
@@ -130,6 +137,10 @@ var loadStateDeps = function (deps) {
         return $ocLazyLoad.load(deps);
     }]
 };
+
+app.constant('TEMPLATECONST', {
+    'SIGNUPPOPOVERURL': 'partials/public/auth/popoverSignUp.html'
+});
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.rule(function ($injector, $location) {
@@ -279,8 +290,8 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 }]);
 
 app.run(
-    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService', '$ocLazyLoad',
-        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService,   $ocLazyLoad) {
+    [            '$rootScope', '$state', '$stateParams', '$modal', '$sce', 'Utils', '$location', 'PublicService', '$ocLazyLoad', 'TEMPLATECONST',
+        function ($rootScope,   $state,   $stateParams,   $modal,   $sce,   Utils,   $location,   PublicService,   $ocLazyLoad, TEMPLATECONST) {
 
             $rootScope.accessRoute = ACCESS_ROUTE;
 
@@ -309,6 +320,8 @@ app.run(
                 else
                     $state.go('publicSearch',{},{reload: true});
             };
+
+            $rootScope.signUpPopoverTemplate = TEMPLATECONST.SIGNUPPOPOVERURL;
 
             //global functions
             $rootScope.htmlToPlainText = Utils.htmlToPlainText;
@@ -344,7 +357,7 @@ app.run(
                             intent: function () {
                                 return intent;
                             },
-                            loadDeps: loadStateDeps(['Auth', 'selectAutocomplete', 'FileUpload'])
+                            loadDeps: loadStateDeps(['Auth', 'uiSelect', 'FileUpload'])
                         }
                     })
                     .result.finally(function () {

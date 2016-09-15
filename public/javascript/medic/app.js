@@ -198,6 +198,13 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 ]
             },
             {
+                name: 'uiSelect',
+                files: [
+                    'components/ui-select/dist/select.js',
+                    'components/ui-select/dist/select.css'
+                ]
+            },
+            {
                 name: 'vAccordion',
                 files: [
                     'components/v-accordion/dist/v-accordion.min.css',
@@ -618,7 +625,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($sta
             templateUrl: 'partials/medic/profile.html',
             controller: 'Profile',
             resolve: {
-                loadDeps: loadStateDeps(['Profile', 'selectAutocomplete', 'TherapeuticSelect', 'FileUpload'])
+                loadDeps: loadStateDeps(['Profile', 'uiSelect', 'TherapeuticSelect', 'FileUpload'])
             }
         })
         .state('groupSpecialProduct.immunologyQA',{
@@ -746,11 +753,11 @@ app.run(
             var pdfResources = {
                 Pharma: {
                     link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/raportare-reactii-adverse.pdf",
-                    title: "Farmacovigilenta"
+                    title: "Farmacovigilență"
                 },
                 Terms: {
                     link: "https://s3-eu-west-1.amazonaws.com/msdapp/resources/files/terms+%26+conditions.pdf",
-                    title: "Termeni si conditii"
+                    title: "Termeni și condiții"
                 },
                 MerckManual: {
                     link: "/merckManual",

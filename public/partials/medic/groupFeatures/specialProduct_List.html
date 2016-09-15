@@ -1,5 +1,5 @@
 <div class="col-sm-12 productsView">
-    <div class="col-md-12 noProducts" ng-if="pathologiesAndProducts.length == 0"><h4>Nu exista produse conform criteriilor selectate</h4></div>
+    <div class="col-md-12 noProducts" ng-if="pathologiesAndProducts.length == 0"><h4>Nu există produse conform criteriilor selectate</h4></div>
     <div class="col-xs-11 col-md-offset-1 noPadding" ng-if="!isMobile(true)" ng-repeat="pathology in pathologiesAndProducts | orderBy:'order_index'">
         <div class="col-xs-12 noPadding text-left">
             <h3>

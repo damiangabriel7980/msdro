@@ -1,8 +1,8 @@
 <div class="col-md-8 col-md-offset-2 col-xs-12 homeSearchWrapper">
 
-    <div class="mainTitle">Cautare Continut</div>
+    <div class="mainTitle">Căutare Conţinut</div>
     <div ng-if="resultsCount == 0" class="col-md-12 noPadding">
-        <h4>Cautarea nu a returnat nici un rezultat</h4>
+        <h4>Căutarea nu a returnat nici un rezultat</h4>
     </div>
     <div class="col-xs-12 noPadding" ng-if="!isMobile(true)">
         <div ng-show="products && products.length>0" ng-repeat="product in products track by $index" ng-if="product" class="col-md-12 col-xs-12 col-sm-12 result">

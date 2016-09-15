@@ -44,7 +44,7 @@ app.directive('button', function () {
                     } else {
                         $target = element;
                     }
-                    angular.element("body,html").stop().animate({'scrollTop': $target.offset().top - angular.element(scope.headerId).outerHeight()});
+                    angular.element("body,html").stop().animate({'scrollTop': $target.offset().top - angular.element(scope.headerId).outerHeight() - 15});
                     return false;
                 });
             }

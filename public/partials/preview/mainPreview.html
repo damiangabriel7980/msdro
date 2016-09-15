@@ -1,20 +1,20 @@
 <div class="row-fluid specialProductMainWrapper col-xs-offset-0">
     <div class="col-md-12 col-xs-12 noPadding">
         <a class="navbar-brand pull-left"><img ng-src="{{pathAmazonResources+'rsz_msd_be_well_green_gray.png'}}"></a>
-        <a class="navbar-link pull-right accessAccount" href="/pro">Intra in cont</a>
+        <a class="navbar-link pull-right accessAccount" href="/pro">Intră în cont</a>
     </div>
     <div class="col-xs-12 col-md-3" id="menuDiv" ng-if="contentToDisplay.menuItems">
         <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
             <accordion-group is-open="parent.open" class="parent" ng-repeat="parent in contentToDisplay.menuItems">
                 <accordion-heading>
-                <span ng-click="parent.children_ids.length==0 ? goToMenuItem(parent._id):null">
-                    <i ng-class="{'glyphicon glyphicon-chevron-down': parent.open&&parent.children_ids.length!=0,
-                                  'glyphicon glyphicon-chevron-right': !parent.open||parent.children_ids.length==0}"></i>&nbsp;&nbsp;{{parent.title}}
+                <span class="menuItemWrapper" ng-click="parent.children_ids.length==0 ? goToMenuItem(parent._id):null">
+                    <i class="menuItemArrow" ng-class="{'glyphicon glyphicon-chevron-down': parent.open&&parent.children_ids.length!=0,
+                                  'glyphicon glyphicon-chevron-right': !parent.open||parent.children_ids.length==0}"></i><span class="menuItemText">{{parent.title}}</span>
                 </span>
                 </accordion-heading>
                 <div class="menuMarginBottom">
-                    <div class="child" ng-repeat="subItem in parent.children_ids" ng-click="goToMenuItem(parent._id, subItem._id)">
-                        &nbsp;&nbsp;<i class="glyphicon glyphicon-chevron-right fontS"></i>&nbsp;&nbsp;{{subItem.title}}
+                    <div class="child menuItemWrapper" ng-repeat="subItem in parent.children_ids" ng-click="goToMenuItem(parent._id, subItem._id)">
+                        &nbsp;&nbsp;<i class="menuItemArrow glyphicon glyphicon-chevron-right fontS"></i><span class="menuItemText">{{subItem.title}}</span>
                     </div>
                 </div>
             </accordion-group>
@@ -34,7 +34,7 @@
 
             </div>
             <div class="col-xs-12">
-                <a class="btn btn-default pull-right" href="{{urlPro}}">Citeste mai mult</a>
+                <a class="btn btn-default pull-right" href="{{urlPro}}">Citește mai mult</a>
             </div>
         </div>
     </div>
