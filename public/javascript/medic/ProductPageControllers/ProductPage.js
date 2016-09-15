@@ -10,7 +10,9 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
             $state.params.isResource = true;
         }
         PathologiesService.pathologies.query({id: $scope.specialProductPage.pathologiesID[0]._id}).$promise.then(function(result){
-            $scope.relatedProducts = Success.getObject(result)[0].associated_items;
+            $scope.relatedProducts = Success.getObject(result)[0].associated_items.filter(function (associatedItem) {
+                return associatedItem._id != $scope.specialProductPage._id;
+            });
         })
     }).catch(function(){
         $state.reload();
@@ -18,7 +20,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
     $scope.mobileMenuTitle="";
     $scope.goToSpecialProduct = function (product) {
         $state.go('groupSpecialProduct.menuItem', {product_id: product._id}, {inherit: false,reload: true});
-    }
+    };
     $scope.goToMenuItemWithNoChildren=function(parent,event){
         if(parent.children_ids.length==0){
             $state.go($state.includes('pathologyResources') ? 'pathologyResources.menuItem' : 'groupSpecialProduct.menuItem',{menuId: parent._id, childId:'', isResource: $state.params.isResource});
