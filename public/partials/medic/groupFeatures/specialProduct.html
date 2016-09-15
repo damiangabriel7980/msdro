@@ -1,4 +1,10 @@
 <div class="row-fluid specialProductMainWrapper col-xs-offset-0">
+    <div class="col-xs-12 col-md-12">
+        <ol class="breadcrumb">
+            <li><a ui-sref="pathologies({pathology_id: pathologyAssociated._id})"><strong>{{pathologyAssociated.display_name}}</strong></a></li>
+            <li class="active"><strong>{{specialProductPage.product_name}}</strong></li>
+        </ol>
+    </div>
     <div class="col-xs-12 col-md-2" id="menuDiv">
         <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
             <accordion-group ng-if="specialProductMenu" is-open="parent.open" class="parent {{($state.includes('pathologyResources.menuItem') || $state.includes('groupSpecialProduct.menuItem')) && ($state.params.menuId === parent._id) ? 'active' : ''}}" ng-repeat="parent in specialProductMenu"
@@ -37,11 +43,6 @@
             <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ui-sref-active="active" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id, isResource: $state.params.isResource})">
                 <accordion-heading>
                     <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
-                </accordion-heading>
-            </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" ng-repeat="pathology in specialProductPage.pathologiesID" ng-if="pathology.description" class="parent oddParent" ui-sref="pathologies({pathology_id: pathology._id})">
-                <accordion-heading>
-                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Înapoi la {{pathology.display_name}}</div>
                 </accordion-heading>
             </accordion-group>
             <accordion-group is-open="status.isFirstOpen" ng-if="!$state.params.isResource" class="parent oddParent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
