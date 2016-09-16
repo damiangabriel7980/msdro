@@ -78,7 +78,8 @@ module.exports = function(app, logger, passport) {
                 accessRoute: accessRoute,
                 GA_code: GA_code,
                 noProofDomain: my_config.user.noProofDomain,
-                usersAllowedLogin: my_config.usersAllowedLogin
+                usersAllowedLogin: my_config.usersAllowedLogin,
+                siteVerification: my_config.siteVerification
             });
         }
     });
@@ -371,7 +372,7 @@ var transportUser = function (req, res) {
                     if(roles[0]){
                         if(roles[0].authority === "ROLE_FARMACIST"){
 
-                            res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
+                            res.render("medic/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code, siteVerification: my_config.siteVerification});
                         }else if(roles[0].authority === "ROLE_ADMIN"){
                             res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
                         }else if(roles[0].authority === "ROLE_STREAM_ADMIN") {
@@ -394,5 +395,5 @@ var transportUser = function (req, res) {
 };
 
 var redirectToPreview = function (req, res) {
-    res.render("preview/main.ejs", {amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
+    res.render("preview/main.ejs", {amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code, siteVerification: my_config.siteVerification});
 };
