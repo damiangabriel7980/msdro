@@ -11,6 +11,11 @@ var UtilsModule = require('../utils');
 var Config = require('../../../config/environment.js'),
     my_config = new Config();
 
+/**
+ * Token Authentication module.
+ * @module tokenAuth
+ */
+
 var getTokenReq = function (req) {
     try{
         return req.headers.authorization.split(' ').pop();
@@ -110,7 +115,52 @@ var refreshToken = function (req) {
 };
 
 module.exports = {
+    /**
+     * Function that generates a token for an existing user on Staywell in order to access medic API
+     *
+     * @name authenticateToken
+     * @function
+     * @param {String} username - Email address of the user
+     * @param {String} password - User's Password
+     * @example
+     * var utilsModule = require(/path/to/utils/module)
+     * utilsModule.authenticateToken("user@test.com", "pass").then(
+     *      function(success){
+     *
+     *      },
+     *      function(error){
+     *
+     *      }
+     * );
+     */
     authenticateToken: authenticateToken,
+    /**
+     * Function that re-generates a token for an existing user on Staywell in order to access medic API
+     *
+     * @name refreshToken
+     * @function
+     * @param {String} Authorization HTTP header - A string containing the previous JWT token (like "Bearer js911ndwdwd")
+     * @example
+     * var utilsModule = require(/path/to/utils/module)
+     * utilsModule.refreshToken().then(
+     *      function(success){
+     *
+     *      },
+     *      function(error){
+     *
+     *      }
+     * );
+     */
     refreshToken: refreshToken,
+    /**
+     * Function that decodes a JWT token and returns user data
+     *
+     * @name getUserData
+     * @function
+     * @param {String} Authorization HTTP header - A string containing the JWT token (like "Bearer js911ndwdwd")
+     * @example
+     * var utilsModule = require(/path/to/utils/module)
+     * var userData = utilsModule.getUserData();
+     */
     getUserData: getUserData
 };
