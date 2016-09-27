@@ -694,9 +694,9 @@ module.exports = function(app, logger, router) {
      * @apiExample {curl} Example usage:
      *     curl -i http://localhost:8080/apiPublic/termsAndConditionsStaywell
      * @apiSuccess {HTML} HTMLContent The HTML page containing the terms & conditions.
-     * @apiSuccessExample {HTML} Success-Response (all categories):
+     * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     <html></html>
+     *     '<html></html>'
      */
     router.route('/termsAndConditionsStaywell')
         .get(function (req, res) {
@@ -713,9 +713,9 @@ module.exports = function(app, logger, router) {
      * @apiExample {curl} Example usage:
      *     curl -i http://localhost:8080/apiPublic/termsAndConditionsMSD
      * @apiSuccess {HTML} HTMLContent The HTML page containing the terms & conditions.
-     * @apiSuccessExample {HTML} Success-Response (all categories):
+     * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     <html></html>
+     *     '<html></html>'
      */
     router.route('/termsAndConditionsMSD')
         .get(function (req, res) {
