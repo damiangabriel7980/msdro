@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: scheduleModule</title>
+    <title>JSDoc: Module: sessionStorage</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: scheduleModule</h1>
+    <h1 class="page-title">Module: sessionStorage</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Schedule module.</div>
+            <div class="description">Session Storage module.</div>
         
 
         
@@ -87,19 +87,12 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schedule_index.js.html">schedule/index.js</a>, <a href="schedule_index.js.html#line10">line 10</a>
+        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="module-newsletterModule.html">module:newsletterModule</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -144,14 +137,14 @@
 
     
 
-    <h4 class="name" id="~createUnparallelScheduledJob"><span class="type-signature">(inner) </span>createUnparallelScheduledJob<span class="signature">(name, cron, taskFuncPointer)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~getElement"><span class="type-signature">(inner) </span>getElement<span class="signature">(request, property)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Function that creates un-parallel scheduled jobs for sending newsletter
+    Function that retrieves a value from the session storage
 </div>
 
 
@@ -187,30 +180,7 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name of the scheduled job</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cron</code></td>
+                <td class="name"><code>request</code></td>
             
 
             <td class="type">
@@ -226,20 +196,20 @@
 
             
 
-            <td class="description last">An object containing a chronometer for running scheduled jobs</td>
+            <td class="description last">The request object</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>taskFuncPointer</code></td>
+                <td class="name"><code>property</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">String</span>
 
 
             
@@ -249,7 +219,7 @@
 
             
 
-            <td class="description last">One of the functions from newsLetterModule to run when the chronometer reaches a point</td>
+            <td class="description last">A property to get from the session storage</td>
         </tr>
 
     
@@ -290,7 +260,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schedule_index.js.html">schedule/index.js</a>, <a href="schedule_index.js.html#line36">line 36</a>
+        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -317,11 +287,191 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>{
-      atMidnight: '0 0 0 * * *',
-      everyHour: '* /1 * * * *',
-      everyMinute: '/1 * * * * *'
- };</code></pre>
+    <pre class="prettyprint"><code>var utilsModule = require(/path/to/session/module)
+var userData = utilsModule.getUserData();</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~setElement"><span class="type-signature">(inner) </span>setElement<span class="signature">(request, property, value)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Function that adds a value to the session storage
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>request</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>property</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A property to add on session storage</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A value for the previously mentioned property</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line7">line 7</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var utilsModule = require(/path/to/session/module)
+utilsModule.setElement(req, 'myElem', '1234');</code></pre>
 
 
 

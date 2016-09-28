@@ -13,7 +13,7 @@ module.exports = {
      * @param {String} property - A property to add on session storage
      * @param {String} value - A value for the previously mentioned property
      * @example
-     * var utilsModule = require(/path/to/utils/module)
+     * var utilsModule = require(/path/to/session/module)
      * utilsModule.setElement(req, 'myElem', '1234');
      */
     setElement: function (req, element, value) {
@@ -27,7 +27,7 @@ module.exports = {
      * @param {Object} request - The request object
      * @param {String} property - A property to get from the session storage
      * @example
-     * var utilsModule = require(/path/to/utils/module)
+     * var utilsModule = require(/path/to/session/module)
      * var userData = utilsModule.getUserData();
      */
     getElement: function (req, element) {
