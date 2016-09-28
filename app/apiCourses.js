@@ -56,6 +56,48 @@ module.exports = function(app, logger, tokenSecret, router) {
 
     //=================================================================================================================== ROUTES FOR E-LEARNING
     router.route('/courses')
+    /**
+     * @apiName Get_Courses
+     * @apiDescription Retrieve a course / list of courses
+     * @apiGroup Courses
+     * @api {get} /apiPublic/apiCourses/courses Retrieve a course / list of courses
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} id The id of a course
+     * @apiExample {curl} Example usage (with id):
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiPublic/apiCourses/courses?id=23fwafwa1221f
+     * @apiExample {curl} Example usage (no id):
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiPublic/apiCourses/courses
+     * @apiSuccess {Object} response.success         an object containing the course / an array of courses
+     * @apiSuccess {String}   response.message       A success message.
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "success":
+     *       {
+     *
+     *       },
+     *       "message": "Cererea a fost procesata cu succes"
+     *     }
+     * @apiSuccessExample {json} Success-Response (no id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "success":[
+     *       {
+     *
+     *       }
+     *      ],
+     *       "message": "Cererea a fost procesata cu succes"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *       "error": "Query Error",
+     *       "data" : {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 courses.findOne({_id: req.query.id}, function (err, course) {
@@ -75,6 +117,43 @@ module.exports = function(app, logger, tokenSecret, router) {
                 });
             }
         })
+        /**
+         * @apiName Post_Courses
+         * @apiDescription Create a new course
+         * @apiGroup Courses
+         * @api {post} /apiPublic/apiContractManagement/templates Create a new course
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiUse HeaderAuthorization
+         * @apiParam {Object} courseModel An object containing the properties of the course Mongo model
+         * @apiExample {curl} Example usage:
+         *     curl -i -X POST -H "Authorization: Bearer " -d '{"name":"someName","content":"someContent"}' http://localhost:8080/apiCourses/courses
+         * @apiSuccess {Object} response.success         an object containing the newly created course
+         * @apiSuccess {String}   response.message       A success message.
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *       "success":
+         *       {
+         *
+         *       },
+         *       "message": "Cererea a fost procesata cu succes"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *       "error": "Query Error",
+         *       "data" : {}
+         *     }
+         * @apiError BadRequest The POST request doesn't contain all necessary data
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 Bad Request
+         *     {
+         *       "error": "Bad request",
+         *       "data" : {}
+         *     }
+         */
         .post(isAdmin, function (req, res) {
             var name = req.body.name;
             var content = req.body.content;
@@ -100,6 +179,44 @@ module.exports = function(app, logger, tokenSecret, router) {
                 }
             }
         })
+        /**
+         * @apiName Update_Courses
+         * @apiDescription Update an existing course
+         * @apiGroup Courses
+         * @api {put} /apiPublic/apiContractManagement/templates Update an existing course
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiUse HeaderAuthorization
+         * @apiParam {String} course_id The id of the course we want to update
+         * @apiParam {Object} courseModel An object containing the properties of the course Mongo model
+         * @apiExample {curl} Example usage:
+         *     curl -i -X PUT -H "Authorization: Bearer " -d '{"name":"someName","content":"someContent"}' http://localhost:8080/apiCourses/courses?id=23nf88y23nddy
+         * @apiSuccess {Object} response.success         an object containing the updated course
+         * @apiSuccess {String}   response.message       A success message.
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *       "success":
+         *       {
+         *
+         *       },
+         *       "message": "Cererea a fost procesata cu succes"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *       "error": "Query Error",
+         *       "data" : {}
+         *     }
+         * @apiError BadRequest The PUT request doesn't contain all necessary data
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 Bad Request
+         *     {
+         *       "error": "Bad request",
+         *       "data" : {}
+         *     }
+         */
         .put(isAdmin, function (req, res) {
             var id = req.query.id;
             var data = req.body;
@@ -127,6 +244,50 @@ module.exports = function(app, logger, tokenSecret, router) {
                 }
             }
         })
+        /**
+         * @apiName Delete_Courses
+         * @apiDescription Delete a course
+         * @apiGroup Courses
+         * @api {delete} /apiPublic/apiCourses/courses Delete a course
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiUse HeaderAuthorization
+         * @apiParam {String} id The id of a course
+         * @apiExample {curl} Example usage:
+         *     curl -i -X DELETE -H "Authorization: Bearer " http://localhost:8080/apiPublic/apiCourses/courses?id=23fwafwa1221f
+         * @apiSuccess {Object} response.success         an empty object
+         * @apiSuccess {String}   response.message       A success message.
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *       "success":
+         *       {
+         *
+         *       },
+         *       "message": "Cererea a fost procesata cu succes"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *       "error": "Query Error",
+         *       "data" : {}
+         *     }
+         * @apiUse BadRequest
+         * @apiErrorExample {json} Error-Response (400):
+         *     HTTP/1.1 400 Bad Request Error
+         *     {
+         *       "error": "Error",
+         *       "data" : {}
+         *     }
+         * @apiUse EntityNotFound
+         * @apiErrorExample {json} Error-Response (404):
+         *     HTTP/1.1 404 Not found Error
+         *     {
+         *       "error": "Error",
+         *       "data" : {}
+         *     }
+         */
         .delete(isAdmin, function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             if(idToDelete){

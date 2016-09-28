@@ -15,7 +15,44 @@ module.exports = function(app, logger, router) {
         res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Last-Modified");
         next();
     });
-
+    /**
+     * @apiName IPad_Applications_Update
+     * @apiDescription Check if there are newer versions of Staywell iPad apps
+     * @apiGroup IPad Applications
+     * @api {get} /apiPublic/apiAplicationUpgrade Check if there are newer versions of Staywell iPad apps
+     * @apiVersion 1.0.0
+     * @apiPermission None
+     * @apiParam {String} name The name of the application
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/apiAplicationUpgrade?name=arcoxia
+     * @apiSuccess {Object} response.success         an object containing the current version and the download URL
+     * @apiSuccess {String}   response.message       A success message.
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "success":
+     *         {
+     *         "version": "1.2",
+     *         "downloadUrl": "https://"
+     *         }
+     *     },
+     *       "message": "Cererea a fost procesata cu succes"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *       "error": "Query Error",
+     *       "data" : {}
+     *     }
+     * @apiError {Object} ApplicationNotFound The requested app was not found.
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 4xx Error
+     *     {
+     *       "error": "Error Message",
+     *       "data" : {}
+     *     }
+     */
     router.route('/').get(function (req, res) {
 
         AppUpdate.find({name:req.query.name}).limit(1).exec(function(err, apps)

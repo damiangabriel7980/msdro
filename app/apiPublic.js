@@ -144,7 +144,7 @@ module.exports = function(app, logger, router) {
      *     }
      * @apiError {Object} ContentNotFound The requested public content was not found.
      * @apiError {Object} AccessForbidden You don't have access to the requested public content.
-     * * @apiErrorExample {json} Error-Response (4xx):
+     * @apiErrorExample {json} Error-Response (4xx):
      *     HTTP/1.1 4xx Error
      *     {
      *       "error": "Error Message",

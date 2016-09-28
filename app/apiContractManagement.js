@@ -20,6 +20,34 @@ module.exports = function(app, logger, router) {
         next();
     });
 
+    /**
+     * @apiName Contract_Management
+     * @apiDescription Retrieve a contract template
+     * @apiGroup Contract Management
+     * @api {get} /apiPublic/apiContractManagement/templates Retrieve a contract template
+     * @apiVersion 1.0.0
+     * @apiPermission None
+     * @apiParam {Date} timestamp A date to filter the number of template
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/apiContractManagement/templates?timestamp=09/26/2016
+     * @apiSuccess {Object} response.success         an object containing the current version and the download URL
+     * @apiSuccess {String}   response.message       A success message.
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "success":
+     *       {
+     *
+     *       }
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *       "error": "Query Error",
+     *       "data" : {}
+     *     }
+     */
     //=================================================================================================================== ROUTES
     router.route('/templates')
         .get(function (req, res) {
