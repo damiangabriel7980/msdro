@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: responseHandler/success.js</title>
+    <title>JSDoc: Source: modelInfos/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: responseHandler/success.js</h1>
+    <h1 class="page-title">Source: modelInfos/index.js</h1>
 
     
 
@@ -26,49 +26,72 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Success module.
- * @module successModule
- */
+            <pre class="prettyprint source linenums"><code>var ModelInfos = require('../../models/model_infos');
+var q = require('q');
+
 /**
- * A variable in the global namespace called 'successCodes' used for sending success messages to front-end.
- * @var {Object} successCodes
+ * Change MongoDB model last updated info module.
+ * @module modelDateUpdatedModule
  */
-var successCodes = {
-    0: "Cererea a fost procesata cu succes",
-    2: "Continutul a fost salvat cu succes",
-    3: "Continutul a fost modificat cu succes",
-    4: "Continutul a fost sters cu succes",
-    5: "Imaginea a fost stearsa din baza de date si de pe Amazon",
-    6: "Imaginea a fost stearsa din baza de date",
-    7: "Continutul si fisierele asociate au fost sterse",
-    8: "Continutul a fost modificat. Un email a fost trimis catre utilizator",
-    81: "Continutul a fost adaugat. Un email a fost trimis catre utilizator",
-    9: "Continutul a fost modificat. Email-ul nu a putut fi trimis catre utilizator",
-    11: "Fotografia a fost actualizata cu succes!",
-    12: "Datele au fost modificate!",
-    13: "Parola a fost schimbata",
-    14: "Cautarea nu a returnat nici un rezultat!",
-    15: "Successfully unsubscribed from push notifications",
-    16: "Nu exista modificari"
+
+/**
+ * Change the last updated date of a MongoDB model
+ *
+ * @function
+ * @name recordLastUpdate
+ * @param {String} modelName - The name of the MongoDB model
+ * @example
+ * var modelDateUpdated = require(/path/to/modelDateUpdated/module)
+ * modelDateUpdated.recordLastUpdate("articles").then(
+ *      function(success){
+ *
+ *      },
+ *      function(error){
+ *
+ *      }
+ * );
+ */
+exports.recordLastUpdate = function (modelName) {
+	var deferred = q.defer();
+	ModelInfos.update({model_name: modelName}, {$set: {last_update: new Date()}}, function (err, wres) {
+		if(err)
+			deferred.reject(err);
+		else
+			deferred.resolve(wres);
+	});
+	return deferred.promise;
 };
 
 /**
- * Function that sends a success response to front-end containing data and a message
+ * Retrieve the last updated date of a MongoDB model
  *
  * @function
- * @param {Object} res - The response object
- * @param {Object|Array} object - The data we want to send to the front-end (can also be an array)
- * @param {Number} code - A code from the variable successCodes
- * @param {Number} [status] - A HTTP status (200 by default) - optional
+ * @name getLastUpdate
+ * @param {String} modelName - The name of the MongoDB model
  * @example
- * var handleSuccess = require(/path/to/success/module)
- * handleSuccess(res, {myElem: data}, 2);
+ * var modelDateUpdated = require(/path/to/modelDateUpdated/module)
+ * modelDateUpdated.getLastUpdate("articles").then(
+ *      function(success){
+ *
+ *      },
+ *      function(error){
+ *
+ *      }
+ * );
  */
-module.exports = function(logger){
-    return function(res, object, code, status){
-        res.send(status || 200, {success: object || true, message: successCodes[code || 0]});
-    };
+
+exports.getLastUpdate = function (modelName) {
+	var deferred = q.defer();
+	ModelInfos.findOne({model_name: modelName}, function (err, info) {
+		if(err){
+			deferred.reject(err);
+		}else if(!info){
+			deferred.reject("No info for this model");
+		}else{
+			deferred.resolve(info.last_update);
+		}
+	});
+	return deferred.promise;
 };</code></pre>
         </article>
     </section>

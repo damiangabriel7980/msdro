@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: sessionStorage</title>
+    <title>JSDoc: Module: modelDateUpdatedModule</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: sessionStorage</h1>
+    <h1 class="page-title">Module: modelDateUpdatedModule</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Session Storage module.</div>
+            <div class="description">Change MongoDB model last updated info module.</div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line1">line 1</a>
+        <a href="modelInfos_index.js.html">modelInfos/index.js</a>, <a href="modelInfos_index.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -137,14 +137,14 @@
 
     
 
-    <h4 class="name" id="~getElement"><span class="type-signature">(inner) </span>getElement<span class="signature">(request, property)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~getLastUpdate"><span class="type-signature">(inner) </span>getLastUpdate<span class="signature">(modelName)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Function that retrieves a value from the session storage
+    Retrieve the last updated date of a MongoDB model
 </div>
 
 
@@ -180,30 +180,7 @@
 
         <tr>
             
-                <td class="name"><code>request</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The request object</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>property</code></td>
+                <td class="name"><code>modelName</code></td>
             
 
             <td class="type">
@@ -219,7 +196,7 @@
 
             
 
-            <td class="description last">A property to get from the session storage</td>
+            <td class="description last">The name of the MongoDB model</td>
         </tr>
 
     
@@ -260,7 +237,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line22">line 22</a>
+        <a href="modelInfos_index.js.html">modelInfos/index.js</a>, <a href="modelInfos_index.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -287,8 +264,15 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var utilsModule = require(/path/to/session/module)
-var userData = utilsModule.getUserData();</code></pre>
+    <pre class="prettyprint"><code>var modelDateUpdated = require(/path/to/modelDateUpdated/module)
+modelDateUpdated.getLastUpdate("articles").then(
+     function(success){
+
+     },
+     function(error){
+
+     }
+);</code></pre>
 
 
 
@@ -297,14 +281,14 @@ var userData = utilsModule.getUserData();</code></pre>
 
     
 
-    <h4 class="name" id="~setElement"><span class="type-signature">(inner) </span>setElement<span class="signature">(request, property, value)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~recordLastUpdate"><span class="type-signature">(inner) </span>recordLastUpdate<span class="signature">(modelName)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Function that adds a value to the session storage
+    Change the last updated date of a MongoDB model
 </div>
 
 
@@ -340,30 +324,7 @@ var userData = utilsModule.getUserData();</code></pre>
 
         <tr>
             
-                <td class="name"><code>request</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The request object</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>property</code></td>
+                <td class="name"><code>modelName</code></td>
             
 
             <td class="type">
@@ -379,30 +340,7 @@ var userData = utilsModule.getUserData();</code></pre>
 
             
 
-            <td class="description last">A property to add on session storage</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">A value for the previously mentioned property</td>
+            <td class="description last">The name of the MongoDB model</td>
         </tr>
 
     
@@ -443,7 +381,7 @@ var userData = utilsModule.getUserData();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line7">line 7</a>
+        <a href="modelInfos_index.js.html">modelInfos/index.js</a>, <a href="modelInfos_index.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -470,8 +408,15 @@ var userData = utilsModule.getUserData();</code></pre>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var utilsModule = require(/path/to/session/module)
-utilsModule.setElement(req, 'myElem', '1234');</code></pre>
+    <pre class="prettyprint"><code>var modelDateUpdated = require(/path/to/modelDateUpdated/module)
+modelDateUpdated.recordLastUpdate("articles").then(
+     function(success){
+
+     },
+     function(error){
+
+     }
+);</code></pre>
 
 
 
