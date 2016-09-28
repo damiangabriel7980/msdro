@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: sessionStorage</title>
+    <title>JSDoc: Module: contentVerifierModule</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: sessionStorage</h1>
+    <h1 class="page-title">Module: contentVerifierModule</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Session Storage module.</div>
+            <div class="description">Retrieve content from medic section by id</div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line1">line 1</a>
+        <a href="contentVerifier_index.js.html">contentVerifier/index.js</a>, <a href="contentVerifier_index.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -137,14 +137,14 @@
 
     
 
-    <h4 class="name" id="~getElement"><span class="type-signature">(inner) </span>getElement<span class="signature">(request, property)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~getContentById"><span class="type-signature">(inner) </span>getContentById<span class="signature">(content_entity, content_id, userSpecialGroups, markView, entity_enable_property, populateFields, groupsField, isCourse<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Function that retrieves a value from the session storage
+    Retrieve content from medic section by id
 </div>
 
 
@@ -168,6 +168,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -180,7 +182,7 @@
 
         <tr>
             
-                <td class="name"><code>request</code></td>
+                <td class="name"><code>content_entity</code></td>
             
 
             <td class="type">
@@ -193,17 +195,25 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">The request object</td>
+            <td class="description last">A MongoDB entity</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>property</code></td>
+                <td class="name"><code>content_id</code></td>
             
 
             <td class="type">
@@ -216,10 +226,206 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">A property to get from the session storage</td>
+            <td class="description last">the id of the article</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userSpecialGroups</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">If we want to check if the user can access the content by his groups</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>markView</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">If we want to count that the user has viewed this article</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>entity_enable_property</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The name of the property to check if the article is enabled</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>populateFields</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">If we want to populate other fields from the content</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>groupsField</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The name of the groups property</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isCourse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">if the requested content is a course</td>
         </tr>
 
     
@@ -260,7 +466,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line22">line 22</a>
+        <a href="contentVerifier_index.js.html">contentVerifier/index.js</a>, <a href="contentVerifier_index.js.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -287,191 +493,15 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var utilsModule = require(/path/to/session/module)
-var userData = utilsModule.getUserData();</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~setElement"><span class="type-signature">(inner) </span>setElement<span class="signature">(request, property, value)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Function that adds a value to the session storage
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>request</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The request object</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>property</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">A property to add on session storage</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">A value for the previously mentioned property</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="sessionStorage_index.js.html">sessionStorage/index.js</a>, <a href="sessionStorage_index.js.html#line7">line 7</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>var utilsModule = require(/path/to/session/module)
-utilsModule.setElement(req, 'myElem', '1234');</code></pre>
+    <pre class="prettyprint"><code>var contentVerifierModule = require(/path/to/contentVerifier/module)
+contentVerifierModule.getContentById(specialApps,req.query.id,false,false,'isEnabled',null,'groups').then(
+     function(success){
+
+     },
+     function(error){
+
+     }
+);</code></pre>
 
 
 

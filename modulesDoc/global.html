@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: errorModule</title>
+    <title>JSDoc: Global</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: errorModule</h1>
+    <h1 class="page-title">Global</h1>
 
     
 
@@ -28,10 +28,7 @@
 
 <header>
     
-        
-            
-        
-            
+        <h2></h2>
         
     
 </header>
@@ -40,19 +37,73 @@
     <div class="container-overview">
     
         
-            <div class="description">Error module.</div>
+
         
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
 
         
             
+<h4 class="name" id="Q"><span class="type-signature"></span>Q<span class="type-signature"></span></h4>
 
 
 
 
-
-
-
-
+<div class="description">
+    Created by andreimirica on 19.10.2015.
+</div>
 
 
 
@@ -89,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="responseHandler_error.js.html">responseHandler/error.js</a>, <a href="responseHandler_error.js.html#line1">line 1</a>
+        <a href="contentVerifier_index.js.html">contentVerifier/index.js</a>, <a href="contentVerifier_index.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -105,22 +156,18 @@
 
 
 
+        
+    
 
-
-
-
-
-
-
-
-
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
 
     
 
-    <h4 class="name" id="module:errorModule"><span class="type-signature"></span>(require("errorModule"))<span class="signature">(res, error, status<span class="signature-attributes">opt</span>, code, data)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="module:errorModule"><span class="type-signature"></span>module:errorModule<span class="signature">(res, error, status<span class="signature-attributes">opt</span>, code, data)</span><span class="type-signature"></span></h4>
 
     
 
@@ -395,44 +442,184 @@ handleSuccess(res, {myElem: data}, 2);</code></pre>
 
 
         
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
             
-<h4 class="name" id="~errorCodes"><span class="type-signature">(inner) </span>errorCodes<span class="type-signature"> :Object</span></h4>
 
+    
+
+    <h4 class="name" id="module:successModule"><span class="type-signature"></span>module:successModule<span class="signature">(res, object, code, status<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
 
 
 
 <div class="description">
-    A variable in the global namespace called 'errorCodes' used for sending error messages to front-end.
+    Function that sends a success response to front-end containing data and a message
 </div>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The response object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The data we want to send to the front-end (can also be an array)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A code from the variable successCodes</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">A HTTP status (200 by default) - optional</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -467,7 +654,7 @@ handleSuccess(res, {myElem: data}, 2);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="responseHandler_error.js.html">responseHandler/error.js</a>, <a href="responseHandler_error.js.html#line5">line 5</a>
+        <a href="responseHandler_success.js.html">responseHandler/success.js</a>, <a href="responseHandler_success.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -483,9 +670,23 @@ handleSuccess(res, {myElem: data}, 2);</code></pre>
 
 
 
-        
-    
 
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var handleSuccess = require(/path/to/success/module)
+handleSuccess(res, {myElem: data}, 2);</code></pre>
+
+
+
+        
     
 
     
