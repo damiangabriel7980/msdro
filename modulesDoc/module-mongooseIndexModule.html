@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: userModule</title>
+    <title>JSDoc: Module: mongooseIndexModule</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: userModule</h1>
+    <h1 class="page-title">Module: mongooseIndexModule</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">User module.</div>
+            <div class="description">Mongoose Index module.</div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line7">line 7</a>
+        <a href="mongooseIndex_index.js.html">mongooseIndex/index.js</a>, <a href="mongooseIndex_index.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -137,14 +137,14 @@
 
     
 
-    <h4 class="name" id="~updateUserImage"><span class="type-signature">(inner) </span>updateUserImage<span class="signature">(user_id, imageBody, imageExtension)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~mongooseIndex"><span class="type-signature">(inner) </span>mongooseIndex<span class="signature">(ObjectToIndex)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Function that updates the user's profile picture (medic section)
+    Index a mongoDB entity for better query performance
 </div>
 
 
@@ -180,13 +180,13 @@
 
         <tr>
             
-                <td class="name"><code>user_id</code></td>
+                <td class="name"><code>ObjectToIndex</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
             
@@ -196,53 +196,7 @@
 
             
 
-            <td class="description last">The id of the user to update the image</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>imageBody</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The image file itself</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>imageExtension</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The extension of the image file</td>
+            <td class="description last">A mongoDB model to index</td>
         </tr>
 
     
@@ -283,7 +237,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="user.js.html">user.js</a>, <a href="user.js.html#line46">line 46</a>
+        <a href="mongooseIndex_index.js.html">mongooseIndex/index.js</a>, <a href="mongooseIndex_index.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -310,15 +264,9 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var userModule = require(/path/to/user/module)
-userModule.updateUserImage(200, {}, "png").then(
-     function(success){
-
-     },
-     function(error){
-
-     }
-);</code></pre>
+    <pre class="prettyprint"><code>var mongooseIndexer = require(/path/to/mongooseIndex/module)
+var Article = mongoose.model('articles', articlesSchema);
+mongooseIndexer.mongooseIndex(Article);</code></pre>
 
 
 

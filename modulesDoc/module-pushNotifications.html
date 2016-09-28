@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: newsletterModule</title>
+    <title>JSDoc: Module: pushNotifications</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: newsletterModule</h1>
+    <h1 class="page-title">Module: pushNotifications</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Newsletter module.</div>
+            <div class="description">Push Notifications module.</div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="newsletter_index.js.html">newsletter/index.js</a>, <a href="newsletter_index.js.html#line13">line 13</a>
+        <a href="pushNotifications_index.js.html">pushNotifications/index.js</a>, <a href="pushNotifications_index.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -137,14 +137,14 @@
 
     
 
-    <h4 class="name" id="~getCampaignStats"><span class="type-signature">(inner) </span>getCampaignStats<span class="signature">(campaign_id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~sendPushNotification"><span class="type-signature">(inner) </span>sendPushNotification<span class="signature">(message, arrayUsersIds)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Retrieve a set of statistics regarding a specific newsletter
+    Function that sends push notifications to certain users
 </div>
 
 
@@ -180,7 +180,7 @@
 
         <tr>
             
-                <td class="name"><code>campaign_id</code></td>
+                <td class="name"><code>message</code></td>
             
 
             <td class="type">
@@ -196,7 +196,30 @@
 
             
 
-            <td class="description last">The mongoDB id of the newsletter</td>
+            <td class="description last">Push notification message</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>arrayUsersIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A set of user ids to send notifications</td>
         </tr>
 
     
@@ -237,7 +260,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="newsletter_index.js.html">newsletter/index.js</a>, <a href="newsletter_index.js.html#line556">line 556</a>
+        <a href="pushNotifications_index.js.html">pushNotifications/index.js</a>, <a href="pushNotifications_index.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -264,8 +287,8 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var newsletter = require(/path/to/newsletter/module)
-newsletter.getCampaignStats("dw121fevev12t4s").then(
+    <pre class="prettyprint"><code>var pushNotif = require(/path/to/pushNotifications/module)
+pushNotif.sendPushNotification("test message", ["mdw812n1nujcnu"]).then(
      function(success){
 
      },
@@ -281,299 +304,14 @@ newsletter.getCampaignStats("dw121fevev12t4s").then(
 
     
 
-    <h4 class="name" id="~getOverallStats"><span class="type-signature">(inner) </span>getOverallStats<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~subscribe"><span class="type-signature">(inner) </span>subscribe<span class="signature">(user_id, deviceType, notificationToken)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Retrieve a set of statistics regarding all newsletters
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="newsletter_index.js.html">newsletter/index.js</a>, <a href="newsletter_index.js.html#line538">line 538</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>var newsletter = require(/path/to/newsletter/module)
-newsletter.getOverallStats().then(
-     function(success){
-
-     },
-     function(error){
-
-     }
-);</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~recordStats"><span class="type-signature">(inner) </span>recordStats<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Add statistics regarding all newsletters in the database
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="newsletter_index.js.html">newsletter/index.js</a>, <a href="newsletter_index.js.html#line587">line 587</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>var newsletter = require(/path/to/newsletter/module)
-newsletter.recordStats().then(
-     function(success){
-
-     },
-     function(error){
-
-     }
-);</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~sendDueCampaigns"><span class="type-signature">(inner) </span>sendDueCampaigns<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Send a newsletter campaign that wasn't sent
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="newsletter_index.js.html">newsletter/index.js</a>, <a href="newsletter_index.js.html#line520">line 520</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>var newsletter = require(/path/to/newsletter/module)
-newsletter.sendDueCampaigns().then(
-     function(success){
-
-     },
-     function(error){
-
-     }
-);</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~unhashUserMail"><span class="type-signature">(inner) </span>unhashUserMail<span class="signature">(hashedEmail)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Unhash a user's email
+    Function that subscribes a user to the push notifications server
 </div>
 
 
@@ -609,7 +347,7 @@ newsletter.sendDueCampaigns().then(
 
         <tr>
             
-                <td class="name"><code>hashedEmail</code></td>
+                <td class="name"><code>user_id</code></td>
             
 
             <td class="type">
@@ -625,7 +363,53 @@ newsletter.sendDueCampaigns().then(
 
             
 
-            <td class="description last">A hashed email</td>
+            <td class="description last">The mongoDB id of the user</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>deviceType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The type of device (android,ios)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>notificationToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A token for unique identification of the device</td>
         </tr>
 
     
@@ -666,7 +450,7 @@ newsletter.sendDueCampaigns().then(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="newsletter_index.js.html">newsletter/index.js</a>, <a href="newsletter_index.js.html#line575">line 575</a>
+        <a href="pushNotifications_index.js.html">pushNotifications/index.js</a>, <a href="pushNotifications_index.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -693,8 +477,159 @@ newsletter.sendDueCampaigns().then(
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var newsletter = require(/path/to/newsletter/module)
-var unhashedEmail = newsletter.unhashUserMail("dw102813nnfdbwefhwfwiwd");</code></pre>
+    <pre class="prettyprint"><code>var pushNotif = require(/path/to/pushNotifications/module)
+pushNotif.subscribe("wdnuiw1812nd", 'android', "mdw812n1nujcnu").then(
+     function(success){
+
+     },
+     function(error){
+
+     }
+);</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~unsubscribe"><span class="type-signature">(inner) </span>unsubscribe<span class="signature">(notificationToken)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Function that un-subscribes a user from the push notifications server
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>notificationToken</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The token for unique identification of the device used to identify the device to un-subscribe</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="pushNotifications_index.js.html">pushNotifications/index.js</a>, <a href="pushNotifications_index.js.html#line137">line 137</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var pushNotif = require(/path/to/pushNotifications/module)
+pushNotif.unsubscribe("mdw812n1nujcnu").then(
+     function(success){
+
+     },
+     function(error){
+
+     }
+);</code></pre>
 
 
 

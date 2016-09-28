@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: mongoosasticIndex/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,51 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: mongoosasticIndex/index.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Created by andreimirica on 06.07.2015.
+ */
+/**
+ * Mongoosastic Index module.
+ * @module mongoosasticIndexModule
+ */
+var mongoosasticIndex = function(ObjectToIndex){
+    var stream = ObjectToIndex.synchronize();
+    var count = 0;
+    stream.on('data', function(err, doc){
+        count++;
+    });
+    stream.on('close', function(){
+        console.log('indexed ' + count + ' documents!');
+    });
+    stream.on('error', function(err){
+        console.log(err);
+    });
+};
+module.exports = {
+    /**
+     * Index a mongoDB entity for search
+     *
+     * @function
+     * @name mongoosasticIndex
+     * @param {Object} ObjectToIndex - A mongoDB model to index
+     * @example
+     * var mongoosasticIndexer = require(/path/to/mongoosasticIndex/module)
+     * var Article = mongoose.model('articles', articlesSchema);
+     * mongoosasticIndexer.mongoosasticIndex(Article);
+     */
+    mongoosasticIndex :  mongoosasticIndex
+};</code></pre>
+        </article>
+    </section>
 
 
 

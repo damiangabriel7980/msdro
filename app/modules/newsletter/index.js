@@ -517,10 +517,89 @@ module.exports = function (logger) {
     }
 
     return {
+        /**
+         * Send a newsletter campaign that wasn't sent
+         *
+         * @function
+         * @name sendDueCampaigns
+         * @example
+         * var newsletter = require(/path/to/newsletter/module)
+         * newsletter.sendDueCampaigns().then(
+         *      function(success){
+         *
+         *      },
+         *      function(error){
+         *
+         *      }
+         * );
+         */
         sendDueCampaigns: sendDueCampaigns,
+
+        /**
+         * Retrieve a set of statistics regarding all newsletters
+         *
+         * @function
+         * @name getOverallStats
+         * @example
+         * var newsletter = require(/path/to/newsletter/module)
+         * newsletter.getOverallStats().then(
+         *      function(success){
+         *
+         *      },
+         *      function(error){
+         *
+         *      }
+         * );
+         */
         getOverallStats: getOverallStats,
+
+        /**
+         * Retrieve a set of statistics regarding a specific newsletter
+         *
+         * @function
+         * @name getCampaignStats
+         * @param {String} campaign_id - The mongoDB id of the newsletter
+         * @example
+         * var newsletter = require(/path/to/newsletter/module)
+         * newsletter.getCampaignStats("dw121fevev12t4s").then(
+         *      function(success){
+         *
+         *      },
+         *      function(error){
+         *
+         *      }
+         * );
+         */
         getCampaignStats: getCampaignStats,
+
+        /**
+         * Unhash a user's email
+         *
+         * @function
+         * @name unhashUserMail
+         * @param {String} hashedEmail - A hashed email
+         * @example
+         * var newsletter = require(/path/to/newsletter/module)
+         * var unhashedEmail = newsletter.unhashUserMail("dw102813nnfdbwefhwfwiwd");
+         */
         unhashUserMail: unhashUserMail,
+
+        /**
+         * Add statistics regarding all newsletters in the database
+         *
+         * @function
+         * @name recordStats
+         * @example
+         * var newsletter = require(/path/to/newsletter/module)
+         * newsletter.recordStats().then(
+         *      function(success){
+         *
+         *      },
+         *      function(error){
+         *
+         *      }
+         * );
+         */
         recordStats: recordStats
     };
 };
