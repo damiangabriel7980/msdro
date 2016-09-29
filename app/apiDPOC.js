@@ -76,7 +76,7 @@ module.exports = function(app, logger, router) {
      * @apiParam {String} name The name of the patient
      * @apiParam {String} reportType The type of the report
      * @apiParam {String} reporterType The sender's type
-     * @apiExample {curl} Example usage (with id):
+     * @apiExample {curl} Example usage:
      *     curl -i -X POST -H "Authorization: Bearer " -d '{"message":"someMessage","phone":"1234141222", "accepted": true,
      *    "patientNumber": "34", "patientSex": "M", "name": "John", "reportType": "someType", "reporterType": "medic"}'
      *     http://localhost:8080/apiDPOC/report
