@@ -10,6 +10,44 @@ module.exports = function(app, env, logger, sessionSecret, router) {
     var handleSuccess = require('./modules/responseHandler/success.js')(logger);
     var handleError = require('./modules/responseHandler/error.js')(logger);
 
+    /**
+     * @apiName Get_Content_Preview
+     * @apiDescription Retrieve a preview for a specific content from medic section
+     * @apiGroup Content_Preview
+     * @api {get} /apiPreview/previewItem Retrieve a preview for a specific content from medic section
+     * @apiVersion 1.0.0
+     * @apiPermission none
+     * @apiParam {String} id The id of the content from medic section
+     * @apiParam {String} type The type of the content (can be resource, pathology or product)
+     * @apiParam {String} [articleType] The type of an article (optional; can be 1 = national, 2 = international, 3 = scientific)
+     * @apiExample {curl} Example usage (with id):
+     *     curl -i http://localhost:8080/apiPreview/previewItem?id=kdwooj2131313&type=resource&articleType=3
+     * @apiSuccess {Array} response.success         an object containing a a specific content from medic section
+     * @apiSuccess {String}   response.message       A success message.
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "success":
+     *       {
+     *
+     *       },
+     *       "message": "Cererea a fost procesata cu succes"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *       "error": "Query Error",
+     *       "data" : {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 Not Found Error
+     *     {
+     *       "error": "Not Found Error",
+     *       "data" : {}
+     *     }
+     */
     router.route('/previewItem')
         .get(function (req, res) {
             var queryObject = {

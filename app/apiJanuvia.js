@@ -14,6 +14,34 @@ module.exports = function(app, logger, router) {
 		next();
 	});
 
+	/**
+	 * @apiName Get_Januvia_Users
+	 * @apiDescription Retrieve a list of Januvia Application users
+	 * @apiGroup Januvia_Application
+	 * @api {get} /apiJanuvia/users Retrieve a list of Januvia Application users
+	 * @apiVersion 1.0.0
+	 * @apiPermission none
+	 * @apiExample {curl} Example usage (with id):
+	 *     curl -i http://localhost:8080/apiJanuvia/users
+	 * @apiSuccess {Array} response.success         an array containing a list of Januvia Application users
+	 * @apiSuccess {String}   response.message       A success message.
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *       "success":[
+     *       {
+     *
+     *       }],
+     *       "message": "Cererea a fost procesata cu succes"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *       "error": "Query Error",
+     *       "data" : {}
+     *     }
+	 */
 	router.route('/users').get(function (req, res) {
 		var last_modified_client = req.query.last_modified;
 		ModelInfos.getLastUpdate("januvia_users").then(
