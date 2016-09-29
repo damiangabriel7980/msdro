@@ -60,6 +60,39 @@ module.exports = function(app, logger, router) {
         }
     };
 
+    /**
+     * @apiName Send_Email_From_DPOC_App
+     * @apiDescription Send an email from DPOC Application
+     * @apiGroup DPOC
+     * @api {post} /apiDPOC/report Send an email from DPOC Application
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} message The message to send via email
+     * @apiParam {String} phone The phone number of the sender
+     * @apiParam {Boolean} [accepted] If the sender doesn't agree to be contacted
+     * @apiParam {String} patientNumber The patient's number
+     * @apiParam {String} patientSex The patient's sex
+     * @apiParam {String} name The name of the patient
+     * @apiParam {String} reportType The type of the report
+     * @apiParam {String} reporterType The sender's type
+     * @apiExample {curl} Example usage (with id):
+     *     curl -i -X POST -H "Authorization: Bearer " -d '{"message":"someMessage","phone":"1234141222", "accepted": true,
+     *    "patientNumber": "34", "patientSex": "M", "name": "John", "reportType": "someType", "reporterType": "medic"}'
+     *     http://localhost:8080/apiDPOC/report
+     * @apiSuccess {Object} response an empty object
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *
+     *     }
+     */
     router.route('/report')
         .post(validateDevice, function (req, res) {
             //get email
@@ -146,6 +179,38 @@ module.exports = function(app, logger, router) {
             });
         });
 
+    /**
+     * @apiName validate_Device_DPOC_App
+     * @apiDescription Validate a device for DPOC application
+     * @apiGroup DPOC
+     * @api {get} /apiDPOC/validate Validate a device for DPOC application
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiHeader {String} authorization-code a code specific to a registered DPOC device
+     * @apiHeader {String} authorization-uuid the id of the registered DPOC device
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " -H "authorization-code: someCode" -H
+     *     "authorization-uuid: someUUID" http://localhost:8080/apiDPOC/report
+     * @apiSuccess {Object} response an empty object
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *
+     *     }
+     * @apiUse AccessForbidden
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 403 AccessForbidden Error
+     *     {
+     *
+     *     }
+     */
     router.route('/validate')
         .get(validateDevice, function (req, res) {
             //if we got here, the device is valid

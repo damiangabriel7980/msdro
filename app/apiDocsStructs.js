@@ -26,3 +26,7 @@
  * @apiDefine EntityNotFound
  * @apiError (Error 4xx) {Object} EntityNotFound Error - Entity not found
  */
+/**
+ * @apiDefine AccessForbidden
+ * @apiError (Error 4xx) {Object} AccessForbidden Error - Access is forbidden
+ */
