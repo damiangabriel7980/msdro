@@ -194,7 +194,7 @@ module.exports = function(app, logger, tokenSecret, router) {
          *     "phone" : "", "birthday" : "",
          *     "therapeutic-areasID" : [], "address" : "", "practiceType" : 1, "title" : 1
          *     }' http://localhost:8080/apiMobileShared/userProfile
-         * @apiSuccess {json} response.success an object containing user data
+         * @apiSuccess {json} response.success an empty object
          * @apiSuccess {json} response.message A message
          * @apiSuccessExample {json} Success-Response:
          *     HTTP/1.1 200 OK
