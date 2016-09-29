@@ -22,7 +22,7 @@ module.exports = function(app, env, logger, sessionSecret, router) {
      * @apiParam {String} [articleType] The type of an article (optional; can be 1 = national, 2 = international, 3 = scientific)
      * @apiExample {curl} Example usage (with id):
      *     curl -i http://localhost:8080/apiPreview/previewItem?id=kdwooj2131313&type=resource&articleType=3
-     * @apiSuccess {Array} response.success         an object containing a a specific content from medic section
+     * @apiSuccess {Array} response.success         an object containing a specific content from medic section
      * @apiSuccess {String}   response.message       A success message.
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
