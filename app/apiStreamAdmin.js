@@ -29,7 +29,52 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
     //======================================
-
+    /**
+     * @apiName Retrieve_Conferences
+     * @apiDescription Retrieve a list of conferences or a single conference
+     * @apiGroup Live_Conferences
+     * @api {get} /api/streamAdmin/liveConferences Retrieve a list of conferences or a single conference
+     * @apiVersion 1.0.0
+     * @apiPermission streamAdmin
+     * @apiParam {String} [id] An id for the conference
+     * @apiParam {Boolean} [separatedViewers] if we wish to receive the associated viewers
+     * @apiExample {curl} Example usage (with id):
+     *     curl -i  http://localhost:8080/api/streamAdmin/liveConferences?id=owkdoad9w912121&separatedViewers=true
+     * @apiExample {curl} Example usage (without id):
+     *     curl -i  http://localhost:8080/api/streamAdmin/liveConferences
+     * @apiSuccess {Array} response.success an array of live conferences / an object with a specific conference
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (without id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 4xx EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/streamAdmin/liveConferences')
         .get(function(req,res){
             if(req.query.id){
@@ -79,6 +124,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Conference
+         * @apiDescription Create a conference
+         * @apiGroup Live_Conferences
+         * @api {post} /api/streamAdmin/liveConferences Create a conference
+         * @apiVersion 1.0.0
+         * @apiPermission streamAdmin
+         * @apiParam {Object} conferenceObj A conference object (based on liveConferences model)
+         * @apiExample {curl} Example usage (with id):
+         *     curl -i -X POST -d 'conferenceObject'  http://localhost:8080/api/streamAdmin/liveConferences
+         * @apiSuccess {Object} response.success an object with the newly created conference
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response :
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
             req.body.last_modified = new Date();
             LiveConference.create(req.body, function(err, conference) {
@@ -86,6 +159,50 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 return handleSuccess(res,conference);
             });
         })
+        /**
+         * @apiName Update_Conference
+         * @apiDescription Update a conference
+         * @apiGroup Live_Conferences
+         * @api {put} /api/streamAdmin/liveConferences Update a conference
+         * @apiVersion 1.0.0
+         * @apiPermission streamAdmin
+         * @apiParam {String} id The id of the conference
+         * @apiParam {Boolean} [isEnabled] The current status of a conference (true=enabled)
+         * @apiParam {Boolean} [updateImage] If we want to update a conference's image
+         * @apiParam {String} [image_path] The new Amazon path for the image previously mentioned
+         * @apiParam {Boolean} [removeUser] If we want to remove a user from a conference
+         * @apiParam {Object} [userObject] An object containing a user model.
+         * @apiParam {Boolean} [addSpeaker] If we want to add a speaker (use previous user param for creating the user).
+         * @apiParam {Boolean} [addViewers] If we want to add a viewer (use previous user param for creating the user).
+         * @apiParam {Object} moderator An object containing a user model.
+         * @apiExample {curl} Example usage:
+         *     curl -i -X PUT -d '{isEnabled: '', image_path: '', userObject : {}, moderator: {}}'
+         *     http://localhost:8080/api/streamAdmin/liveConferences?id=okwdoai923913njff&updateImage=false&removeUser=false&addSpeaker=false&addViewers=false
+         * @apiSuccess {Number} response.success the number of conferences that were updated
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response :
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *           1
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         * @apiUse EntityNotFound
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 4xx EntityNotFound Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             if(req.body._id)
             { delete req.body._id; }
@@ -176,6 +293,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Delete_Conference
+         * @apiDescription Delete a conference
+         * @apiGroup Live_Conferences
+         * @api {delete} /api/streamAdmin/liveConferences Delete a conference
+         * @apiVersion 1.0.0
+         * @apiPermission streamAdmin
+         * @apiParam {String} id The id of the conference
+         * @apiExample {curl} Example usage:
+         *     curl -i -X DELETE  http://localhost:8080/api/streamAdmin/liveConferences?id=jdnwadw7871231b3b
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response :
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             LiveConference.findById(req.query.id, function (err, conference) {
                 if(err) {
@@ -208,6 +353,50 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/streamAdmin/checkEmail')
+    /**
+     * @apiName Check_Email
+     * @apiDescription Check if a user already exists / if the email address is valid
+     * @apiGroup Live_Conferences
+     * @api {delete} /api/streamAdmin/checkEmail Check if a user already exists / if the email address is valid
+     * @apiVersion 1.0.0
+     * @apiPermission streamAdmin
+     * @apiParam {String} username The email of the user
+     * @apiParam {Boolean} [checkIfExists] If we want to check if the user exists
+     * @apiParam {Boolean} [checkEmailAddress] If we want to verify an email address
+     * @apiExample {curl} Example usage:
+     *     curl -i -X POST -d '{username: "john@test.com"}' http://localhost:8080/api/streamAdmin/checkEmail?checkIfExists=true&checkEmailAddress=false
+     * @apiSuccess {Array} response.success a list of users / an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (checkIfExists):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiSuccessExample {json} Success-Response (checkEmailAddress) :
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse BadRequest
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 4xx BadRequest Error
+     *     {
+     *
+     *     }
+     */
         .post(function(req,res){
             if(req.query.checkIfExists){
                 //first check if the user is exists in the database
@@ -234,6 +423,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    /**
+     * @apiName User_List
+     * @apiDescription Retrieve a list of users
+     * @apiGroup Live_Conferences
+     * @api {get} /api/streamAdmin/users Retrieve a list of users
+     * @apiVersion 1.0.0
+     * @apiPermission streamAdmin
+     * @apiParam {Boolean} groups If we want to retrieve the user's groups
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/streamAdmin/users?groups=true
+     * @apiSuccess {Array} response.success a list of users
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/streamAdmin/users')
         .get(function(req,res){
             var data = {username: 1, name: 1, profession: 1};
@@ -248,6 +465,33 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName User_Groups
+     * @apiDescription Retrieve a list of user groups
+     * @apiGroup Live_Conferences
+     * @api {get} /api/streamAdmin/groups Retrieve a list of user groups
+     * @apiVersion 1.0.0
+     * @apiPermission streamAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/streamAdmin/groups
+     * @apiSuccess {Array} response.success a list of groups
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/streamAdmin/groups')
         .get(function(req,res){
             var data = {display_name: 1};
@@ -655,6 +899,33 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
         });
 
+    /**
+     * @apiName Therapeutic_areas
+     * @apiDescription Retrieve a list of therapeutic areas
+     * @apiGroup Live_Conferences
+     * @api {get} /api/streamAdmin/therapeutic_areas Retrieve a list of therapeutic areas
+     * @apiVersion 1.0.0
+     * @apiPermission streamAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/streamAdmin/therapeutic_areas
+     * @apiSuccess {Array} response.success a list of therapeutic areas
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/streamAdmin/therapeutic_areas')
 
         .get(function(req, res) {
@@ -666,6 +937,26 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Regexp
+     * @apiDescription Retrieve the regexp validation strings from back-end
+     * @apiGroup Live_Conferences
+     * @api {get} /api/streamAdmin/regexp Retrieve the regexp validation strings from back-end
+     * @apiVersion 1.0.0
+     * @apiPermission streamAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/streamAdmin/regexp
+     * @apiSuccess {Array} response.success an object containing the validation strings
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     */
     router.route('/streamAdmin/regexp')
         .get(function(req,res){
             var regexp = UtilsModule.validationStrings;

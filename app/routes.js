@@ -630,8 +630,8 @@ module.exports = function(app, logger, passport) {
      * @apiParam {String} email An email address
      * @apiExample {curl} Example usage:
      *     curl -i -X POST -d '{"email" : "john@test.com"}' http://localhost:8080/checkEmailExists
-     * @apiSuccess {json} response.success.exists an object confirming the user's existence (can be true or false)
-     * @apiSuccess {json} response.message A message
+     * @apiSuccess {Boolean} response.success.exists an object confirming the user's existence (can be true or false)
+     * @apiSuccess {String} response.message A message
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
