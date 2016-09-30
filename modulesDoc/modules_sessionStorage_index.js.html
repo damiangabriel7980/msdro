@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/sessionStorage/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,53 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/sessionStorage/index.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Session Storage module.
+ * @module sessionStorage
+ */
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = {
+    /**
+     * Function that adds a value to the session storage
+     *
+     * @name setElement
+     * @function
+     * @param {Object} request - The request object
+     * @param {String} property - A property to add on session storage
+     * @param {String} value - A value for the previously mentioned property
+     * @example
+     * var utilsModule = require(/path/to/session/module)
+     * utilsModule.setElement(req, 'myElem', '1234');
+     */
+    setElement: function (req, element, value) {
+        req.session[element] = value;
+    },
+    /**
+     * Function that retrieves a value from the session storage
+     *
+     * @name getElement
+     * @function
+     * @param {Object} request - The request object
+     * @param {String} property - A property to get from the session storage
+     * @example
+     * var utilsModule = require(/path/to/session/module)
+     * var userData = utilsModule.getUserData();
+     */
+    getElement: function (req, element) {
+        return req.session[element];
+    }
+};</code></pre>
+        </article>
+    </section>
 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/mongooseIndex/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,48 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/mongooseIndex/index.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Created by andreimirica on 06.07.2015.
+ */
+/**
+ * Mongoose Index module.
+ * @module mongooseIndexModule
+ */
+var mongooseIndex = function(ObjectToIndex){
+    ObjectToIndex.ensureIndexes(function (err) {
+        if (err)
+            console.log(err);
+    });
+    ObjectToIndex.on('index', function (err) {
+        if (err)
+            console.log(err); // error occurred during index creation
+    });
+};
+module.exports = {
+    /**
+     * Index a mongoDB entity for better query performance
+     *
+     * @function
+     * @name mongooseIndex
+     * @param {Object} ObjectToIndex - A mongoDB model to index
+     * @example
+     * var mongooseIndexer = require(/path/to/mongooseIndex/module)
+     * var Article = mongoose.model('articles', articlesSchema);
+     * mongooseIndexer.mongooseIndex(Article);
+     */
+    mongooseIndex : mongooseIndex
+};</code></pre>
+        </article>
+    </section>
 
 
 

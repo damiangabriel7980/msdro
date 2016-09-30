@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: conferencesModule</title>
+    <title>JSDoc: Module: elearningModule</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: conferencesModule</h1>
+    <h1 class="page-title">Module: elearningModule</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Retrieve Conferences for MSD Check-In App</div>
+            <div class="description">Elearning module.</div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_Conferences_index.js.html">modules/Conferences/index.js</a>, <a href="modules_Conferences_index.js.html#line4">line 4</a>
+        <a href="api_elearning_elearning.service.js.html">api/elearning/elearning.service.js</a>, <a href="api_elearning_elearning.service.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -137,14 +137,14 @@
 
     
 
-    <h4 class="name" id="~getConference"><span class="type-signature">(inner) </span>getConference<span class="signature">(id_conference, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~getQuestionsMaxPoints"><span class="type-signature">(inner) </span>getQuestionsMaxPoints<span class="signature">(qIds)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Retrieve a conference by id
+    Function that retrieves a max score for a test slide
 </div>
 
 
@@ -180,516 +180,7 @@
 
         <tr>
             
-                <td class="name"><code>id_conference</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The id of the conference</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">a callback function</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_Conferences_index.js.html">modules/Conferences/index.js</a>, <a href="modules_Conferences_index.js.html#line150">line 150</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>var conferencesModule = require(/path/to/conferences/module)
-conferencesModule.getConference("dwad1131das2dfwwda", function(err, success){
-
-});</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~getConference"><span class="type-signature">(inner) </span>getConference<span class="signature">(id_conference, id_user, callback)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Add a conference to a user
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id_conference</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The id of the conference</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>id_user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The id of the user</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">a callback function</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_Conferences_index.js.html">modules/Conferences/index.js</a>, <a href="modules_Conferences_index.js.html#line165">line 165</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>var conferencesModule = require(/path/to/conferences/module)
-conferencesModule.addConferenceToUser("dwad1131das2dfwwda", "dw8812bnbdwhd", function(err, success){
-
-});</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~getConferencesForUser"><span class="type-signature">(inner) </span>getConferencesForUser<span class="signature">(id_user, callback)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Retrieve the conferences associated to a user
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id_user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The id of the user</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">a callback function</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_Conferences_index.js.html">modules/Conferences/index.js</a>, <a href="modules_Conferences_index.js.html#line135">line 135</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>var conferencesModule = require(/path/to/conferences/module)
-conferencesModule.getConferencesForUser("dwad1131das2dfwwda", function(err, success){
-
-});</code></pre>
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~getConferencesInDepth"><span class="type-signature">(inner) </span>getConferencesInDepth<span class="signature">(id_conferences, callback)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Retrieve multiple conferences with associated speakers
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id_conferences</code></td>
+                <td class="name"><code>qIds</code></td>
             
 
             <td class="type">
@@ -705,30 +196,7 @@ conferencesModule.getConferencesForUser("dwad1131das2dfwwda", function(err, succ
 
             
 
-            <td class="description last">The ids of the conferences (array of strings)</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>callback</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">a callback function</td>
+            <td class="description last">an array of question ids</td>
         </tr>
 
     
@@ -769,7 +237,7 @@ conferencesModule.getConferencesForUser("dwad1131das2dfwwda", function(err, succ
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_Conferences_index.js.html">modules/Conferences/index.js</a>, <a href="modules_Conferences_index.js.html#line196">line 196</a>
+        <a href="api_elearning_elearning.service.js.html">api/elearning/elearning.service.js</a>, <a href="api_elearning_elearning.service.js.html#line208">line 208</a>
     </li></ul></dd>
     
 
@@ -796,10 +264,15 @@ conferencesModule.getConferencesForUser("dwad1131das2dfwwda", function(err, succ
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var conferencesModule = require(/path/to/conferences/module)
-conferencesModule.getSpeakersForConferences(["dwad1131das2dfwwda"], function(err, success){
+    <pre class="prettyprint"><code>var elearningModule = require(/path/to/elearning/module)
+elearningModule.getQuestionsMaxPoints([qId1, qId2]).then(
+     function(success){
 
-});</code></pre>
+     },
+     function(error){
+
+     }
+);</code></pre>
 
 
 
@@ -808,14 +281,14 @@ conferencesModule.getSpeakersForConferences(["dwad1131das2dfwwda"], function(err
 
     
 
-    <h4 class="name" id="~getConferencesInDepth"><span class="type-signature">(inner) </span>getConferencesInDepth<span class="signature">(id_conferences, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~getSlide"><span class="type-signature">(inner) </span>getSlide<span class="signature">(id, previous, next)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Retrieve multiple conferences with associated talks
+    Function that retrieves a slide and the previous/next slide
 </div>
 
 
@@ -851,13 +324,13 @@ conferencesModule.getSpeakersForConferences(["dwad1131das2dfwwda"], function(err
 
         <tr>
             
-                <td class="name"><code>id_conferences</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">String</span>
 
 
             
@@ -867,20 +340,20 @@ conferencesModule.getSpeakersForConferences(["dwad1131das2dfwwda"], function(err
 
             
 
-            <td class="description last">The ids of the conferences (array of strings)</td>
+            <td class="description last">slide id</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>previous</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -890,7 +363,30 @@ conferencesModule.getSpeakersForConferences(["dwad1131das2dfwwda"], function(err
 
             
 
-            <td class="description last">a callback function</td>
+            <td class="description last">if we want the previous slide</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>next</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if we want the next slide</td>
         </tr>
 
     
@@ -931,7 +427,7 @@ conferencesModule.getSpeakersForConferences(["dwad1131das2dfwwda"], function(err
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="modules_Conferences_index.js.html">modules/Conferences/index.js</a>, <a href="modules_Conferences_index.js.html#line181">line 181</a>
+        <a href="api_elearning_elearning.service.js.html">api/elearning/elearning.service.js</a>, <a href="api_elearning_elearning.service.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -958,10 +454,479 @@ conferencesModule.getSpeakersForConferences(["dwad1131das2dfwwda"], function(err
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>var conferencesModule = require(/path/to/conferences/module)
-conferencesModule.getConferencesInDepth(["dwad1131das2dfwwda"], function(err, success){
+    <pre class="prettyprint"><code>var elearningModule = require(/path/to/elearning/module)
+elearningModule.getSlide("wdadwa1212r412f", true).then(
+     function(success){
 
-});</code></pre>
+     },
+     function(error){
+
+     }
+);</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~getSlideViews"><span class="type-signature">(inner) </span>getSlideViews<span class="signature">(user, slideID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Function that verifies if a user viewed a slide
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an user object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>slideID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of the slide</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api_elearning_elearning.service.js.html">api/elearning/elearning.service.js</a>, <a href="api_elearning_elearning.service.js.html#line226">line 226</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var elearningModule = require(/path/to/elearning/module)
+var isViewed = elearningModule.getSlideViews({}, slideID);</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~getUserPoints"><span class="type-signature">(inner) </span>getUserPoints<span class="signature">(qaMap)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Function that calculates a user's score for a test slide
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>qaMap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a map of questions and user's answers</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api_elearning_elearning.service.js.html">api/elearning/elearning.service.js</a>, <a href="api_elearning_elearning.service.js.html#line190">line 190</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var elearningModule = require(/path/to/elearning/module)
+elearningModule.getUserPoints({qId : aId}).then(
+     function(success){
+
+     },
+     function(error){
+
+     }
+);</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~userViewedSlide"><span class="type-signature">(inner) </span>userViewedSlide<span class="signature">(user, slideID)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Function that marks a slide as viewed
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an user object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>slideID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the id of the slide</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api_elearning_elearning.service.js.html">api/elearning/elearning.service.js</a>, <a href="api_elearning_elearning.service.js.html#line238">line 238</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var elearningModule = require(/path/to/elearning/module)
+elearningModule.userViewedSlide({}, slideID);</code></pre>
 
 
 
