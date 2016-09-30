@@ -554,7 +554,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     };
 
     router.route('/streamAdmin/sendNotification')
-
+    /**
+     * @apiName Send_Conference_Updates_Notification
+     * @apiDescription Send email to notify users for changes in a conference
+     * @apiGroup Live_Conferences
+     * @api {put} /api/streamAdmin/sendNotification Send email to notify users for changes in a conference
+     * @apiVersion 1.0.0
+     * @apiPermission streamAdmin
+     * @apiParam {String} conferencesStateURL The URL to access the conference in medic section
+     * @apiParam {String} id The id of the conference
+     * @apiParam {String} spkString A string containing the names of the speakers
+     * @apiExample {curl} Example usage:
+     *     curl -i -x PUT -d '{conferencesStateURL: 'someURL', spkString: 'speakersString'}' http://localhost:8080/api/streamAdmin/sendNotification?id=dnwuadhw71723163bd
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .put(function (req,res) {
             LiveConference.find({_id: req.query.id}).exec(function(err,conference){
                 if(err)
@@ -693,7 +722,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
-
+        /**
+         * @apiName Send_Conference_Invitation
+         * @apiDescription Send email to invite users to participate at a conference
+         * @apiGroup Live_Conferences
+         * @api {post} /api/streamAdmin/sendNotification Send email to invite users to participate at a conference
+         * @apiVersion 1.0.0
+         * @apiPermission streamAdmin
+         * @apiParam {String} conferencesStateURL The URL to access the conference in medic section
+         * @apiParam {String} id The id of the conference
+         * @apiParam {String} spkString A string containing the names of the speakers
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{conferencesStateURL: 'someURL', spkString: 'speakersString'}' http://localhost:8080/api/streamAdmin/sendNotification
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req, res) {
             LiveConference.find({_id: req.query.id}).exec(function(err,conference){
                 if(err)
