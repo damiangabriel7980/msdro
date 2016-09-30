@@ -18,7 +18,31 @@ module.exports = function (app, logger) {
         res.writeHead(200, headers);
         res.end();
     });
-    
+
+    /**
+     * @apiName Refresh_token
+     * @apiDescription Refresh Bearer token
+     * @apiGroup Token_API
+     * @api {get} /authenticateToken Refresh Bearer token
+     * @apiVersion 1.0.0
+     * @apiPermission none
+     * @apiUse HeaderAuthorization
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/authenticateToken
+     * @apiSuccess {Object} response an object containing the new token
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        token : ""
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     app.get('/authenticateToken', function (req, res) {
         logger.warn("token refresh");
         TokenService.refreshToken(req).then(
@@ -32,6 +56,34 @@ module.exports = function (app, logger) {
         );
     });
 
+    /**
+     * @apiName Create_token
+     * @apiDescription Create Bearer token
+     * @apiGroup Token_API
+     * @api {post} /authenticateToken Create Bearer token
+     * @apiVersion 1.0.0
+     * @apiPermission none
+     * @apiParam {String} username the user's email
+     * @apiParam {String} password the user's password
+     * @apiParam {String} [deviceType] the device's type
+     * @apiParam {String} [notificationToken] the device's notification token
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{username: '', password: ''}' http://localhost:8080/authenticateToken
+     * @apiSuccess {Object} response an object containing the token and user data
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        token : "",
+     *        {}
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     app.post('/authenticateToken', function (req, res) {
         logger.warn("token auth - username: ", req.body.username);
 
