@@ -20,6 +20,46 @@ module.exports = function(env, logger, amazon, router){
 	var ContentVerifier = require('../../modules/contentVerifier');
 
 	router.route('/admin/elearning/updateIndex')
+	/**
+	 * @apiName Update_Courses_Indexes
+	 * @apiDescription Update courses indexes - use only one at a time of the parameters in the list below
+	 * @apiGroup Elearning_API
+	 * @api {put} /api/admin/elearning/updateIndex Update courses indexes
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {Array} courseMap An array of courses
+	 * @apiParam {Array} chapterMap An array of chapters
+	 * @apiParam {Array} subChaptersMap An array of sub-chapters
+	 * @apiParam {Array} slidesMap An array of slides
+	 * @apiParam {Array} questionsMap An array of questions
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -x POST -H "Authorization: Bearer " -d '{courseMap: [{id: '', order: ''}]}' http://localhost:8080/api/admin/elearning/updateIndex
+	 * @apiSuccess {Object} response.success an empty object
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 * @apiUse BadRequest
+	 * @apiErrorExample {json} Error-Response (4xx):
+	 *     HTTP/1.1 4xx 4xx Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 			.put(function (req, res) {
 				if(req.body.courseMap){
 					var mapping = req.body.courseMap;
@@ -121,6 +161,43 @@ module.exports = function(env, logger, amazon, router){
 			});
 
 	router.route('/admin/elearning/courses')
+	/**
+	 * @apiName Get_Elearning_Courses
+	 * @apiDescription Retrieve a list of elearning courses / a single course
+	 * @apiGroup Elearning_API
+	 * @api {get} /api/admin/elearning/courses Retrieve a list of elearning courses / a single course
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {String} [id] the id of a course
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/courses?id=wdnan828dnwdwoogr
+	 * @apiSuccess {Object} response.success a single course / an array of courses
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+	 * @apiSuccessExample {json} Success-Response (with id):
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 	    .get(function (req, res) {
 	        if(req.query.id){
 	            Courses.findOne({_id: req.query.id}).populate('groupsID').exec(function (err, course) {
@@ -140,6 +217,42 @@ module.exports = function(env, logger, amazon, router){
 	            });
 	        }
 	    })
+		/**
+		 * @apiName Create_Elearning_Course
+		 * @apiDescription Create an elearning course
+		 * @apiGroup Elearning_API
+		 * @api {post} /api/admin/elearning/courses Create an elearning course
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {Object} course a course object
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x POST -H "Authorization: Bearer " -d '{course : {}}' http://localhost:8080/api/admin/elearning/courses
+		 * @apiSuccess {Object} response.success the newly created course
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 *        success : {
+     	 *
+     	 *        },
+     	 *        message : "A message"
+     	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .post(function (req, res) {
 	        if(!req.body.course){
 	            handleError(res, null, 400, 6);
@@ -159,6 +272,38 @@ module.exports = function(env, logger, amazon, router){
 	        }
 	    })
 	    .put(function (req, res) {
+			/**
+			 * @apiName Update_Elearning_Course
+			 * @apiDescription Update an elearning course
+			 * @apiGroup Elearning_API
+			 * @api {put} /api/admin/elearning/courses Update an elearning course
+			 * @apiVersion 1.0.0
+			 * @apiPermission admin
+			 * @apiUse HeaderAuthorization
+			 * @apiParam {Object} course a course object
+			 * @apiParam {String} imagePath the file path to the course image
+			 * @apiParam {Object} status if we want to enable/disable a course (contains the property isEnabled which holds the new
+			 * status of the course
+			 * @apiExample {curl} Example usage:
+			 *     curl -i -x PUT -H "Authorization: Bearer " -d '{course : {}, imagePath: null, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/courses?id=dnwadnwan8284y854nfg
+			 * @apiSuccess {Object} response.success an empty object / an object confirming if the course was updated
+			 * @apiSuccess {String} response.message A message
+			 * @apiSuccessExample {json} Success-Response:
+			 *     HTTP/1.1 200 OK
+			 *     {
+     	 	 *        success : {
+     	 	 *           updated: 1 //optional
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+			 * @apiUse ErrorOnServer
+			 * @apiErrorExample {json} Error-Response (500):
+			 *     HTTP/1.1 500 Server Error
+			 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+			 */
 			if(req.body.imagePath){
 				var info = req.body.imagePath;
 					Courses.update({_id: req.query.id}, {$set:{image_path: info}}, function (err, wRes) {
@@ -244,6 +389,42 @@ module.exports = function(env, logger, amazon, router){
 				});
 			}
 	    })
+		/**
+		 * @apiName Delete_Elearning_Course
+		 * @apiDescription Delete an elearning course
+		 * @apiGroup Elearning_API
+		 * @api {delete} /api/admin/elearning/courses Delete an elearning course
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {String} id the id of the course
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/courses?id=dnwadnwan8284y854nfg
+		 * @apiSuccess {Object} response.success an empty object
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .delete(function (req, res) {
 	        var idToDelete = ObjectId(req.query.id);
 	        if(idToDelete){
@@ -339,6 +520,43 @@ module.exports = function(env, logger, amazon, router){
 	    });
 
 	router.route('/admin/elearning/chapters')
+	/**
+	 * @apiName Get_Elearning_Chapters
+	 * @apiDescription Retrieve a list of elearning chapters / a single chapter
+	 * @apiGroup Elearning_API
+	 * @api {get} /api/admin/elearning/chapters Retrieve a list of elearning chapters / a single chapter
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {String} [id] the id of a chapter
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/chapters?id=wdnan828dnwdwoogr
+	 * @apiSuccess {Object} response.success a single chapter / an array of chapters
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+	 * @apiSuccessExample {json} Success-Response (with id):
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 	    .get(function (req, res) {
 	        if(req.query.id){
 	            Chapters.findOne({_id: req.query.id}).exec(function (err, chapter) {
@@ -358,6 +576,43 @@ module.exports = function(env, logger, amazon, router){
 	            });
 	        }
 	    })
+		/**
+		 * @apiName Create_Elearning_Chapter
+		 * @apiDescription Create an elearning chapter
+		 * @apiGroup Elearning_API
+		 * @api {post} /api/admin/elearning/chapters Create an elearning chapter
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {Object} chapter a chapter object
+		 * @apiParam {String} courseId id of course to associate to
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x POST -H "Authorization: Bearer " -d '{chapter : {}, courseId: ''}' http://localhost:8080/api/admin/elearning/chapters
+		 * @apiSuccess {Object} response.success the newly created chapter
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 *        success : {
+     	 *
+     	 *        },
+     	 *        message : "A message"
+     	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .post(function (req, res) {
 			if(!req.body.chapter){
 				handleError(res, null, 400, 6);
@@ -382,6 +637,37 @@ module.exports = function(env, logger, amazon, router){
 				}
 			}
 	    })
+		/**
+		 * @apiName Update_Elearning_Chapter
+		 * @apiDescription Update an elearning chapter
+		 * @apiGroup Elearning_API
+		 * @api {put} /api/admin/elearning/chapters Update an elearning chapter
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {Object} chapter a chapter object
+		 * @apiParam {Object} status if we want to enable/disable a chapter (contains the property isEnabled which holds the new
+		 * status of the chapter
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x PUT -H "Authorization: Bearer " -d '{chapter : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/chapters?id=dnwadnwan8284y854nfg
+		 * @apiSuccess {Object} response.success an empty object
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+		 */
 	    .put(function (req, res) {
 			if(req.body.status){
 				Chapters.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
@@ -404,6 +690,42 @@ module.exports = function(env, logger, amazon, router){
 				});
 			}
 	    })
+		/**
+		 * @apiName Delete_Elearning_Chapter
+		 * @apiDescription Delete an elearning chapter
+		 * @apiGroup Elearning_API
+		 * @api {delete} /api/admin/elearning/chapters Delete an elearning chapter
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {String} id the id of the chapter
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/chapters?id=dnwadnwan8284y854nfg
+		 * @apiSuccess {Object} response.success an empty object
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .delete(function (req, res) {
 			var idToDelete = ObjectId(req.query.id);
 			if(idToDelete){
@@ -491,6 +813,43 @@ module.exports = function(env, logger, amazon, router){
 
 
 	router.route('/admin/elearning/subchapters')
+	/**
+	 * @apiName Get_Elearning_Subchapters
+	 * @apiDescription Retrieve a list of elearning subchapters / a single subchapter
+	 * @apiGroup Elearning_API
+	 * @api {get} /api/admin/elearning/subchapters Retrieve a list of elearning subchapters / a single subchapter
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {String} [id] the id of a subchapter
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/subchapters?id=wdnan828dnwdwoogr
+	 * @apiSuccess {Object} response.success a single subchapter / an array of subchapters
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+	 * @apiSuccessExample {json} Success-Response (with id):
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 	    .get(function (req, res) {
 	        if(req.query.id){
 	            Subchapters.findOne({_id: req.query.id}).exec(function (err, course) {
@@ -510,6 +869,43 @@ module.exports = function(env, logger, amazon, router){
 	            });
 	        }
 	    })
+		/**
+		 * @apiName Create_Elearning_SubChapter
+		 * @apiDescription Create an elearning subchapter
+		 * @apiGroup Elearning_API
+		 * @api {post} /api/admin/elearning/subchapters Create an elearning subchapter
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {Object} subchapter a subchapter object
+		 * @apiParam {String} chapterId id of chapter to associate to
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x POST -H "Authorization: Bearer " -d '{subchapter : {}, chapterId: ''}' http://localhost:8080/api/admin/elearning/subchapters
+		 * @apiSuccess {Object} response.success the newly created subchapter
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 *        success : {
+     	 *
+     	 *        },
+     	 *        message : "A message"
+     	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .post(function (req, res) {
 			if(!req.body.subChapter){
 				handleError(res, null, 400, 6);
@@ -534,6 +930,37 @@ module.exports = function(env, logger, amazon, router){
 				}
 			}
 	    })
+		/**
+		 * @apiName Update_Elearning_SubChapter
+		 * @apiDescription Update an elearning subchapter
+		 * @apiGroup Elearning_API
+		 * @api {put} /api/admin/elearning/subchapters Update an elearning subchapter
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {Object} subchapter a subchapter object
+		 * @apiParam {Object} status if we want to enable/disable a subchapter (contains the property isEnabled which holds the new
+		 * status of the subchapter
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x PUT -H "Authorization: Bearer " -d '{subchapter : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/subchapters?id=dnwadnwan8284y854nfg
+		 * @apiSuccess {Object} response.success an empty object
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+		 */
 	    .put(function (req, res) {
 			if(req.body.status){
 				Subchapters.update({_id: req.query.id},{$set:{enabled: req.body.status.isEnabled}}).exec(function (err, wRes) {
@@ -556,6 +983,42 @@ module.exports = function(env, logger, amazon, router){
 				});
 			}
 	    })
+		/**
+		 * @apiName Delete_Elearning_SubChapter
+		 * @apiDescription Delete an elearning subchapter
+		 * @apiGroup Elearning_API
+		 * @api {delete} /api/admin/elearning/subchapters Delete an elearning subchapter
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {String} id the id of the subchapter
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/subchapters?id=dnwadnwan8284y854nfg
+		 * @apiSuccess {Object} response.success an empty object
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .delete(function (req, res) {
 			var idToDelete = ObjectId(req.query.id);
 			if(idToDelete){
@@ -625,6 +1088,43 @@ module.exports = function(env, logger, amazon, router){
 	    });
 
 	router.route('/admin/elearning/slides')
+	/**
+	 * @apiName Get_Elearning_Slides
+	 * @apiDescription Retrieve a list of elearning slides / a single slide
+	 * @apiGroup Elearning_API
+	 * @api {get} /api/admin/elearning/slides Retrieve a list of elearning slides / a single slide
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {String} [id] the id of a slide
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/slides?id=wdnan828dnwdwoogr
+	 * @apiSuccess {Object} response.success a single slide / an array of slides
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+	 * @apiSuccessExample {json} Success-Response (with id):
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 	    .get(function (req, res) {
 	        if(req.query.id){
 	            Slides.findOne({_id: req.query.id}).deepPopulate('questions.answers',{
@@ -656,6 +1156,43 @@ module.exports = function(env, logger, amazon, router){
 	            });
 	        }
 	    })
+		/**
+		 * @apiName Create_Elearning_Slide
+		 * @apiDescription Create an elearning slide
+		 * @apiGroup Elearning_API
+		 * @api {post} /api/admin/elearning/slides Create an elearning slide
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {Object} subchapter a slide object
+		 * @apiParam {String} id id of subchapter to associate to
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x POST -H "Authorization: Bearer " -d '{slide : {}, id: ''}' http://localhost:8080/api/admin/elearning/slides
+		 * @apiSuccess {Object} response.success the newly created slide
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 *        success : {
+     	 *
+     	 *        },
+     	 *        message : "A message"
+     	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .post(function (req, res) {
 			if(!req.body.slide){
 				handleError(res, null, 400, 6);
@@ -680,6 +1217,38 @@ module.exports = function(env, logger, amazon, router){
 				}
 			}
 	    })
+		/**
+		 * @apiName Update_Elearning_Slide
+		 * @apiDescription Update an elearning slide
+		 * @apiGroup Elearning_API
+		 * @api {put} /api/admin/elearning/slides Update an elearning slide
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {Object} slide a slide object
+		 * @apiParam {Boolean} isSlide if the slide is a presentation or a questionnaire
+		 * @apiParam {Object} status if we want to enable/disable a slide (contains the property isEnabled which holds the new
+		 * status of the slide
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x PUT -H "Authorization: Bearer " -d '{slide : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/slides?id=dnwadnwan8284y854nfg
+		 * @apiSuccess {Object} response.success an empty object
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+		 */
 	    .put(function (req, res) {
 			var data = req.body.slide;
 			if(req.body.status){
@@ -749,6 +1318,42 @@ module.exports = function(env, logger, amazon, router){
 			}
 
 	    })
+		/**
+		 * @apiName Delete_Elearning_Slide
+		 * @apiDescription Delete an elearning slide
+		 * @apiGroup Elearning_API
+		 * @api {delete} /api/admin/elearning/slides Delete an elearning slide
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {String} id the id of the slide
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/slides?id=dnwadnwan8284y854nfg
+		 * @apiSuccess {Object} response.success an empty object
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response:
+		 *     HTTP/1.1 200 OK
+		 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+		 * @apiUse BadRequest
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+		 */
 	    .delete(function (req, res) {
 	        var idToDelete = ObjectId(req.query.id);
 	        if(idToDelete){
@@ -813,6 +1418,43 @@ module.exports = function(env, logger, amazon, router){
 
 
 	router.route('/admin/elearning/questions')
+	/**
+	 * @apiName Create_Elearning_Question
+	 * @apiDescription Create an elearning question
+	 * @apiGroup Elearning_API
+	 * @api {post} /api/admin/elearning/questions Create an elearning question
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {Object} question a question object
+	 * @apiParam {String} id id of slide to associate to
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -x POST -H "Authorization: Bearer " -d '{question : {}, id: ''}' http://localhost:8080/api/admin/elearning/questions
+	 * @apiSuccess {Object} response.success a property containing the status of the update process
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     	 *        success : {
+     	 *			1 // or 0 if not updated
+     	 *        },
+     	 *        message : "A message"
+     	 *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+	 * @apiUse BadRequest
+	 * @apiErrorExample {json} Error-Response (4xx):
+	 *     HTTP/1.1 400 BadRequest Error
+	 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+	 */
 			.post(function (req, res) {
 				if(!req.body.question){
 					handleError(res, null, 400, 6);
@@ -876,6 +1518,35 @@ module.exports = function(env, logger, amazon, router){
 					}
 				}
 			})
+			/**
+			 * @apiName Update_Elearning_Question
+			 * @apiDescription Update an elearning question
+			 * @apiGroup Elearning_API
+			 * @api {put} /api/admin/elearning/questions Update an elearning question
+			 * @apiVersion 1.0.0
+			 * @apiPermission admin
+			 * @apiUse HeaderAuthorization
+			 * @apiParam {Object} question a question object
+			 * @apiExample {curl} Example usage:
+			 *     curl -i -x PUT -H "Authorization: Bearer " -d '{question : {}}' http://localhost:8080/api/admin/elearning/questions?id=dnwadnwan8284y854nfg
+			 * @apiSuccess {Object} response.success an empty object
+			 * @apiSuccess {String} response.message A message
+			 * @apiSuccessExample {json} Success-Response:
+			 *     HTTP/1.1 200 OK
+			 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+			 * @apiUse ErrorOnServer
+			 * @apiErrorExample {json} Error-Response (500):
+			 *     HTTP/1.1 500 Server Error
+			 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+			 */
 			.put(function (req, res) {
 				var data = req.body.question;
 				Questions.update({_id:req.query.id},{$set:data}, function(err, quest) {
@@ -886,6 +1557,42 @@ module.exports = function(env, logger, amazon, router){
 					}
 				});
 			})
+			/**
+			 * @apiName Delete_Elearning_Question
+			 * @apiDescription Delete an elearning question
+			 * @apiGroup Elearning_API
+			 * @api {delete} /api/admin/elearning/questions Delete an elearning question
+			 * @apiVersion 1.0.0
+			 * @apiPermission admin
+			 * @apiUse HeaderAuthorization
+			 * @apiParam {String} id the id of the question
+			 * @apiExample {curl} Example usage:
+			 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/questions?id=dnwadnwan8284y854nfg
+			 * @apiSuccess {Object} response.success an empty object
+			 * @apiSuccess {String} response.message A message
+			 * @apiSuccessExample {json} Success-Response:
+			 *     HTTP/1.1 200 OK
+			 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+			 * @apiUse ErrorOnServer
+			 * @apiErrorExample {json} Error-Response (500):
+			 *     HTTP/1.1 500 Server Error
+			 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+			 * @apiUse BadRequest
+			 * @apiErrorExample {json} Error-Response (4xx):
+			 *     HTTP/1.1 400 BadRequest Error
+			 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+			 */
 			.delete(function (req, res) {
 				var idToDelete = ObjectId(req.query.id);
 				if(idToDelete){
@@ -923,6 +1630,43 @@ module.exports = function(env, logger, amazon, router){
 			});
 
 	router.route('/admin/elearning/answers')
+	/**
+	 * @apiName Create_Elearning_Answer
+	 * @apiDescription Create an elearning answer
+	 * @apiGroup Elearning_API
+	 * @api {post} /api/admin/elearning/answers Create an elearning answer
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {Object} answer a answer object
+	 * @apiParam {String} id id of question to associate to
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -x POST -H "Authorization: Bearer " -d '{answer : {}, id: ''}' http://localhost:8080/api/admin/elearning/answers
+	 * @apiSuccess {Object} response.success the newly created answer
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     	 *        success : {
+     	 *
+     	 *        },
+     	 *        message : "A message"
+     	 *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+	 * @apiUse BadRequest
+	 * @apiErrorExample {json} Error-Response (4xx):
+	 *     HTTP/1.1 400 BadRequest Error
+	 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+	 */
 			.post(function (req, res) {
 				if(!req.body.answer){
 					handleError(res, null, 400, 6);
@@ -947,6 +1691,35 @@ module.exports = function(env, logger, amazon, router){
 					}
 				}
 			})
+			/**
+			 * @apiName Update_Elearning_Answer
+			 * @apiDescription Update an elearning answer
+			 * @apiGroup Elearning_API
+			 * @api {put} /api/admin/elearning/answers Update an elearning answer
+			 * @apiVersion 1.0.0
+			 * @apiPermission admin
+			 * @apiUse HeaderAuthorization
+			 * @apiParam {Object} answer a answer object
+			 * @apiExample {curl} Example usage:
+			 *     curl -i -x PUT -H "Authorization: Bearer " -d '{answer : {}}' http://localhost:8080/api/admin/elearning/answers?id=dnwadnwan8284y854nfg
+			 * @apiSuccess {Object} response.success an empty object
+			 * @apiSuccess {String} response.message A message
+			 * @apiSuccessExample {json} Success-Response:
+			 *     HTTP/1.1 200 OK
+			 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+			 * @apiUse ErrorOnServer
+			 * @apiErrorExample {json} Error-Response (500):
+			 *     HTTP/1.1 500 Server Error
+			 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+			 */
 			.put(function (req, res) {
 				var data = req.body.answer;
 				Answers.update({_id:req.query.id},{$set:data}, function(err, course) {
@@ -957,6 +1730,42 @@ module.exports = function(env, logger, amazon, router){
 					}
 				});
 			})
+			/**
+			 * @apiName Delete_Elearning_Answer
+			 * @apiDescription Delete an elearning answer
+			 * @apiGroup Elearning_API
+			 * @api {delete} /api/admin/elearning/answers Delete an elearning answer
+			 * @apiVersion 1.0.0
+			 * @apiPermission admin
+			 * @apiUse HeaderAuthorization
+			 * @apiParam {String} id the id of the answer
+			 * @apiExample {curl} Example usage:
+			 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/answers?id=dnwadnwan8284y854nfg
+			 * @apiSuccess {Object} response.success an empty object
+			 * @apiSuccess {String} response.message A message
+			 * @apiSuccessExample {json} Success-Response:
+			 *     HTTP/1.1 200 OK
+			 *     {
+     	 	 *        success : {
+     	 	 *
+     	 	 *        },
+     	 	 *        message : "A message"
+     	 	 *     }
+			 * @apiUse ErrorOnServer
+			 * @apiErrorExample {json} Error-Response (500):
+			 *     HTTP/1.1 500 Server Error
+			 *     {
+     	 	 *          error: "",
+     	 	 *          data: {}
+     	 	 *     }
+			 * @apiUse BadRequest
+			 * @apiErrorExample {json} Error-Response (4xx):
+			 *     HTTP/1.1 400 BadRequest Error
+			 *     {
+     	 *          error: "",
+     	 *          data: {}
+     	 *     }
+			 */
 			.delete(function (req, res) {
 				var idToDelete = ObjectId(req.query.id);
 				if(idToDelete){
@@ -981,6 +1790,43 @@ module.exports = function(env, logger, amazon, router){
 			});
 
 	router.route('/elearning/courses')
+	/**
+	 * @apiName Get_Elearning_Courses_For_Medic
+	 * @apiDescription Retrieve a list of elearning courses / a single course (for medic section)
+	 * @apiGroup Elearning_API
+	 * @api {get} /api/elearning/courses Retrieve a list of elearning courses / a single course (for medic section)
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {String} [id] the id of a course
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/elearning/courses?id=wdnan828dnwdwoogr
+	 * @apiSuccess {Object} response.success a single course / an array of courses
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+	 * @apiSuccessExample {json} Success-Response (with id):
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 	    .get(function (req, res) {
 	    	if(req.query.id){
 				ContentVerifier.getContentById(Courses,req.query.id,false,false,'enabled','','groupsID',true).then(
@@ -1009,6 +1855,41 @@ module.exports = function(env, logger, amazon, router){
 	    });
 
 	router.route('/elearning/subchapters')
+	/**
+	 * @apiName Get_Elearning_Subchapter_For_Medic
+	 * @apiDescription Retrieve a single subchapter (for medic section)
+	 * @apiGroup Elearning_API
+	 * @api {get} /api/elearning/subchapters Retrieve a single subchapter (for medic section)
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {String} id the id of a subchapter
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/elearning/subchapters?id=wdnan828dnwdwoogr
+	 * @apiSuccess {Object} response.success a single subchapter
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response :
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 * @apiErrorExample {json} Error-Response (4xx):
+	 *     HTTP/1.1 400 BadRequest Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 		.get(function(req, res){
 			if(!req.query.id){
 				return handleError(res, false, 400, 6);
@@ -1026,6 +1907,41 @@ module.exports = function(env, logger, amazon, router){
 		});
 
 	router.route('/elearning/slides')
+	/**
+	 * @apiName Get_Elearning_Slide_For_Medic
+	 * @apiDescription Retrieve a single slide (for medic section)
+	 * @apiGroup Elearning_API
+	 * @api {get} /api/elearning/slides Retrieve a single slide (for medic section)
+	 * @apiVersion 1.0.0
+	 * @apiPermission admin
+	 * @apiUse HeaderAuthorization
+	 * @apiParam {Array} id the id of a slide
+	 * @apiExample {curl} Example usage:
+	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/elearning/slides?id=wdnan828dnwdwoogr
+	 * @apiSuccess {Object} response.success a single slide
+	 * @apiSuccess {String} response.message A message
+	 * @apiSuccessExample {json} Success-Response :
+	 *     HTTP/1.1 200 OK
+	 *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+	 * @apiUse ErrorOnServer
+	 * @apiErrorExample {json} Error-Response (500):
+	 *     HTTP/1.1 500 Server Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 * @apiErrorExample {json} Error-Response (4xx):
+	 *     HTTP/1.1 400 BadRequest Error
+	 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+	 */
 		.get(function(req, res){
 			if(!req.query.id){
 				handleError(res, false, 400, 6);
@@ -1060,6 +1976,42 @@ module.exports = function(env, logger, amazon, router){
 				);
 			}
 		})
+		/**
+		 * @apiName Post_Elearning_TestSlide_Answers
+		 * @apiDescription Post the answers of a test slide (for medic section)
+		 * @apiGroup Elearning_API
+		 * @api {post} /api/elearning/slides Post the answers of a test slide (for medic section)
+		 * @apiVersion 1.0.0
+		 * @apiPermission admin
+		 * @apiUse HeaderAuthorization
+		 * @apiParam {String} id the id of a slide
+		 * @apiParam {Object} qaMap an object mapping the question and the user's answer
+		 * @apiExample {curl} Example usage:
+		 *     curl -i -x POST -H "Authorization: Bearer " -d '{qid : aid}' http://localhost:8080/api/elearning/slides?id=wdnan828dnwdwoogr
+		 * @apiSuccess {Object} response.success an object containing the score
+		 * @apiSuccess {String} response.message A message
+		 * @apiSuccessExample {json} Success-Response :
+		 *     HTTP/1.1 200 OK
+		 *     {
+     *        success : {
+     *			21
+     *        },
+     *        message : "A message"
+     *     }
+		 * @apiUse ErrorOnServer
+		 * @apiErrorExample {json} Error-Response (500):
+		 *     HTTP/1.1 500 Server Error
+		 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+		 * @apiErrorExample {json} Error-Response (4xx):
+		 *     HTTP/1.1 400 BadRequest Error
+		 *     {
+     *          error: "",
+     *          data: {}
+     *     }
+		 */
 		.post(function(req, res){
 			//this route is for validating a user's test
 			if(!req.query.id){
