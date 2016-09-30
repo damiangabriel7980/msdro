@@ -59,6 +59,45 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
     //========================================================================================================================================== all routes
 
 
+    /**
+     * @apiName Retrieve_NewsPost
+     * @apiDescription Retrieve a news post / multiple news posts based on the create date
+     * @apiGroup MSD_DOC
+     * @api {get} /apiMSDDoc/newsPost/ Retrieve a news post / multiple news posts based on the create date
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} [pageSize] How many news posts we want to receive (for multiple news posts)
+     * @apiParam {String} id The id of the news post (the other two parameters don't apply if used)
+     * @apiParam {String} created The date the news post was created (for multiple news posts)
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiMSDDoc/newsPost?id=90cwwdadwadawf1&pageSize=10&created=08/22/2016
+     * @apiSuccess {Object} response.success a news post object / multiple news posts objects
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiSuccessExample {json} Success-Response (without id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     //========    NEWS POST    =======//
     router.route('/newsPost')
         .get(function(req,res){
@@ -88,6 +127,36 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                     });
             }
         })
+        /**
+         * @apiName Create_News_Post
+         * @apiDescription Create a news post
+         * @apiGroup MSD_DOC
+         * @api {post} /apiMSDDoc/newsPost/ Create a news post
+         * @apiVersion 1.0.0
+         * @apiPermission medic
+         * @apiUse HeaderAuthorization
+         * @apiParam {String} title The news post title
+         * @apiParam {String} message The news post content
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -H "Authorization: Bearer " -d '{title: '', message: ''}' http://localhost:8080/apiMSDDoc/newsPost
+         * @apiSuccess {Object} response.success the newly created news post object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
     .post(function(req,res){
         var userData = req.user;
         var MyNewsPost = new NewsPost();
@@ -112,7 +181,52 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
 
 
     //========  MEDICS  =======//
-
+    /**
+     * @apiName Retrieve_Medics
+     * @apiDescription Retrieve a medic / multiple medics
+     * @apiGroup MSD_DOC
+     * @api {get} /apiMSDDoc/medics/ Retrieve a medic / multiple medics
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} [pageSize] How many medics we want to receive (for multiple medics)
+     * @apiParam {String} id The id of the medic (the other two parameters don't apply if used)
+     * @apiParam {Number} skip How many medics we want to skip from the beginning of the query results
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiMSDDoc/medics?id=null&pageSize=10&skip=20
+     * @apiSuccess {Object} response.success a medic object / multiple medic objects
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiSuccessExample {json} Success-Response (without id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/medics')
         .get(function(req,res){
             var id = req.query.id;
@@ -204,6 +318,37 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
     //========    CHAT    =======//
 
     router.route('/chats')
+    /**
+     * @apiName Retrieve_Chats
+     * @apiDescription Retrieve a list of chats the current user has participated
+     * @apiGroup MSD_DOC
+     * @api {get} /apiMSDDoc/chats/ Retrieve a list of chats the current user has participated
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} [pageSize] How many medics we want to receive (for multiple medics)
+     * @apiParam {String} created Filter chats by the created date
+     * @apiParam {String} type The type of a chat (can be null or 'topic')
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiMSDDoc/chats?type=topic&pageSize=10&created=22/08/2016
+     * @apiSuccess {Array} response.success A list of chats
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req,res){
             var user = req.user;
             var created=req.query.created;
@@ -226,6 +371,45 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                 }
             });
         })
+        /**
+         * @apiName Create_Chat_Thread
+         * @apiDescription Create a chat thread
+         * @apiGroup MSD_DOC
+         * @api {post} /apiMSDDoc/chats/ Create a chat thread
+         * @apiVersion 1.0.0
+         * @apiPermission medic
+         * @apiUse HeaderAuthorization
+         * @apiParam {String} userId The id of the user creating the chat
+         * @apiParam {String} postId The id of the news post we want to create a chat
+         * @apiParam {String} postOwner The owner of the post
+         * @apiParam {String} type The type of a chat (can be null, 'userBased' or 'postBased')
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -H "Authorization: Bearer " -d '{userId: '', postId: '', postOwner: '', type: ''}' http://localhost:8080/apiMSDDoc/chats
+         * @apiSuccess {Object} response.success The newly created chat
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         * @apiUse BadRequest
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 BadRequest Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var userData = req.user;
 
@@ -298,6 +482,43 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
                 handleError(res, null, 400);
             }
         })
+        /**
+         * @apiName Subscribe_Unsubscribe_Chat_Thread
+         * @apiDescription Subscribe / un-subscribe to a chat thread
+         * @apiGroup MSD_DOC
+         * @api {put} /apiMSDDoc/chats/ Subscribe / un-subscribe to a chat thread
+         * @apiVersion 1.0.0
+         * @apiPermission medic
+         * @apiUse HeaderAuthorization
+         * @apiParam {String} chatId The id of the chat
+         * @apiParam {Boolean} subscribe If true, the user will subscribe to a chat thread
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -H "Authorization: Bearer " http://localhost:8080/apiMSDDoc/chats?chatId=21nf387r32rn23ndf&subscribe=true
+         * @apiSuccess {Object} response.success An empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         * @apiUse BadRequest
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 BadRequest Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var keepGoing = true;
 
@@ -341,6 +562,42 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
     };
 
     router.route('/image/profile')
+        /**
+         * @apiName Update_Profile_Image
+         * @apiDescription Update user profile picture
+         * @apiGroup MSD_DOC
+         * @api {post} /apiMSDDoc/image/profile Update user profile picture
+         * @apiVersion 1.0.0
+         * @apiPermission medic
+         * @apiUse HeaderAuthorization
+         * @apiParam {String} files.file The image file
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -H "Authorization: Bearer " --data-binary "@path/to/file" http://localhost:8080/apiMSDDoc/image/profile
+         * @apiSuccess {Object} response.success An object containing the path to the image
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         * @apiUse EntityNotFound
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 404 EntityNotFound Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var file = getFile(req);
             if(file){
@@ -358,6 +615,43 @@ module.exports = function(app, env, logger, tokenSecret, socketServer, router) {
         });
 
     router.route('/image/newspost')
+        /**
+         * @apiName News_Post_Image
+         * @apiDescription Attach a image to a news post
+         * @apiGroup MSD_DOC
+         * @api {post} /apiMSDDoc/image/newspost Attach a image to a news post
+         * @apiVersion 1.0.0
+         * @apiPermission medic
+         * @apiUse HeaderAuthorization
+         * @apiParam {String} files.file The image file
+         * @apiParam {String} id The id of the news post
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -H "Authorization: Bearer " --data-binary "@path/to/file" http://localhost:8080/apiMSDDoc/image/newspost?id=du8awd822313fnnf
+         * @apiSuccess {Object} response.success An object containing the path to the image
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message : "A message"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         * @apiUse BadRequest
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 BadRequest Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             //get necessary params
             var file = getFile(req);
