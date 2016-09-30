@@ -62,6 +62,34 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
 
     //route for retrieving environment info; CAREFUL NOT TO INCLUDE SENSIBLE DATA
     router.route('/appSettings')
+    /**
+     * @apiName Retrieve_Amazon_Bucket
+     * @apiDescription Retrieve Amazon Bucket
+     * @apiGroup Global_API
+     * @api {get} /apiGloballyShared/appSettings/ Retrieve Amazon Bucket
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiGloballyShared/appSettings
+     * @apiSuccess {Object} response.success an object containing the link to the Amazon bucket
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *          amazonPrefix: ''
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             handleSuccess(res, {
                 amazonPrefix: env.amazonPrefix + env.amazonBucket + "/"
@@ -356,6 +384,45 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         });
     };
 
+    /**
+     * @apiName Create_Staywell_Account
+     * @apiDescription Create a Staywell account
+     * @apiGroup Global_API
+     * @api {post} /apiGloballyShared/createAccountStaywell/ Create a Staywell account
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {Object} user a user object containing the following properties:
+     *   title, name, email, password, registeredFrom, job, profession,
+     *   groupsID, address, citiesID, practiceType, phone, subscriptions, specialty
+     * @apiParam {Object} activation Contains the properties : type - can be 'code' or 'file' and value - can be file or code string
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -H "Authorization: Bearer " -d '{user: {}, activation: {}}' http://localhost:8080/apiGloballyShared/createAccountStaywell
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse BadRequest
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 400 BadRequest Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/createAccountStaywell')
         .post(validateCreateAccount, validateCompleteProfile, createAccount, uploadProof, function (req, res) {
             var info = {
@@ -402,6 +469,45 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             }
         });
 
+    /**
+     * @apiName Complete_Staywell_Account
+     * @apiDescription Complete Staywell account
+     * @apiGroup Global_API
+     * @api {post} /apiGloballyShared/completeProfile/ Complete Staywell account
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {Object} user a user object containing the following properties:
+     *   title, name, email, password, registeredFrom, job, profession,
+     *   groupsID, address, citiesID, practiceType, phone, subscriptions, specialty
+     * @apiParam {Object} activation Contains the properties : type - can be 'code' or 'file' and value - can be file or code string
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -H "Authorization: Bearer " -d '{user: {}, activation: {}}' http://localhost:8080/apiGloballyShared/completeProfile
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse BadRequest
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 400 BadRequest Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/completeProfile')
         .post(Auth.isLoggedIn, validateCompleteProfile, completeProfile, uploadProof, function (req,res) {
             var info = {
@@ -414,6 +520,43 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             notifyAdmin(req.user._id);
         });
 
+    /**
+     * @apiName Create_Staywell_Account_Mobile
+     * @apiDescription Create a Staywell account (mobile only)
+     * @apiGroup Global_API
+     * @api {post} /apiGloballyShared/createAccountMobile/ Create a Staywell account (mobile only)
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {Object} user a user object containing the following properties:
+     *   title, name, email, password, registeredFrom, job
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -H "Authorization: Bearer " -d '{user: {}}' http://localhost:8080/apiGloballyShared/createAccountMobile
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse BadRequest
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 400 BadRequest Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/createAccountMobile')
         .post(validateCreateAccount, createAccount, function (req, res) {
             var info = {
@@ -459,6 +602,34 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             });
         });
 
+    /**
+     * @apiName Retrieve_Professions
+     * @apiDescription Retrieve a list of professions
+     * @apiGroup Global_API
+     * @api {get} /apiGloballyShared/accountActivation/professions Retrieve a list of professions
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiGloballyShared/accountActivation/professions
+     * @apiSuccess {Array} response.success an array of professions
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/accountActivation/professions')
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
@@ -469,6 +640,34 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                 }
             });
         });
+    /**
+     * @apiName Retrieve_specialties
+     * @apiDescription Retrieve a list of specialties
+     * @apiGroup Global_API
+     * @api {get} /apiGloballyShared/accountActivation/specialty Retrieve a list of specialties
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiGloballyShared/accountActivation/specialty
+     * @apiSuccess {Array} response.success an array of specialties
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/accountActivation/specialty')
         .get(function (req, res) {
             Speciality.find({enabled: true}).exec(function (err, specialities) {
@@ -479,7 +678,35 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                 }
             });
         });
-
+    /**
+     * @apiName Retrieve_groups
+     * @apiDescription Retrieve a list of groups based on profession
+     * @apiGroup Global_API
+     * @api {get} /apiGloballyShared/accountActivation/signupGroups/:profession Retrieve a list of groups based on profession
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} profession The id of the profession
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiGloballyShared/accountActivation/signupGroups/215r25fqfwfdf2
+     * @apiSuccess {Array} response.success an array of groups
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/accountActivation/signupGroups/:profession')
         .get(function (req, res) {
             var profession = req.params.profession;
@@ -497,6 +724,34 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             }
         });
 
+    /**
+     * @apiName Retrieve_counties
+     * @apiDescription Retrieve a list of counties
+     * @apiGroup Global_API
+     * @api {get} /apiGloballyShared/accountActivation/specialty Retrieve a list of counties
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiGloballyShared/accountActivation/counties
+     * @apiSuccess {Array} response.success an array of counties
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/accountActivation/counties')
         .get(function (req, res) {
             Counties.find({}).sort({name: 1}).exec(function (err, counties) {
@@ -508,6 +763,35 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             });
         });
 
+    /**
+     * @apiName Retrieve_cities
+     * @apiDescription Retrieve a list of cities from a county
+     * @apiGroup Global_API
+     * @api {get} /apiGloballyShared/accountActivation/cities Retrieve a list of cities from a county
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} county the id of the county
+     * @apiExample {curl} Example usage:
+     *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiGloballyShared/accountActivation/cities
+     * @apiSuccess {Array} response.success an array of cities
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/accountActivation/cities')
         .get(function (req, res) {
             if(!req.query.county){
@@ -527,6 +811,42 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
 
 
 //============================================================================================= generate token for resetting user password
+    /**
+     * @apiName Request_Password_Reset
+     * @apiDescription Request password reset
+     * @apiGroup Global_API
+     * @api {post} /apiGloballyShared/requestPasswordReset Request password reset
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiUse HeaderAuthorization
+     * @apiParam {String} email the user's email
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -H "Authorization: Bearer " -d '{email : ''}' http://localhost:8080/apiGloballyShared/requestPasswordReset
+     * @apiSuccess {Object} response.success an object containing the email the reset password email was sent to
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *          mailto: ''
+     *        },
+     *        message : "A message"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse BadRequest
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 400 BadRequest Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/requestPasswordReset')
         .post(function(req, res) {
             
