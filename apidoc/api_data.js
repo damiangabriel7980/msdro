@@ -1,5 +1,709 @@
 define({ "api": [
   {
+    "name": "Create_Newsletter_Campaign",
+    "description": "<p>Create a newsletter campaign</p>",
+    "group": "Admin_API",
+    "type": "post",
+    "url": "/api/admin/newsletter/campaigns",
+    "title": "Create a newsletter campaign",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "clone",
+            "description": "<p>the id of the campaign we want to clone</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x POST http://localhost:8080/api/admin/newsletter/campaigns?clone=0210infnf93f813s",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>the newly created template / an empty object if we clone a campaign</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Create_Newsletter_Distribution_List",
+    "description": "<p>Create a newsletter distribution list</p>",
+    "group": "Admin_API",
+    "type": "post",
+    "url": "/api/admin/newsletter/distribution_lists",
+    "title": "Create a newsletter distribution list",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x POST http://localhost:8080/api/admin/newsletter/distribution_lists",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>the newly created distribution list</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Create_Newsletter_Template",
+    "description": "<p>Create a newsletter template</p>",
+    "group": "Admin_API",
+    "type": "post",
+    "url": "/api/admin/newsletter/templates",
+    "title": "Create a newsletter template",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x POST http://localhost:8080/api/admin/newsletter/templates",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>the newly created template</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Delete_Newsletter_Campaign",
+    "description": "<p>Delete a newsletter campaign</p>",
+    "group": "Admin_API",
+    "type": "delete",
+    "url": "/api/admin/newsletter/campaigns",
+    "title": "Delete a newsletter campaign",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the campaign</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x DELETE http://localhost:8080/api/admin/newsletter/campaigns?id=jdwkandnadnawnfwubfabf",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an empty object</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Delete_Newsletter_Distribution_list",
+    "description": "<p>Delete a newsletter distribution list</p>",
+    "group": "Admin_API",
+    "type": "delete",
+    "url": "/api/admin/newsletter/distribution_lists",
+    "title": "Delete a newsletter distribution list",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the distribution list</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x DELETE http://localhost:8080/api/admin/newsletter/distribution_lists?id=jdwkandnadnawnfwubfabf",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an empty object</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Delete_Newsletter_Template",
+    "description": "<p>Delete a newsletter template</p>",
+    "group": "Admin_API",
+    "type": "delete",
+    "url": "/api/admin/newsletter/templates",
+    "title": "Delete a newsletter template",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the template</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x DELETE http://localhost:8080/api/admin/newsletter/templates?id=wndkandandawodjaw",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an empty object</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Newsletter_Campaigns",
+    "description": "<p>Retrieve a list of newsletter campaigns / a single campaign</p>",
+    "group": "Admin_API",
+    "type": "get",
+    "url": "/api/admin/newsletter/templates",
+    "title": "Retrieve a list of newsletter campaigns / a single campaign",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the camapign</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:8080/api/admin/newsletter/campaigns?id=null",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an array of campaigns / an object with a campaign</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : [{\n\n   }],\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response (with id):",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Newsletter_Distribution_Lists",
+    "description": "<p>Retrieve a list of distribution lists / a single distribution list</p>",
+    "group": "Admin_API",
+    "type": "get",
+    "url": "/api/admin/newsletter/distribution_lists",
+    "title": "Retrieve a list of distribution lists / a single distribution list",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the distribution list</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:8080/api/admin/newsletter/distribution_lists?id=null",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an array of distribution lists / an object with a distribution list</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : [{\n\n   }],\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response (with id):",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
     "name": "Newsletter_Statistics",
     "description": "<p>Retrieve newsletter statistics</p>",
     "group": "Admin_API",
@@ -27,7 +731,7 @@ define({ "api": [
             "type": "String",
             "optional": true,
             "field": "campaign",
-            "description": "<p>The id of the campaign</p>"
+            "description": "<p>The id of a newsletter campaign</p>"
           }
         ]
       }
@@ -96,6 +800,568 @@ define({ "api": [
             "optional": false,
             "field": "EntityNotFound",
             "description": "<p>Error - Entity not found</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Newsletter_Templates",
+    "description": "<p>Retrieve a list of newsletter templates</p>",
+    "group": "Admin_API",
+    "type": "get",
+    "url": "/api/admin/newsletter/templates",
+    "title": "Retrieve a list of newsletter templates",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the template</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "returnTypes",
+            "description": "<p>if true, the newsletter types are returned</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>filter newsletters by type (can be header, content or footer)</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:8080/api/admin/newsletter/templates?id=null&type=header",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an array of templates</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : [{\n\n   }],\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Newsletter_Unsubscribed",
+    "description": "<p>Retrieve a list of users who unsubscribed from MSD Newsletter</p>",
+    "group": "Admin_API",
+    "type": "post",
+    "url": "/api/admin/newsletter/unsubscribedEmails",
+    "title": "Retrieve a list of users who unsubscribed from MSD Newsletter",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:8080/api/admin/newsletter/unsubscribedEmails",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an array with users</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : [{\n\n   }],\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Newsletter_Users_Unsubscribed_Yet",
+    "description": "<p>Retrieve a list of users who haven't subscribed to the newsletter yet</p>",
+    "group": "Admin_API",
+    "type": "post",
+    "url": "/api/admin/newsletter/users",
+    "title": "Retrieve a list of users who haven't subscribed to the newsletter yet",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "unsubscribed",
+            "description": "<p>if the user haven't subscribed to the newsletter</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:8080/api/admin/newsletter/users?unsubscribed=true",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Array",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>an array with users</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : [{\n\n   }],\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Update_Newsletter_Campaign",
+    "description": "<p>Update a newsletter campaign</p>",
+    "group": "Admin_API",
+    "type": "put",
+    "url": "/api/admin/newsletter/campaigns",
+    "title": "Update a newsletter campaign",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the campaign</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "obj",
+            "description": "<p>a campaign object</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x PUT -d '{}' http://localhost:8080/api/admin/newsletter/templates?id=jwiadjij141441mdd",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>the updated campaign</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Update_Newsletter_Distribution_List",
+    "description": "<p>Update a newsletter distribution list</p>",
+    "group": "Admin_API",
+    "type": "put",
+    "url": "/api/admin/newsletter/distribution_lists",
+    "title": "Update a newsletter distribution list",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the template</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "obj",
+            "description": "<p>a distribution list object</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x PUT -d '{}' http://localhost:8080/api/admin/newsletter/distribution_lists?id=0nncknkwawa",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>the updated distribution list</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
+          }
+        ]
+      }
+    },
+    "filename": "app/api/index.js",
+    "groupTitle": "Admin_API"
+  },
+  {
+    "name": "Update_Newsletter_Template",
+    "description": "<p>Update a newsletter template</p>",
+    "group": "Admin_API",
+    "type": "put",
+    "url": "/api/admin/newsletter/templates",
+    "title": "Update a newsletter template",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "admin",
+        "title": "Only users with admin rights can access this route",
+        "description": ""
+      },
+      {
+        "name": "devModeAdmin",
+        "title": "In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with admin rights)",
+        "description": ""
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the template</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "obj",
+            "description": "<p>a template object</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i -x PUT -d '{}' http://localhost:8080/api/admin/newsletter/templates?id=dknwandandwaid",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "response.success",
+            "description": "<p>the updated template</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "response.message",
+            "description": "<p>A message</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   success : {\n\n   },\n   message: \"Cererea a fost procesata cu succes!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response (500):",
+          "content": "HTTP/1.1 500 Server Error\n{\n     error: \"\",\n     data: {}\n}",
+          "type": "json"
+        }
+      ],
+      "fields": {
+        "Error 500": [
+          {
+            "group": "Error 500",
+            "type": "Object",
+            "optional": false,
+            "field": "ServerError",
+            "description": "<p>The requested operation could not be executed</p>"
           }
         ]
       }
@@ -8204,49 +9470,6 @@ define({ "api": [
   },
   {
     "name": "Login",
-    "description": "<p>User login redirect</p>",
-    "group": "Main_Routes",
-    "type": "get",
-    "url": "/login",
-    "title": "User login",
-    "version": "1.0.0",
-    "permission": [
-      {
-        "name": "none"
-      }
-    ],
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://localhost:8080/login",
-        "type": "curl"
-      }
-    ],
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "html",
-            "optional": false,
-            "field": "response",
-            "description": "<p>a HTML page</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   accepted: true\n}",
-          "type": "HTML"
-        }
-      ]
-    },
-    "filename": "app/routes.js",
-    "groupTitle": "Main_Routes"
-  },
-  {
-    "name": "Login",
     "description": "<p>User login</p>",
     "group": "Main_Routes",
     "type": "post",
@@ -8336,6 +9559,49 @@ define({ "api": [
           }
         ]
       }
+    },
+    "filename": "app/routes.js",
+    "groupTitle": "Main_Routes"
+  },
+  {
+    "name": "Login",
+    "description": "<p>User login redirect</p>",
+    "group": "Main_Routes",
+    "type": "get",
+    "url": "/login",
+    "title": "User login",
+    "version": "1.0.0",
+    "permission": [
+      {
+        "name": "none"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost:8080/login",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "html",
+            "optional": false,
+            "field": "response",
+            "description": "<p>a HTML page</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   accepted: true\n}",
+          "type": "HTML"
+        }
+      ]
     },
     "filename": "app/routes.js",
     "groupTitle": "Main_Routes"

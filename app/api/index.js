@@ -3879,6 +3879,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     };
 
     router.route('/admin/newsletter/distribution_lists')
+    /**
+     * @apiName Newsletter_Distribution_Lists
+     * @apiDescription Retrieve a list of distribution lists / a single distribution list
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/newsletter/distribution_lists Retrieve a list of distribution lists / a single distribution list
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the distribution list
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/newsletter/distribution_lists?id=null
+     * @apiSuccess {Array} response.success an array of distribution lists / an object with a distribution list
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 Newsletter.distributionLists.findOne({_id: req.query.id}).populate('user_groups').exec(function (err, newsletter) {
@@ -3898,6 +3935,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Newsletter_Distribution_List
+         * @apiDescription Create a newsletter distribution list
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/newsletter/distribution_lists Create a newsletter distribution list
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/newsletter/distribution_lists
+         * @apiSuccess {Object} response.success the newly created distribution list
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .post(function (req, res) {
             var list = new Newsletter.distributionLists({
                 name: "Untitled",
@@ -3911,6 +3976,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Newsletter_Distribution_List
+         * @apiDescription Update a newsletter distribution list
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/newsletter/distribution_lists Update a newsletter distribution list
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the template
+         * @apiParam {Object} obj a distribution list object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/newsletter/distribution_lists?id=0nncknkwawa
+         * @apiSuccess {Object} response.success the updated distribution list
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .put(function (req, res) {
             UtilsModule.discardFields(req.body, ["_id"]);
             Newsletter.distributionLists.findOne({_id: req.query.id}, function (err, list) {
@@ -3930,6 +4025,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Newsletter_Distribution_list
+         * @apiDescription Delete a newsletter distribution list
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/newsletter/distribution_lists Delete a newsletter distribution list
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the distribution list
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/newsletter/distribution_lists?id=jdwkandnadnawnfwubfabf
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Newsletter.distributionLists.remove({_id: idToDelete}, function (err, wres) {
@@ -3942,6 +4066,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/newsletter/campaigns')
+    /**
+     * @apiName Newsletter_Campaigns
+     * @apiDescription Retrieve a list of newsletter campaigns / a single campaign
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/newsletter/templates Retrieve a list of newsletter campaigns / a single campaign
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the camapign
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/newsletter/campaigns?id=null
+     * @apiSuccess {Array} response.success an array of campaigns / an object with a campaign
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 Newsletter.campaigns.findOne({_id: req.query.id}).populate("distribution_lists").exec(function (err, campaign) {
@@ -3966,6 +4127,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Newsletter_Campaign
+         * @apiDescription Create a newsletter campaign
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/newsletter/campaigns Create a newsletter campaign
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} [clone] the id of the campaign we want to clone
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/newsletter/campaigns?clone=0210infnf93f813s
+         * @apiSuccess {Object} response.success the newly created template / an empty object if we clone a campaign
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .post(function (req, res) {
             if(req.query.clone){
                 Newsletter.campaigns.findOne({_id: req.query.clone}, function (err, campaign) {
@@ -4005,6 +4195,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Update_Newsletter_Campaign
+         * @apiDescription Update a newsletter campaign
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/newsletter/campaigns Update a newsletter campaign
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the campaign
+         * @apiParam {Object} obj a campaign object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/newsletter/templates?id=jwiadjij141441mdd
+         * @apiSuccess {Object} response.success the updated campaign
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .put(function (req, res) {
             UtilsModule.discardFields(req.body, ["_id", "date_created", "status"]);
             Newsletter.campaigns.findOne({_id: req.query.id, status: "not sent"}, function (err, campaign) {
@@ -4024,6 +4244,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Newsletter_Campaign
+         * @apiDescription Delete a newsletter campaign
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/newsletter/campaigns Delete a newsletter campaign
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the campaign
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/newsletter/campaigns?id=jdwkandnadnawnfwubfabf
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Newsletter.campaigns.update({_id: idToDelete}, {$set: {deleted: true}}, function (err, wres) {
@@ -4035,6 +4284,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Newsletter_Templates
+     * @apiDescription Retrieve a list of newsletter templates
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/newsletter/templates Retrieve a list of newsletter templates
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the template
+     * @apiParam {Boolean} [returnTypes] if true, the newsletter types are returned
+     * @apiParam {String} type filter newsletters by type (can be header, content or footer)
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/newsletter/templates?id=null&type=header
+     * @apiSuccess {Array} response.success an array of templates
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/admin/newsletter/templates')
         .get(function (req, res) {
             if(req.query.id){
@@ -4061,6 +4341,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Newsletter_Template
+         * @apiDescription Create a newsletter template
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/newsletter/templates Create a newsletter template
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/newsletter/templates
+         * @apiSuccess {Object} response.success the newly created template
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .post(function (req, res) {
             var template = new Newsletter.templates({
                 name: "Untitled",
@@ -4074,6 +4382,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Newsletter_Template
+         * @apiDescription Update a newsletter template
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/newsletter/templates Update a newsletter template
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the template
+         * @apiParam {Object} obj a template object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/newsletter/templates?id=dknwandandwaid
+         * @apiSuccess {Object} response.success the updated template
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .put(function (req, res) {
             UtilsModule.discardFields(req.body, ["_id"]);
             Newsletter.templates.findOne({_id: req.query.id}, function (err, template) {
@@ -4093,6 +4431,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Newsletter_Template
+         * @apiDescription Delete a newsletter template
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/newsletter/templates Delete a newsletter template
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the template
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/newsletter/templates?id=wndkandandawodjaw
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Newsletter.templates.remove({_id: idToDelete}, function (err, wres) {
@@ -4104,6 +4471,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Newsletter_Users_Unsubscribed_Yet
+     * @apiDescription Retrieve a list of users who haven't subscribed to the newsletter yet
+     * @apiGroup Admin_API
+     * @api {post} /api/admin/newsletter/users Retrieve a list of users who haven't subscribed to the newsletter yet
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Boolean} unsubscribed if the user haven't subscribed to the newsletter
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/newsletter/users?unsubscribed=true
+     * @apiSuccess {Array} response.success an array with users
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/admin/newsletter/users')
         .get(function (req, res) {
             if(req.query.unsubscribed){
@@ -4119,6 +4515,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    /**
+     * @apiName Newsletter_Unsubscribed
+     * @apiDescription Retrieve a list of users who unsubscribed from MSD Newsletter
+     * @apiGroup Admin_API
+     * @api {post} /api/admin/newsletter/unsubscribedEmails Retrieve a list of users who unsubscribed from MSD Newsletter
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/newsletter/unsubscribedEmails
+     * @apiSuccess {Array} response.success an array with users
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/admin/newsletter/unsubscribedEmails')
         .get(function (req, res) {
             Newsletter.unsubscribers.find({}).exec(function (err, people) {
@@ -4138,7 +4562,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
      * @apiVersion 1.0.0
      * @apiPermission admin
      * @apiPermission devModeAdmin
-     * @apiParam {String} [campaign] The id of the campaign
+     * @apiParam {String} [campaign] The id of a newsletter campaign
      * @apiExample {curl} Example usage:
      *     curl -i http://localhost:8080/api/admin/newsletter/statistics?campaign=null
      * @apiSuccess {Object} response.success an object with statistics
