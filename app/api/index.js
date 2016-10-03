@@ -4166,7 +4166,42 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     //==================================================================================================================================== USER ROUTES
-
+    /**
+     * @apiName Change_User_Profile_Pic
+     * @apiDescription Change user's profile pic
+     * @apiGroup Medic_API
+     * @api {post} /api/user/addPhoto Change user's profile pic
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} data An object containing the new picture
+     * @apiExample {curl} Example usage:
+     *     curl -i  -x POST -d '{data : {Body: '', extension: ''}}' http://localhost:8080/api/user/addPhoto
+     * @apiSuccess {Array} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse BadRequest
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 400 BadRequest Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/user/addPhoto')
         .post(function(req,res){
             var data = req.body.data || {};
@@ -4199,6 +4234,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
             });
         });
+    /**
+     * @apiName Retrieve_Special_Product_By_Group
+     * @apiDescription Retrieve an array of special products by a user's special group
+     * @apiGroup Medic_API
+     * @api {get} /api/specialFeatures/groupSpecialProducts Retrieve an array of special products by a user's special group
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} specialGroup The id of the special group the user belongs
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialFeatures/groupSpecialProducts?id=dawiy8271515h125s
+     * @apiSuccess {Array} response.success an array with special products associated with the special group
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialFeatures/groupSpecialProducts')
         .get(function(req, res) {
             specialProduct.find({groups: {$in: [req.query.specialGroup]}, enabled: true}, function(err, product) {
@@ -4211,7 +4275,50 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
+    /**
+     * @apiName Retrieve_Special_Apps
+     * @apiDescription Retrieve an array of special apps / a single special app (hybrid apps)
+     * @apiGroup Medic_API
+     * @api {get} /api/specialFeatures/specialApps Retrieve an array of special apps / a single special app (hybrid apps)
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} [id] The id of the special app
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialFeatures/specialApps?id=dawiy8271515h125s
+     * @apiSuccess {Array} response.success an array with special apps objects / a single special app
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (no id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialFeatures/specialApps')
         .get(function (req, res) {
             if(req.query.id){
@@ -4237,6 +4344,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    /**
+     * @apiName Retrieve_Default_Group
+     * @apiDescription Retrieve the default group of the user
+     * @apiGroup Medic_API
+     * @api {get} /api/defaultPharma Retrieve the default group of the user
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/defaultPharma
+     * @apiSuccess {Object} response.success an object with the default group
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/defaultPharma')
 
         .get(function(req, res) {
@@ -4250,7 +4385,51 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
+    /**
+     * @apiName Retrieve_Special_Product
+     * @apiDescription Retrieve a special product
+     * @apiGroup Medic_API
+     * @api {get} /api/specialProductMenu Retrieve a special product's menu
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} id The id of the special product
+     * @apiParam {String} idPathology Filter special products by pathology (0 means no filter)
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialProduct?id=null&idPathology=wjdjadada924142nn24
+     * @apiSuccess {Array} response.success an array containing special products / a single special product
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (no id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialProduct')
         .get(function(req, res) {
             if(req.query.id){
@@ -4290,6 +4469,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 )
             }
         });
+    /**
+     * @apiName Retrieve_Special_Product_Menu
+     * @apiDescription Retrieve a special product's menu
+     * @apiGroup Medic_API
+     * @api {get} /api/specialProductMenu Retrieve a special product's menu
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} id The id of the special product
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialProductMenu?id=dnjwandawh8264y181b241
+     * @apiSuccess {Array} response.success an array containing the menu of the product
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialProductMenu')
         .get(function(req, res) {
             getSpecialProductMenu(req.query.id).then(
@@ -4301,6 +4509,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             )
         });
+    /**
+     * @apiName Retrieve_Special_Product_Description
+     * @apiDescription Retrieve a special product menu item
+     * @apiGroup Medic_API
+     * @api {get} /api/specialProductDescription Retrieve a special product menu item
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} id The id of the special product
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialProductDescription?id=dnjwandawh8264y181b241
+     * @apiSuccess {Object} response.success an object containing a menu item
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialProductDescription')
         .get(function(req, res) {
             specialProductMenu.findOne({_id: req.query.id}).exec(function(err, details) {
@@ -4313,6 +4550,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+    /**
+     * @apiName Retrieve_Special_Product_Files
+     * @apiDescription Retrieve an array of files for a special product
+     * @apiGroup Medic_API
+     * @api {get} /api/specialProductFiles Retrieve an array of files for a special product
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} id The id of the special product
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialProductFiles?id=dnjwandawh8264y181b241
+     * @apiSuccess {Array} response.success an array of files objects
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialProductFiles')
         .get(function(req, res) {
             specialProductFiles.find({product: req.query.id}).exec(function(err, details) {
@@ -4325,6 +4591,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+    /**
+     * @apiName Retrieve_Special_Product_Glossary
+     * @apiDescription Retrieve an array of glossary objects for a special product
+     * @apiGroup Medic_API
+     * @api {get} /api/specialProductGlossary Retrieve a glossary array for a special product
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} id The id of the special product
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialProductGlossary?id=dnjwandawh8264y181b241
+     * @apiSuccess {Array} response.success an array of glossary objects
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialProductGlossary')
         .get(function(req, res) {
             specialProductGlossary.find({product: req.query.id}).exec(function(err, details) {
@@ -4337,7 +4632,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
+    /**
+     * @apiName Retrieve_Special_Product_Speaker
+     * @apiDescription Retrieve a speaker for a special product
+     * @apiGroup Medic_API
+     * @api {get} /api/specialProduct/speakers Retrieve a speaker for a special product
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} speaker_id The id of the speaker
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/specialProduct/speakers?speaker_id=dnjwandawh8264y181b241
+     * @apiSuccess {Object} response.success a speaker object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/specialProduct/speakers')
         .get(function (req, res) {
             Speakers.findOne({_id: req.query.speaker_id}, function (err, speaker) {
@@ -4348,6 +4671,51 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+    /**
+     * @apiName Retrieve_Articles
+     * @apiDescription Retrieve an array of articles / a single article
+     * @apiGroup Medic_API
+     * @api {get} /api/content Retrieve an array of articles / a single article
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} content_id The id of the article
+     * @apiPAram {Number} content_type The type of the content (1 = national, 2 = international or 3 = stiintific)
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/content?id=null&content_type=3
+     * @apiSuccess {Array} response.success an array of articles / a single article
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (with article id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (no article id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/content')
         .get(function(req, res) {
             if(req.query.content_id){
@@ -4383,6 +4751,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    /**
+     * @apiName Retrieve_User_Data
+     * @apiDescription Retrieve user data for profile page
+     * @apiGroup Medic_API
+     * @api {get} /api/userdata Retrieve user data for profile page
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/userdata
+     * @apiSuccess {Object} response.success an object containing the current user info
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/userdata')
 
         .get(function(req, res) {
@@ -4441,6 +4837,45 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_User_Data
+         * @apiDescription Update user's data
+         * @apiGroup Medic_API
+         * @api {put} /api/userdata Change User Job
+         * @apiVersion 1.0.0
+         * @apiPermission medic
+         * @apiPermission devModeMedic
+         * @apiParam {String} name the user's name
+         * @apiParam {String} title the user's title
+         * @apiParam {Array} therapeutic-areasID an array of therapeutic areas ids
+         * @apiParam {String} phone the user's phone number
+         * @apiParam {String} address the user's address
+         * @apiParam {Object} subscriptions subscribe to : newsletterStaywell or infoMSD
+         * @apiParam {Number} practiceType 1 = Public , 2 = Private
+         * @apiParam {Boolean} newsletter subscribe to newsletter
+         * @apiParam {Array} citiesID an array with the city which is the user's hometown
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{newData: {name: '' , title : '', phone:'', therapeutic-areasID: 3, address: '',
+         *     subscriptions: {newsletterStaywell: true, infoMSD: false},
+         *     practiceType: '', newsletter: '', citiesID: []}}' http://localhost:8080/api/userdata
+         * @apiSuccess {Array} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse BadRequest
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 BadRequest Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .put(function (req, res) {
             var ans = {};
 
@@ -4466,6 +4901,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    /**
+     * @apiName Retrieve_Counties
+     * @apiDescription Retrieve an array of counties
+     * @apiGroup Medic_API
+     * @api {get} /api/counties Retrieve an array of counties
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/counties
+     * @apiSuccess {Array} response.success an array of cities
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/counties')
 
         .get(function(req, res) {
@@ -4477,6 +4940,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Retrieve_Cities
+     * @apiDescription Retrieve an array of cities based on county name
+     * @apiGroup Medic_API
+     * @api {get} /api/cities Retrieve an array of cities based on county name
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} county_name The county's name
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/cities?county_name=Bucuresti
+     * @apiSuccess {Array} response.success an array of cities
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/cities')
 
         .get(function(req, res) {
@@ -4494,6 +4986,40 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Change_Job
+     * @apiDescription Change User Job
+     * @apiGroup Medic_API
+     * @api {post} /api/userJob Change User Job
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} street_number the street number
+     * @apiParam {String} street_name the street name
+     * @apiParam {String} job_name job name
+     * @apiParam {Number} job_type the job type (1 = Spital; 2 = CMI; 3 = Policlinica; 4 = Farmacie)
+     * @apiParam {String} postal_code the postal code
+     * @apiParam {String} job_address the job address
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{job: {street_number: '' , street_name : '', job_name:'', job_type: 3, postal_code: '', job_address: ''}}' http://localhost:8080/api/userJob
+     * @apiSuccess {Array} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse BadRequest
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 400 BadRequest Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/userJob')
 
         .post(function (req, res) {
@@ -4566,6 +5092,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         }
         });
 
+    /**
+     * @apiName Change_Password
+     * @apiDescription Change User Password
+     * @apiGroup Medic_API
+     * @api {post} /api/changePassword Change User Password
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} oldPass the old password
+     * @apiParam {String} newPass the new password
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{userData: {oldPass: '' , newPass : ''}}' http://localhost:8080/api/changePassword
+     * @apiSuccess {Array} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/changePassword')
         .post(function (req, res) {
             var ans = {error: true, message:"Server error"};
@@ -4606,7 +5162,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
+    /**
+     * @apiName Retrieve_Carousel_Images
+     * @apiDescription Retrieve an array of carousel images
+     * @apiGroup Medic_API
+     * @api {get} /api/userHomeCarousel Retrieve an array of carousel images
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/userHomeCarousel
+     * @apiSuccess {Array} response.success an array of carousel images
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/userHomeCarousel/')
         .get(function (req,res) {
             Content.distinct("_id", {enable:true}).exec(function (err, ids) {
@@ -4624,6 +5207,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
+
+    /**
+     * @apiName Retrieve_Search_Content
+     * @apiDescription Retrieve an array of medic specific content for search page
+     * @apiGroup Medic_API
+     * @api {get} /api/userHomeSearch Retrieve an array of medic specific content for search page
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} data the string to search for
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/userHomeSearch?data=someString
+     * @apiSuccess {Array} response.success an array of medic specific content
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/userHomeSearch/')
         .get(function(req,res){
             var data=req.query.data;
@@ -4674,6 +5287,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         });
+
+    /**
+     * @apiName Retrieve_Home_Events
+     * @apiDescription Retrieve an array of calendar events for home page
+     * @apiGroup Medic_API
+     * @api {get} /api/userHomeEvents Retrieve an array of calendar events for home page
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/userHomeEvents
+     * @apiSuccess {Array} response.success an array of calendar events
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/userHomeEvents')
         .get(function (req,res) {
             Events.find({start: {$gte: new Date()}, enable: { $exists: true, $ne : false }}).sort({start: 1}).exec(function (err, events) {
@@ -4685,6 +5327,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Retrieve_Home_Multimedia
+     * @apiDescription Retrieve an array of multimedias for home page
+     * @apiGroup Medic_API
+     * @api {get} /api/userHomeMultimedia Retrieve an array of multimedias for home page
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/userHomeMultimedia
+     * @apiSuccess {Array} response.success an array of multimedias
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/userHomeMultimedia')
         .get(function (req,res) {
             Multimedia.find({enable: { $exists: true, $ne : false }}).sort({last_updated: 'desc'}).exec(function (err, multimedia) {
@@ -4695,7 +5365,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         });
-
+    /**
+     * @apiName Retrieve_Home_News
+     * @apiDescription Retrieve an array of articles for home page
+     * @apiGroup Medic_API
+     * @api {get} /api/homeNews Retrieve an array of articles for home page
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {Boolean} [scientific] If we want scientific articles
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/homeNews?scientific=true
+     * @apiSuccess {Array} response.success an array of articles
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/homeNews')
         .get(function(req, res) {
             //establish content type
@@ -4711,6 +5409,52 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
         });
 
+    /**
+     * @apiName Retrieve_Products
+     * @apiDescription Retrieve an array of products / a single product
+     * @apiGroup Medic_API
+     * @api {get} /api/products Retrieve an array of products / a single product
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} idProduct The id of the product
+     * @apiParam {String} idPathology Filter products based on a pathology (0 means don't filter by pathology)
+     * @apiParam {String} [firstLetter] Filter products based on the first letter
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/products?idProduct=dwhad841895715195151&idPathology=null
+     * @apiSuccess {Array} response.success an array of calendar events / a single calendar event
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (without product id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with product id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/products')
         .get(function(req, res) {
             if(req.query.idProduct){
@@ -4756,6 +5500,51 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    /**
+     * @apiName Retrieve_Calendar_Events
+     * @apiDescription Retrieve an array of calendar events / a single event
+     * @apiGroup Medic_API
+     * @api {get} /api/calendar Retrieve an array of calendar events / a single event
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} id The id of the calendar event
+     * @apiParam {String} idPathology Filter calendar events items based on a pathology (0 means don't filter by pathology)
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/calendar?id=dwhad841895715195151&idPathology=null
+     * @apiSuccess {Array} response.success an array of calendar events / a single calendar event
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (without calendar event id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with calendar event id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/calendar')
         .get(function(req,res) {
             if(req.query.id){
@@ -4817,6 +5606,51 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 })
             }
         });
+    /**
+     * @apiName Retrieve_Multimedia
+     * @apiDescription Retrieve an array of multimedia items / a single multimedia item
+     * @apiGroup Medic_API
+     * @api {get} /api/multimedia Retrieve an array of multimedia items / a single multimedia item
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} idMultimedia The id of the multimedia item
+     * @apiParam {String} idPathology Filter multimedia items based on a pathology (0 means don't filter by pathology)
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/multimedia?idMultimedia=null&idPathology=jdiwahd9aw8dd0111d
+     * @apiSuccess {Array} response.success an array of multimedia items / a single multimedia item
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response (without multimedia id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with multimedia id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/multimedia')
         .get(function(req,res){
             if(req.query.idMultimedia){
@@ -4857,6 +5691,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     //============================================ intro presentations
 
+    /**
+     * @apiName Check_Intro_Enabled
+     * @apiDescription Check if a intro is enabled
+     * @apiGroup Medic_API
+     * @api {get} /api/checkIntroEnabled Check if a intro is enabled
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/checkIntroEnabled
+     * @apiSuccess {Object} response.success an array of intro presentations
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/checkIntroEnabled')
         .get(function (req, res) {
             Presentations.findOne({enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
@@ -4869,10 +5731,68 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/rememberIntroView')
+    /**
+     * @apiName Check_Intro_Viewed
+     * @apiDescription Check if the intro was viewed in this session
+     * @apiGroup Medic_API
+     * @api {get} /api/rememberIntroView Check if the intro was viewed in this session
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} groupID The id of the group the user belongs to
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/rememberIntroView?groupID=wdkakdwa99713n
+     * @apiSuccess {Object} response.success an object telling if the intro was viewed in this session
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *           isViewed: ""
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req,res){
             var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
             handleSuccess(res,{isViewed: viewStatus[req.query.groupID]});
         })
+        /**
+         * @apiName Set_Intro_As_Viewed
+         * @apiDescription Mark an intro as viewed for this session
+         * @apiGroup Medic_API
+         * @api {post} /api/pathologies Mark an intro as viewed for this session
+         * @apiVersion 1.0.0
+         * @apiPermission medic
+         * @apiPermission devModeMedic
+         * @apiParam {String} groupID The group id the user belong to
+         * @apiExample {curl} Example usage:
+         *     curl -i -X POST -d '{groupID : ""}' http://localhost:8080/api/rememberIntroView
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
             var viewStatus = SessionStorage.getElement(req, "viewedIntroPresentations") || {};
             viewStatus[req.body.groupID] = true;
@@ -4880,6 +5800,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             handleSuccess(res);
         });
 
+    /**
+     * @apiName Get_Intro
+     * @apiDescription Retrieve an array of intro presentations
+     * @apiGroup Medic_API
+     * @api {get} /api/introPresentation Retrieve an array of intro presentations
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/introPresentation
+     * @apiSuccess {Object} response.success an array of intro presentations
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/introPresentation')
         .get(function (req, res) {
             Presentations.findOne({enabled: { $exists: true, $ne : false }}).exec(function (err, presentation) {
@@ -4892,12 +5840,63 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     //============================================ regexp object
+    /**
+     * @apiName Regexp
+     * @apiDescription Retrieve the regexp validation strings from back-end
+     * @apiGroup Medic_API
+     * @api {get} /api/regexp Retrieve the regexp validation strings from back-end
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/regexp
+     * @apiSuccess {Array} response.success an object containing the validation strings
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message : "A message"
+     *     }
+     */
     router.route('/regexp')
         .get(function(req,res){
             var regexp = UtilsModule.validationStrings;
             handleSuccess(res,regexp);
         });
 
+    /**
+     * @apiName Get_Pathologies
+     * @apiDescription Retrieve an array of pathologies
+     * @apiGroup Medic_API
+     * @api {get} /api/pathologies Retrieve an array of pathologies
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {String} id The id of the pathology
+     * @apiParam {Boolean} forDropdown If we want to retrieve the patohlogies without their special products/resources
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/pathologies?id=null&forDropdown=true
+     * @apiSuccess {Object} response.success an array containing the pathologies
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/pathologies')
         .get(function(req, res) {
             var queryPathObject = {
@@ -4938,6 +5937,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    /**
+     * @apiName Get_Brochure
+     * @apiDescription Retrieve MSD brochure
+     * @apiGroup Medic_API
+     * @api {get} /api/brochure Retrieve MSD brochure
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiParam {Boolean} firstOnly If we want only the first section of the brochure
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/brochure?firstOnly=true
+     * @apiSuccess {Object} response.success an array containing the brochure sections
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/brochure')
         .get(function(req, res) {
             var queryToExec = req.query.firstOnly ? brochureSection.find({enabled: { $exists: true, $ne : false }}).sort({orderIndex: 1}).limit(1) : brochureSection.find({enabled: { $exists: true, $ne : false }}).sort({orderIndex: 1});
@@ -4950,6 +5978,32 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Medical_Courses_Redirect
+     * @apiDescription Obtain a token from Medical Courses and send URL for redirect
+     * @apiGroup Medic_API
+     * @api {get} /api/medicalCourses Obtain a token from Medical Courses and send URL for redirect
+     * @apiVersion 1.0.0
+     * @apiPermission medic
+     * @apiPermission devModeMedic
+     * @apiExample {curl} Example usage:
+     *     curl -i  http://localhost:8080/api/medicalCourses
+     * @apiSuccess {Object} response.success an object containing the url for redirect
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {},
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/medicalCourses')
         .get(function (req, res) {
             User.findOne({_id: req.user._id}).select("+citiesID").populate('specialty profession').deepPopulate('citiesID.county').exec(function (err, foundUser) {
