@@ -60,6 +60,7 @@
   "appPath": "app",
   "resolutions": {
     "jquery": "2.1.4",
-    "angular": "1.3.20"
+    "angular": "1.3.20",
+    "fullcalendar": "2.3.1"
   }
 }

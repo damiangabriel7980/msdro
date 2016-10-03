@@ -4130,6 +4130,42 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    /**
+     * @apiName Newsletter_Statistics
+     * @apiDescription Retrieve newsletter statistics
+     * @apiGroup Admin_API
+     * @api {post} /api/admin/newsletter/statistics Retrieve newsletter statistics
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [campaign] The id of the campaign
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/newsletter/statistics?campaign=null
+     * @apiSuccess {Object} response.success an object with statistics
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
     router.route('/admin/newsletter/statistics')
         .get(function (req, res) {
             if(req.query.campaign){
@@ -4177,7 +4213,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
      * @apiParam {String} data An object containing the new picture
      * @apiExample {curl} Example usage:
      *     curl -i  -x POST -d '{data : {Body: '', extension: ''}}' http://localhost:8080/api/user/addPhoto
-     * @apiSuccess {Array} response.success an empty object
+     * @apiSuccess {Object} response.success an empty object
      * @apiSuccess {String} response.message A message
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK

@@ -34,8 +34,8 @@ module.exports = function(){
                 },
                 usersAllowedLogin: [],
                 dev_mode: {
-                    isEnabled: true,
-                    loggedInWith: "laura.iacob@qualitance.ro"
+                    isEnabled: false,
+                    loggedInWith: "qqq@mailinator.com"
                 },
                 elearning: {
                     maxScore: 18
