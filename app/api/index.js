@@ -293,7 +293,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     //======================================
 
     router.route('/admin/users/groups')
-
+    /**
+     * @apiName User_Groups
+     * @apiDescription Get a list of user groups / a single groups
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/groups Get a list of user groups / a single groups
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the group
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/groups?id=null
+     * @apiSuccess {Array} response.success a list of user groups / a single groups
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 UserGroup.findOne({_id: req.query.id}).populate('profession').exec(function(err, cont) {
@@ -313,6 +349,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_User_Group
+         * @apiDescription Create a user group
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/users/groups Create a user group
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} toCreate a group object
+         * @apiParam {Array} users a list of user ids for this groups
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{toCreate: {}, users: []}' http://localhost:8080/api/admin/users/groups
+         * @apiSuccess {Object} response.success an object with the new group
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              created: {},
+         *              updated: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = req.body.toCreate;
             var users = req.body.users || [];
@@ -332,6 +399,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_User_Group
+         * @apiDescription Update a user group
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/groups Update a user group
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} toUpdate a group object
+         * @apiParam {String} id the group id
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{toUpdate: {}}' http://localhost:8080/api/admin/users/groups?id=dwanawnfawnva
+         * @apiSuccess {Object} response.success an object with how many users were added to the group
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              connectedUsers: 0 // or multiple
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             UserGroup.findOne({_id: req.query.id}, function (err, oldGroup) {
                 if(err || !oldGroup){
@@ -371,6 +468,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_User_Group
+         * @apiDescription Delete a user group
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/users/groups Delete a user group
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the group id
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/users/groups?id=dwanawnfawnva
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             UserGroup.findOne({_id: idToDelete}, function (err, group) {
@@ -399,7 +525,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/professions')
-
+    /**
+     * @apiName Professions
+     * @apiDescription Get a list of professions
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/professions Get a list of professions
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/professions
+     * @apiSuccess {Array} response.success a list of professions
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             Professions.find({}, function(err, cont) {
                 if(err) {
@@ -410,7 +563,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/users')
-
+    /**
+     * @apiName Users_List
+     * @apiDescription Get a list of Staywell users
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/users Get a list of Staywell users
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [group] a group id to filter user by it
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/users?group=null
+     * @apiSuccess {Array} response.success a list of Staywell users
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.group){
                 var id = req.query.group;
@@ -433,7 +614,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/publicContent')
-
+    /**
+     * @apiName Public_Content_List
+     * @apiDescription Get a list of public content items / a single public content item
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/publicContent Get a list of public content items / a single public content item
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the public content
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/publicContent?id=null
+     * @apiSuccess {Array} response.success a list of public content items / a single public content item
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 PublicContent.findOne({_id: req.query.id}).populate('therapeutic-areasID').exec(function (err, cont) {
@@ -456,6 +673,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Public_Content
+         * @apiDescription Create a public content item
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/users/publicContent Create a public content item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/users/publicContent
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
             var content = new PublicContent({
                 title : "Untitled",
@@ -470,6 +715,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                    }
                 });
         })
+        /**
+         * @apiName Update_Public_Content
+         * @apiDescription Update a public content item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/publicContent Update a public content item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the public item to update
+         * @apiParam {String} [info] an object with the old status of the public content (looks like - info : {isEnabled: true})
+         * @apiParam {Object} toUpdate the updated public content
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{toUpdate: {}}' http://localhost:8080/api/admin/users/publicContent?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             if(req.body.info){
                 PublicContent.update({_id: req.query.id}, {enable: !req.body.info.isEnabled}, function (err, wRes) {
@@ -503,6 +779,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
 
         })
+        /**
+         * @apiName Delete_Public_Content
+         * @apiDescription Delete a public content item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/users/publicContent Delete a public content item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the public item to delete
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/users/publicContent?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             var content_id = req.query.id;
             PublicContent.remove({_id: content_id}, function (err, success) {
@@ -514,6 +819,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/admin/users/publicContent/changeImageOrFile')
+    /**
+     * @apiName Update_Public_Content_Attached_File_Or_Image
+     * @apiDescription Update a public content item's image or attached file
+     * @apiGroup Admin_API
+     * @api {post} /api/admin/users/publicContent/changeImageOrFile Update a public content item's image or attached file
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Object} data the info for updating the image / file path (looks like - {id: '', type: 'file', path: ''})
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{id: '', type: 'file', path: ''}' http://localhost:8080/api/admin/users/publicContent/changeImageOrFile
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+         *          error: "",
+         *          data: {}
+         *     }
+     */
         .post(function (req,res) {
             var data = req.body.data;
             var qry = {};
@@ -540,6 +874,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/pathologies')
+    /**
+     * @apiName Pathologies_List
+     * @apiDescription Get a list of pathologies / a single pathology
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/pathologies Get a list of pathologies / a single pathology
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the pathology
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/pathologies?id=null
+     * @apiSuccess {Array} response.success a list of pathologies / a single pathology
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 Pathologies.findOne({_id:req.query.id}).populate('specialApps').exec(function(err, pathology) {
@@ -560,6 +931,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Pathology
+         * @apiDescription Create a pathology
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/pathologies Create a pathology
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/pathologies
+         * @apiSuccess {Object} response.success an object with the new pathology
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *           saved: {}
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req, res) {
             var pathology = new Pathologies({
                 display_name: 'Untitled',
@@ -574,6 +973,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Pathology
+         * @apiDescription Update a pathology
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/pathologies Update a pathology
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the pathology to update
+         * @apiParam {Object} obj the updated pathology
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{{}}' http://localhost:8080/api/admin/pathologies?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req, res) {
             // the body will contain an object with the property/properties we want to update
             Pathologies.update({_id:req.query.id},{$set: req.body}, function(err, pathology) {
@@ -584,6 +1013,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Pathology
+         * @apiDescription Delete a pathology
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/pathologies Delete a pathology
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the pathology
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/pathologies?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req, res) {
             var id = req.query.id;
             Pathologies.findOne({_id: id}, function (err, pathology) {
@@ -641,6 +1099,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/brochure')
+    /**
+     * @apiName Brochure_Sections
+     * @apiDescription Get a list of brochure sections / a brochure section
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/brochure Get a list of brochure sections / a brochure section
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the brochure
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/brochure?id=null
+     * @apiSuccess {Array} response.success a list of brochure sections / a single brochure section
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 brochureSection.findOne({_id:req.query.id}, function(err, pathology) {
@@ -661,6 +1156,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Brochure_Section
+         * @apiDescription Create a brochure section
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/brochure Create a brochure section
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/pathologies
+         * @apiSuccess {Object} response.success an object with the new brochure section
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *           saved: {}
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req, res) {
             var brochure = new brochureSection({
                 title: 'Untitled',
@@ -675,6 +1198,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Brochure_Section
+         * @apiDescription Update a brochure section
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/brochure Update a brochure section
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the brochure section to update
+         * @apiParam {Object} obj the updated brochure section
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{{}}' http://localhost:8080/api/admin/brochure?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req, res) {
             // the body will contain an object with the property/properties we want to update
             brochureSection.update({_id:req.query.id},{$set: req.body}, function(err, pathology) {
@@ -685,6 +1238,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Brochure_Section
+         * @apiDescription Delete a brochure section
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/brochure Delete a brochure section
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the brochure section
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/brochure?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req, res) {
             var id = req.query.id;
             brochureSection.findOne({_id: id}, function (err, brochureS) {
@@ -812,6 +1394,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
       });
 
     router.route('/admin/users/publicContent/categories')
+    /**
+     * @apiName Public_Content_Categories
+     * @apiDescription Get a list of public content categories
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/publicContent/categories Get a list of public content categories
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/publicContent/categories
+     * @apiSuccess {Array} response.success a list of public content categories
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             PublicCategories.find(function (err, categories) {
                 if(err){
@@ -821,6 +1431,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Create_Public_Content_Category
+         * @apiDescription Create a public content category
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/users/publicContent/categories Create a public content category
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/users/publicContent/categories
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var category = new PublicCategories({
                 last_updated: new Date(),
@@ -841,6 +1479,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Public_Content_Category
+         * @apiDescription Update a public content category
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/publicContent/categories Update a public content category
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the public content category
+         * @apiParam {Object} obj the updated public content category
+         * @apiParam {Object} data the new path to the image of the category (looks like - {type: 'image', path: ''})
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{{}, data: null}' http://localhost:8080/api/admin/users/publicContent/categories?id=wwdmwaknfwbafajfjnabga
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             PublicCategories.findOne({_id: req.query.id}, function (err, category) {
                 if(err){
@@ -887,6 +1556,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Public_Content_Category
+         * @apiDescription Delete a public content category
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/users/publicContent/categories Delete a public content category
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the public content category
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/users/publicContent/categories?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var image_id = ObjectId(req.query.id);
             //find image to remove from amazon
@@ -935,7 +1633,42 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/carouselPublic')
-
+    /**
+     * @apiName Public_Carousel
+     * @apiDescription Get a list of public carousel items / a single public carousel item
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/carouselPublic Get a list of public carousel items / a single public carousel item
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/carouselPublic?id=null
+     * @apiSuccess {Array} response.success a list of public carousel items / a single public carousel item
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 PublicCarousel.findOne({_id: req.query.id}).populate("links.content").exec(function (err, cont) {
@@ -958,6 +1691,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Public_Carousel_Item
+         * @apiDescription Create a public carousel item
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/users/carouselPublic Create a public carousel item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/users/carouselPublic
+         * @apiSuccess {Object} response.success the new public carousel item
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
             var img = new PublicCarousel({
                 title: "Untitled",
@@ -972,6 +1733,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Public_Carousel
+         * @apiDescription Update a public carousel item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/carouselPublic Update a public carousel item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the public carousel item
+         * @apiParam {Object} obj the updated public carousel item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{{}}' http://localhost:8080/api/admin/users/carouselPublic?id=wwdmwaknfwbafajfjnabga
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             PublicCarousel.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
@@ -981,6 +1772,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Public_Carousel
+         * @apiDescription Delete a public carousel item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/users/carouselPublic Delete a public carousel item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the public carousel item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/users/carouselPublic?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             var image_id = req.query.id;
             //find image to remove from amazon
@@ -1016,6 +1836,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/admin/users/carouselPublic/contentByType')
+    /**
+     * @apiName Public_Carousel_By_Type
+     * @apiDescription Get a list of public carousel associated contents
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/carouselPublic/contentByType Get a list of public carousel associated contents
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Number} type can be (1 = stire (noutati), 2 = articol (despre), 3 = elearning, 4 = download)
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/carouselPublic/contentByType?type=1
+     * @apiSuccess {Array} response.success a list of public contents
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             PublicContent.find({type: req.query.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
                 if(err) {
@@ -1026,6 +1875,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/productPDF')
+    /**
+     * @apiName Create_Product_PDF
+     * @apiDescription Create a PDF document for a product
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/productPDF Create a PDF document for a product
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} html the html we want to convert to PDF
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/productPDF
+     * @apiSuccess {Object} response.success an object containing the buffer for the PDF file
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *          buffer: ''
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
       .post(function(req, res){
         pdf.create(req.body.html, {format: "A3", header: {height: "40px"} , footer:{height: "40px"}}).toBuffer(function(err, buffer){
           if (err) {
@@ -1041,7 +1919,42 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     //===============================================================================================
 
     router.route('/admin/users/carouselMedic')
-
+    /**
+     * @apiName Medic_Carousel
+     * @apiDescription Get a list of medic carousel items / a single medic carousel item
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/carouselMedic Get a list of medic carousel items / a single medic carousel item
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/carouselMedic?id=null
+     * @apiSuccess {Array} response.success a list of medic carousel items / a single medic carousel item
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 Carousel.findOne({_id: req.query.id}).populate("article_id").exec(function (err, cont) {
@@ -1064,6 +1977,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Medic_Carousel_Item
+         * @apiDescription Create a medic carousel item
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/users/carouselMedic Create a medic carousel item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/users/carouselMedic
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
                 //check if content_id exists
                     var img = new Carousel({
@@ -1079,6 +2020,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         }
                     });
         })
+        /**
+         * @apiName Update_Medic_Carousel
+         * @apiDescription Update a medic carousel item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/carouselMedic Update a medic carousel item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the medic carousel item
+         * @apiParam {Object} data object containing 'toUpdate' property (object) which is the updated medic carousel item and 'imagePath' property (string) which is optional
+         * @apiParam {Object} [info] object containing the current status of the medic carousel item (looks like - {isEnabled: true})
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{data : {toUpdate :{}}}' http://localhost:8080/api/admin/users/carouselMedic?id=wwdmwaknfwbafajfjnabga
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         * @apiUse BadRequest
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 BadRequest Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             if(req.body.info){
                 Carousel.update({_id: req.query.id}, {$set:{enable: !req.body.info.isEnabled}}, function (err, wRes) {
@@ -1121,6 +2100,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             }
         })
+        /**
+         * @apiName Delete_Medic_Carousel
+         * @apiDescription Delete a medic carousel item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/users/carouselMedic Delete a medic carousel item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the medic carousel item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/users/carouselMedic?id=djwafnan95252nfnwef
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             var image_id = req.query.id;
             //find image to remove from amazon
@@ -1157,6 +2165,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/carouselMedic/contentByType')
+    /**
+     * @apiName Medic_Carousel_By_Type
+     * @apiDescription Get a list of medic carousel items filtered by type
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/carouselMedic/contentByType Get a list of medic carousel items filtered by type
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Number} type can be (1 = national, 2 = international, 3 = stiintific)
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/carouselMedic/contentByType?type=3
+     * @apiSuccess {Array} response.success a list of articles
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             Content.find({type: req.query.type}, {title: 1, type:1}).sort({title: 1}).exec(function(err, cont) {
                 if(err) {
@@ -1168,6 +2205,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
 
     router.route('/admin/divisions')
+    /**
+     * @apiName Get_Divisions
+     * @apiDescription Get a list of divisions / a single division
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/divisions Get a list of divisions / a single division
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the division
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/divisions?id=null
+     * @apiSuccess {Array} response.success a list of divisions / a single division
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if (req.query.id) {
                 Divisions.findOne({_id: req.query.id}).exec(function (err, division) {
@@ -1189,6 +2263,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 })
             }
         })
+        /**
+         * @apiName Create_Division
+         * @apiDescription Create a division
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/divisions Create a division
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/divisions
+         * @apiSuccess {Object} response.success the new division
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *     },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var division = new Divisions({
                 name: 'Untitled'
@@ -1202,6 +2304,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Update_Division
+         * @apiDescription Update a division
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/divisions Update a division
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the division
+         * @apiParam {Object} obj the updated division
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{name: '', code: ''}' http://localhost:8080/api/admin/divisions?id=widngnen222
+         * @apiSuccess {Object} response.success the updated division
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *     },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             Divisions.findOne({_id: idToUpdate}).exec(function (err, division) {
@@ -1226,6 +2358,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Delete_Division
+         * @apiDescription Delete a division
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/divisions Delete a division
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the division
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/divisions?id=widngnen222
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *     },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var id = req.query.id;
             Divisions.findOne({_id: id}, function (err, division) {
@@ -1776,6 +2937,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialProducts/speakers')
+    /**
+     * @apiName Get_Special_Product_Speakers
+     * @apiDescription Get a list of speakers / speakers for a special product / a single speaker
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content/specialProducts/speakers Get a list of speakers / speakers for a special product / a single speaker
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [product] the id of the special product
+     * @apiParam {String} [id] the id of the speaker
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content/specialProducts/speakers?id=null
+     * @apiSuccess {Array} response.success a list of speakers / speakers for a special product / a single speaker
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with speaker id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.product){
                 specialProduct.findOne({_id: req.query.product}).populate('speakers').exec(function (err, product) {
@@ -1805,6 +3004,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Add_Speaker_To_Special_Product
+         * @apiDescription Add a speaker to a special product
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/content/specialProducts/speakers Add a speaker to a special product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} speaker_id the id of the speaker to add
+         * @apiParam {String} product_id the id of the special product to update speakers list
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{speaker_id: '', product_id: ''}' http://localhost:8080/api/admin/content/specialProducts/speakers
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var speaker_id = ObjectId(req.body.speaker_id);
             var product_id = ObjectId(req.body.product_id);
@@ -1816,6 +3045,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Speaker_From_Special_Product
+         * @apiDescription Delete speaker from special product speaker list
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/content/specialProducts/speakers Delete speaker from special product speaker list
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} speaker_id the id of the speaker to remove from list
+         * @apiParam {String} product_id the id of the special product to update speakers list
+         * @apiParam {String} id the id of the guidelines Category
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE -d '{speaker_id: '', product_id: ''}' http://localhost:8080/api/admin/content/specialProducts/speakers
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var speaker_id = ObjectId(req.query.speaker_id);
             var product_id = ObjectId(req.query.product_id);
@@ -1829,6 +3089,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialApps/apps')
+    /**
+     * @apiName Get_Special_Apps
+     * @apiDescription Get a list of special apps / a single special app
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content/specialApps/apps Get a list of special apps / a single special app
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the special app
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content/specialApps/apps?id=djwanfvaenbvabnev
+     * @apiSuccess {Array} response.success a list of special apps / a single special app
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 specialApps.findOne({_id: req.query.id}).deepPopulate('groups.profession').exec(function (err, app) {
@@ -1848,6 +3145,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Special_App
+         * @apiDescription Create a special app
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/content/specialApps/apps Create a special app
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/content/specialApps/apps
+         * @apiSuccess {Object} response.success the new special app
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toSave = new specialApps({
                 name: 'Untitled'
@@ -1860,6 +3185,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Special_App
+         * @apiDescription Update a special app
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/content/specialApps/apps Update a special app
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the special app object
+         * @apiParam {String} id the id of the special app
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/content/specialApps/apps?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToEdit = ObjectId(req.query.id);
             specialApps.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
@@ -1870,6 +3225,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Special_App
+         * @apiDescription Delete a special app
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/content/specialApps/apps Delete a special app
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the special app
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/content/specialApps/apps?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Pathologies.update({}, {$pull: {specialApps: idToDelete}}, {multi: true}, function (err, wres) {
@@ -1888,6 +3272,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialApps/groups')
+    /**
+     * @apiName Get_Groups_For_Special_Apps
+     * @apiDescription Get a list of groups for special apps
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content/specialApps/groups Get a list of groups for special apps
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content/specialApps/groups
+     * @apiSuccess {Array} response.success a list of groups
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             UserGroup.find({content_specific: true}).populate('profession').exec(function (err, groups) {
                 if(err){
@@ -1900,6 +3312,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
 
     router.route('/admin/applications/upgrade')
+    /**
+     * @apiName Get_Hybrid_App
+     * @apiDescription Get a list of hybrid apps / a single hybrid app
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/upgrade Get a list of hybrid apps / a single hybrid app
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the hybrid app
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/upgrade?id=null
+     * @apiSuccess {Array} response.success a list of hybrid apps / a single hybrid app
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req,res){
             if(req.query.id){
                 AppUpdate.findOne({_id:req.query.id},function(err,edit){
@@ -1919,6 +3368,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 })
             }
         })
+        /**
+         * @apiName Create_Hybrid_App
+         * @apiDescription Create a hybrid app
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/upgrade Create a hybrid app
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/applications/upgrade
+         * @apiSuccess {Object} response.success the new hybrid app
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
             var app = new AppUpdate({
                 name:'Untitled',
@@ -1932,6 +3409,38 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Update_Hybrid_App
+         * @apiDescription Update a hybrid app
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/applications/upgrade Update a hybrid app
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the hybrid app object
+         * @apiParam {String} id the id of the hybrid app
+         * @apiParam {String} name the name of the hybrid app
+         * @apiParam {String} downloadUrl the download Url of the hybrid app
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/applications/upgrade?id=sjafah&downloadUrl=SomeURL&name=someName
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res) {
             AppUpdate.findOne({$or: [{'downloadUrl': req.query.downloadUrl}, {'name': req.query.name}]}, function (err, resp) {
                 if (err){
@@ -1959,6 +3468,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Delete_Hybrid_App
+         * @apiDescription Delete a hybrid app
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/upgrade Delete a hybrid app
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the hybrid app
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/upgrade?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             var idToDelete = ObjectId(req.query.id)
             AppUpdate.remove({_id:idToDelete},function(err,wres){
@@ -2008,6 +3546,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
       };
 
     router.route('/admin/applications/guidelines/Category')
+    /**
+     * @apiName Get_Guidelines_Category
+     * @apiDescription Get a list of guidelines categories / a single guidelines category
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/guidelines/Category Get a list of guidelines categories / a single guidelines category
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the guidelines category
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/guidelines/Category?id=null
+     * @apiSuccess {Array} response.success a list of guidelines categories / a single guidelines category
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req,res){
               if(req.query.id){
                   guidelineCategory.findOne({_id:req.query.id},function(err,category){
@@ -2027,7 +3602,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                   });
               }
         })
-
+        /**
+         * @apiName Create_Guidelines_Category
+         * @apiDescription Create a guidelines Category
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/guidelines/Category Create a guidelines Category
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/applications/guidelines/Category
+         * @apiSuccess {Object} response.success the new guidelines Category
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
             var toSave = new guidelineCategory({
                 name:'Untitled',
@@ -2042,6 +3644,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             })
 
         })
+        /**
+         * @apiName Update_Category
+         * @apiDescription Update a Category
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/applications/guidelines/Category Update a Category
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the Category object
+         * @apiParam {String} id the id of the Category
+         * @apiParam {String} name the name of the Category
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/applications/guidelines/Category?id=nfnbnuebvneajab&name=SomeName
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             guidelineCategory.findOne({name:req.query.name},function(err,resp){
                 if (err){
@@ -2064,6 +3697,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Delete_Guidelines_Category
+         * @apiDescription Delete a guidelines Category
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/guidelines/Category Delete a guidelines Category
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the guidelines Category
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/guidelines/Category?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             guidelineCategory.findOne({_id:req.query.id}).populate('guidelineFiles').exec(function(err,resp){
                 if (err){
@@ -2132,6 +3794,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         };
 
     router.route('/admin/applications/guidelines/File')
+    /**
+     * @apiName Get_Guidelines_Files
+     * @apiDescription Get a list of guidelines files / a single guidelines file
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/guidelines/File Get a list of guidelines files / a single guidelines file
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the guidelines file
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/guidelines/File?id=null
+     * @apiSuccess {Array} response.success a list of guidelines files / a single guidelines file
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req,res){
             if(req.query.id){
                 guidelineFile.findOne({_id:req.query.id},function(err,file){
@@ -2151,6 +3850,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 })
             }
         })
+        /**
+         * @apiName Create_Guidelines_File
+         * @apiDescription Create a guidelines file
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/guidelines/File Create a guidelines file
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/applications/guidelines/File
+         * @apiSuccess {Object} response.success the new guidelines file
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
               var toSave = new guidelineFile({
                   displayName:'Untitled',
@@ -2166,7 +3893,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                   }
                 })
         })
-
+        /**
+         * @apiName Update_Guidelines_File
+         * @apiDescription Update a guidelines file
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/applications/guidelines/File Update a guidelines file
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the guidelines file object
+         * @apiParam {String} fileId the id of the guidelines file
+         * @apiParam {String} [categoryId] the id of the category the file is attached to
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/applications/guidelines/File?fileId=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with the updated guidelines file
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             if(req.query.categoryId){
                 guidelineCategory.find({_id:req.query.categoryId}).populate('guidelineFiles',null,{displayName:req.body.displayName}).exec(function(err,resp){
@@ -2183,6 +3940,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 updateFile(req.query.fileId,req.body,res);
             }
         })
+        /**
+         * @apiName Delete_Guidelines_File
+         * @apiDescription Delete a guidelines file
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/guidelines/File Delete a guidelines file
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the guidelines file
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/guidelines/File?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
            guidelineFile.remove({_id:req.query.id},function(err,wres){
                if(err){
@@ -2194,6 +3980,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/myPrescription')
+    /**
+     * @apiName Get_Prescription
+     * @apiDescription Get a list of prescriptions
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/myPrescription Get a list of prescriptions
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/myPrescription
+     * @apiSuccess {Array} response.success a list of prescriptions
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
       .get(function(req, res){
         myPrescription.find({},function(err,info){
           if(err){
@@ -2203,6 +4017,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
           }
         })
       })
+      /**
+       * @apiName Update_Prescription
+       * @apiDescription Update a prescription
+       * @apiGroup Admin_API
+       * @api {put} /api/admin/applications/myPrescription Update a prescription
+       * @apiVersion 1.0.0
+       * @apiPermission admin
+       * @apiPermission devModeAdmin
+       * @apiParam {Object} update the prescription object
+       * @apiParam {String} id the id of the prescription
+       * @apiExample {curl} Example usage:
+       *     curl -i -x PUT -d '{update: {}}' http://localhost:8080/api/admin/applications/myPrescription?id=nfnbnuebvneajab
+       * @apiSuccess {Object} response.success an object with the updated prescription
+       * @apiSuccess {String} response.message A message
+       * @apiSuccessExample {json} Success-Response:
+       *     HTTP/1.1 200 OK
+       *     {
+         *        success : {
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+       * @apiUse ErrorOnServer
+       * @apiErrorExample {json} Error-Response (500):
+       *     HTTP/1.1 500 Server Error
+       *     {
+         *          error: "",
+         *          data: {}
+         *     }
+       */
       .put(function(req,res){
         myPrescription.update({_id:req.query.id},{$set:req.body.update},function(err,updated){
           if(err){
@@ -2215,6 +4058,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
       });
 
     router.route('/admin/events/events')
+    /**
+     * @apiName Get_Events
+     * @apiDescription Get a list of events / a single event
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/events/events Get a list of events / a single event
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the event
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/events/events?id=null
+     * @apiSuccess {Array} response.success a list of events / a single event
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with talk id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 Events.findOne({_id: req.query.id}).select('-listconferences').populate('groupsID pathologiesID').exec(function (err, event) {
@@ -2234,6 +4114,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Event
+         * @apiDescription Create a event
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/events/events Create a event
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the event object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/events/events
+         * @apiSuccess {Object} response.success the new event
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = new Events(req.body);
             toCreate.last_updated = Date.now();
@@ -2245,6 +4154,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Event
+         * @apiDescription Update an event
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/events/events Update an event
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the event object
+         * @apiParam {String} id the id of the event
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/events/events?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with how many events were updated
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          updateCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             Events.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
@@ -2256,6 +4195,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Event
+         * @apiDescription Delete an event
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/events/events Delete an event
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the event
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/events/events?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             //get event details
             Events.findOne({_id: req.query.id}, function (err, event) {
@@ -2300,6 +4268,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/events/speakers')
+    /**
+     * @apiName Get_Speakers
+     * @apiDescription Get a list of speakers / a single speaker
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/events/speakers Get a list of speakers / a single speaker
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the speaker
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/events/speakers?id=null
+     * @apiSuccess {Array} response.success a list of speakers / a single speaker
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 Speakers.findOne({_id: req.query.id}, function (err, speaker) {
@@ -2319,6 +4324,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Speaker
+         * @apiDescription Create a speaker
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/events/speakers Create a speaker
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/events/speakers
+         * @apiSuccess {Object} response.success the new speaker
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = new Speakers({
                 first_name: 'Untitled',
@@ -2333,6 +4366,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Speaker
+         * @apiDescription Update a speaker
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/events/speakers Update a speaker
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the speaker object
+         * @apiParam {String} id the id of the speaker
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/events/speakers?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with how many speakers were updated
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          updateCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToEdit = ObjectId(req.query.id);
             Speakers.update({_id: idToEdit}, {$set: req.body}, function (err, wres) {
@@ -2343,6 +4406,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Speaker
+         * @apiDescription Delete a speaker
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/events/speakers Delete a speaker
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the speaker
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/events/speakers?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Speakers.remove({_id: idToDelete}, function (err, wres) {
@@ -2362,6 +4454,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/events/conferences')
+    /**
+     * @apiName Get_Conference
+     * @apiDescription Get a list of conferences / conferences associated to a event / a single conference
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/events/conferences Get a list of conferences / conferences associated to a event / a single conference
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [event] the id of the event
+     * @apiParam {String} [id] the id of the conference
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/events/conferences?event=null&id=null
+     * @apiSuccess {Array} response.success a list of conferences / conferences associated to a event / a single conference
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with conference id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.event){
                 Events.findOne({_id: req.query.event}).populate('listconferences').exec(function (err, event) {
@@ -2389,6 +4519,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Conference
+         * @apiDescription Create a conference
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/events/rooms Create a conference
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the conference object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/events/conferences
+         * @apiSuccess {Object} response.success the new conference
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = new Conferences(req.body);
             toCreate.last_updated = Date.now();
@@ -2412,6 +4571,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Conference
+         * @apiDescription Update a conference
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/events/conferences Update a conference
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the conference object
+         * @apiParam {String} id the id of the conference
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/events/conferences?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with how many conferences were updated
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          updateCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             var dataToUpdate = req.body;
@@ -2424,6 +4613,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Conference
+         * @apiDescription Delete a conference
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/events/conferences Delete a conference
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the conference
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/events/conferences?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             //remove talks for this conference
@@ -2467,6 +4685,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/events/rooms')
+    /**
+     * @apiName Get_Rooms
+     * @apiDescription Get a list of rooms associated to a event / a single room
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/events/rooms Get a list of rooms associated to a event / a single room
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} event the id of the event
+     * @apiParam {String} [id] the id of the room
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/events/rooms?event=dwafgwt3t&id=null
+     * @apiSuccess {Array} response.success a list of rooms associated to a event / a single room
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with talk id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.event){
                 var idEvent = ObjectId(req.query.event);
@@ -2489,6 +4745,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 handleError(res,false,400,6);
             }
         })
+        /**
+         * @apiName Create_Room
+         * @apiDescription Create a room
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/events/rooms Create a room
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the room object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/events/rooms
+         * @apiSuccess {Object} response.success the new room
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = new Rooms(req.body);
             toCreate.save(function (err, saved) {
@@ -2511,6 +4796,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Room
+         * @apiDescription Update a room
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/events/rooms Update a room
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the room object
+         * @apiParam {String} id the id of the room
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/events/rooms?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with how many rooms were updated
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          updateCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             var dataToUpdate = req.body;
@@ -2522,6 +4837,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Room
+         * @apiDescription Delete a room
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/events/rooms Delete a room
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the room
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/events/rooms?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             //remove room; remove from and talks as well
@@ -2555,6 +4899,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/events/talks')
+    /**
+     * @apiName Get_Talks
+     * @apiDescription Get a list of talks associated to a conference / a single talk
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/events/talks Get a list of talks associated to a conference / a single talk
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} conference the id of the conference
+     * @apiParam {String} [id] the id of the talk
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/events/talks?conference=dwafgwt3t&id=null
+     * @apiSuccess {Array} response.success a list of talks associated to a conference / a single talk
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with talk id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.conference){
                 var idConference = ObjectId(req.query.conference);
@@ -2578,6 +4960,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 handleError(res,true,400,6);
             }
         })
+        /**
+         * @apiName Create_Talk
+         * @apiDescription Create a talk
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/events/talks Create a talk
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the talk object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/events/talks
+         * @apiSuccess {Object} response.success the new talk
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = new Talks(req.body);
             toCreate.last_updated = Date.now();
@@ -2589,6 +5000,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Talk
+         * @apiDescription Update a talk
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/events/talks Update a talk
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the talk object
+         * @apiParam {String} id the id of the talk
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/events/talks?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with how many talks were updated
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          updateCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             var dataToUpdate = req.body;
@@ -2601,6 +5042,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Talk
+         * @apiDescription Delete a talk
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/events/talks Delete a talk
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the talk
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/events/talks?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with how many talks were deleted
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          deleteCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             Talks.remove({_id: idToDelete}, function (err, wres) {
@@ -2613,6 +5083,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/events/conferenceToEvent')
+    /**
+     * @apiName Conference_To_Event
+     * @apiDescription Add a conference to a event
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/events/conferenceToEvent Add a conference to a event
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} idEvent the id of the event
+     * @apiParam {String} idConference the id of the conference
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/events/conferenceToEvent?idEvent=dwafgwt3t&idConference=dwamnfnawbfabw
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .post(function (req, res) {
             var eventToUpdate = ObjectId(req.query.idEvent);
             var conferenceToAdd = ObjectId(req.body.idConference);
@@ -2626,6 +5126,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/multimedia')
+    /**
+     * @apiName Get_Multimedia_List
+     * @apiDescription Get a list of multimedia / a single multimedia
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/multimedia Get a list of multimedia / a single multimedia
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the multimedia
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/multimedia?id=null
+     * @apiSuccess {Array} response.success an array of multimedia / a single multimedia
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 Multimedia.findOne({_id: req.query.id}).populate("therapeutic-areasID pathologiesID groupsID").exec(function(err, product) {
@@ -2647,6 +5184,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Multimedia
+         * @apiDescription Create a multimedia item
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/multimedia Create a multimedia item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/multimedia
+         * @apiSuccess {Object} response.success the new multimedia item
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              justSaved : {
+         *
+         *              }
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = new Multimedia({
                 author : 'Untitled',
@@ -2661,6 +5228,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Multimedia
+         * @apiDescription Update a multimedia item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/multimedia Update a multimedia item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} [info] used for updating thumb image / video attached (looks like this: {image: '', video: null})
+         * @apiParam {Object} [enableMultimedia] used for enable/disable (looks like this: enableMultimedia: {isEnabled: true})
+         * @apiParam {Object} multimedia the updated multimedia item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{multimedia: {}}' http://localhost:8080/api/admin/multimedia?id=wdnajfnugfew2chfbec
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             if(req.body.info){
                 var data = req.body.info;
@@ -2702,6 +5300,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             }
         })
+        /**
+         * @apiName Delete_Multimedia
+         * @apiDescription Delete a multimedia item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/multimedia Delete a multimedia item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} id the id of the multimedia item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/multimedia?id=wdnajfnugfew2chfbec
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req, res) {
             var id = req.query.id;
             Multimedia.findOne({_id: id}, function (err, multimedia) {
@@ -2742,7 +5369,45 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/admin/areas')
-
+    /**
+     * @apiName Get_Therapeutic_Areas_List
+     * @apiDescription Get a list of therapeutic areas / a single therapeutic area
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/areas Get a list of therapeutic areas / a single therapeutic area
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the therapeutic area
+     * @apiParam {Boolean} [parentsOnly] if we want only parent therapeutic areas
+     * @apiParam {Array} [exclude] array of therapeutic area ids to exclude
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/areas?id=null&parentsOnly=true&exclude=null
+     * @apiSuccess {Array} response.success an array of therapeutic areas
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 Therapeutic_Area.findById(req.query.id).exec(function(err, area) {
@@ -2765,6 +5430,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Therapeutic_Area
+         * @apiDescription Create a therapeutic area
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/areas Create a therapeutic area
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/areas
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req, res) {
             var therapeutic = new Therapeutic_Area({
                 last_updated: new Date(),
@@ -2778,6 +5471,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Therapeutic_Area
+         * @apiDescription Update a therapeutic area
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/areas Update a therapeutic area
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the area
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/areas?id=dnwajfnae87gtnvbvsbe
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req, res) {
             var area = req.body;
             area.last_updated = Date.now();
@@ -2789,6 +5511,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Therapeutic_Area
+         * @apiDescription Delete a therapeutic area
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/areas Delete a therapeutic area
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the area
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/areas?id=dnwajfnae87gtnvbvsbe
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req, res) {
             var data = req.query.id;
             var dataArray = [req.query.id];
@@ -2817,7 +5568,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/admin/therapeutic_areas')
-
+    /**
+     * @apiName Get_Therapeutic_Areas
+     * @apiDescription Get a list of therapeutic areas
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/therapeutic_areas Get a list of therapeutic areas
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/therapeutic_areas
+     * @apiSuccess {Array} response.success an array of therapeutic areas
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             Therapeutic_Area.find({$query:{}, $orderby: {name: 1}}, function(err, cont) {
                 if(err) {
@@ -2829,6 +5607,31 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
 
     router.route('/admin/applications/qa/topics')
+    /**
+     * @apiName QA_Topic_List
+     * @apiDescription Get a list of QA topics
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/qa/topics Get a list of QA topics
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/qa/topics
+     * @apiSuccess {Array} response.success an array with topics
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       [{
+     *
+     *       }]
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *
+     *     }
+     */
         .get(function (req, res) {
             Topics.find({}, function (err, topics) {
                 if(err){
@@ -2838,6 +5641,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Create_QA_Topic
+         * @apiDescription Create a QA topic
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/qa/topics Create a QA topic
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} name the topic name
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{name: ""}' http://localhost:8080/api/admin/applications/qa/topics
+         * @apiSuccess {Object} response.success an object with a response message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *         message : {
+         *              type: '',
+         *              text: ''
+         *         }
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *         message : {
+         *              type: '',
+         *              text: ''
+         *         }
+         *     }
+         */
         .post(function (req, res) {
             var name = req.body.name;
             //validate name
@@ -2867,6 +5700,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Update_QA_Topic
+         * @apiDescription Update a QA topic
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/applications/qa/topics Update a QA topic
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} name the topic name
+         * @apiParam {String} id the id of the topic
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{id: "", name: ""}' http://localhost:8080/api/admin/applications/qa/topics
+         * @apiSuccess {Object} response.success an object with a response message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *         message : {
+         *              type: '',
+         *              text: ''
+         *         }
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *         message : {
+         *              type: '',
+         *              text: ''
+         *         }
+         *     }
+         */
         .put(function (req, res) {
             var id = req.body.id;
             var name = req.body.name;
@@ -2898,6 +5762,30 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/qa/topicById/:id')
+    /**
+     * @apiName QA_Topic
+     * @apiDescription Get a QA topic by id
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/qa/topicById/:id Get a QA topic by id
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the topic
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/qa/topicById/dwah8t8375fnnvnvbvye
+     * @apiSuccess {Object} response.success an object with the topic
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *
+     *     }
+     */
         .get(function (req, res) {
             Topics.findOne({_id: req.params.id}, function (err, topic) {
                 if(err){
@@ -2907,6 +5795,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_QA_Topic
+         * @apiDescription Delete a QA topic by id
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/qa/topicById/:id Delete a QA topic by id
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the topic
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/qa/topicById/dwah8t8375fnnvnvbvye
+         * @apiSuccess {Object} response.success an object with a response message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *          message: {
+         *              type: '',
+         *              text: ''
+         *          }
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          message: {
+         *              type: '',
+         *              text: ''
+         *          }
+         *     }
+         */
         .delete(function (req, res) {
             var id_topic = req.params.id;
             id_topic = mongoose.Types.ObjectId(id_topic.toString());
@@ -2933,6 +5851,31 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/qa/answerGivers')
+    /**
+     * @apiName QA_Medic_Answerers
+     * @apiDescription Get a list of QA Medic Answerers
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/qa/answerGivers Get a list of QA Medic Answerers
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/qa/answerGivers
+     * @apiSuccess {Array} response.success an array of QA medics answerers
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       [{
+     *
+     *       }]
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *
+     *     }
+     */
         .get(function (req, res) {
             AnswerGivers.find({}).populate('id_user').exec(function (err, ag) {
                 if(err){
@@ -2942,6 +5885,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Create_QA_Medic_Answerer
+         * @apiDescription Create a QA Medic Answerer
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/qa/answerGivers Create a QA Medic Answerer
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id_user the id of the medic who will become an QA answerer
+         * @apiParam {String} nickname the nickname of the QA answerer
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{id_user: "", nickname: ""}' http://localhost:8080/api/admin/applications/qa/answerGivers
+         * @apiSuccess {Object} response.success an object with response message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *       message: {
+         *          type: '',
+         *          text: ''
+         *       }
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *       message: {
+         *          type: '',
+         *          text: ''
+         *       }
+         *     }
+         */
         .post(function (req, res) {
             if(!req.body.nickname || !req.body.id_user){
                 res.send({message: {type: 'danger', text:'Toate campurile sunt obligatorii'}});
@@ -2987,6 +5961,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Update_QA_Medic_Answerer
+         * @apiDescription Update a QA Medic Answerer
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/applications/qa/answerGivers Update a QA Medic Answerer
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the medic who will become an QA answerer
+         * @apiParam {String} nickname the nickname of the QA answerer
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{id: "", nickname: ""}' http://localhost:8080/api/admin/applications/qa/answerGivers
+         * @apiSuccess {Object} response.success an object with response message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *       message: {
+         *          type: '',
+         *          text: ''
+         *       }
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *       message: {
+         *          type: '',
+         *          text: ''
+         *       }
+         *     }
+         */
         .put(function (req, res) {
             var nickname = req.body.nickname?req.body.nickname.toString():"";
             //validate nickname format
@@ -3031,6 +6036,30 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/qa/answerGiverById/:id')
+    /**
+     * @apiName QA_Medic_Answerer
+     * @apiDescription Get a QA Medic Answerer
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/qa/answerGiverById/:id Get a QA Medic Answerer
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of QA medic
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/qa/answerGiverById/djawihfyafjwabca727488ybdf
+     * @apiSuccess {Object} response.success an array of QA medics
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *
+     *     }
+     */
         .get(function (req, res) {
             AnswerGivers.findOne({_id: req.params.id}, function (err, ag) {
                 if(err){
@@ -3040,6 +6069,33 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_QA_Medic_Answerer
+         * @apiDescription Delete a QA Medic Answerer
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/qa/answerGiverById/:id Delete a QA Medic Answerer
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of QA medic
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/qa/answerGiverById/djawihfyafjwabca727488ybdf
+         * @apiSuccess {Object} response.success an array of QA medics
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *         message: {
+         *              type: '',
+         *              text: ''
+         *         }
+         *     }
+         */
         .delete(function (req, res) {
             var id_ag = req.params.id;
             id_ag = mongoose.Types.ObjectId(id_ag.toString());
@@ -3054,6 +6110,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/qa/medics')
+    /**
+     * @apiName QA_Medics
+     * @apiDescription Get a list of QA Medics
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/qa/medics Get a list of QA Medics
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/qa/medics
+     * @apiSuccess {Array} response.success an array of QA medics
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        [{
+     *
+     *        }]
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          message: {
+     *              type: '',
+     *              text: ''
+     *          }
+     *     }
+     */
         .get(function (req, res) {
             //find medics already defined as answer givers
             AnswerGivers.find(function (err, ag) {
@@ -3084,6 +6168,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/contractManagement/templates')
+    /**
+     * @apiName Get_Contract_Templates
+     * @apiDescription Get a list of contract templates / a single contract template
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/contractManagement/templates Get a list of contract templates / a single contract template
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id a contract template id
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/contractManagement/templates?id=null
+     * @apiSuccess {Array} response.success an array of contract templates / a single contract template
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 CM_templates.findOne({_id: req.query.id}, function (err, template) {
@@ -3104,6 +6225,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
 
         })
+        /**
+         * @apiName Create_Contract_Template
+         * @apiDescription Create a contract template
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/contractManagement/templates Create a contract template
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj a contract template object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/applications/contractManagement/templates
+         * @apiSuccess {Object} response.success the newly created contract template
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var template = new CM_templates({
                 name: "untitled",
@@ -3118,6 +6268,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Contract_Template
+         * @apiDescription Update a contract template
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/applications/contractManagement/templates Update a contract template
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id a contract template id
+         * @apiParam {Object} obj a contract template object
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/applications/contractManagement/templates?id=dwafdjawghf2cnahfgawhfnawf
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             CM_templates.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
@@ -3128,6 +6308,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Contract_Template
+         * @apiDescription Delete a contract template
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/contractManagement/templates Delete a contract template
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id a contract template id
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/contractManagement/templates?id=dwafdjawghf2cnahfgawhfnawf
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             CM_templates.remove({_id: idToDelete}, function (err, wres) {
@@ -3223,6 +6432,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
     };
 
     router.route('/admin/applications/DPOC/devices')
+    /**
+     * @apiName Get_DPOC_Users
+     * @apiDescription Get a list of DPOC users / a single DPOC user
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/DPOC/devices Get a list of DPOC users / a single DPOC user
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id a DPOC user id
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/DPOC/devices?id=diwajfawfh7fenvnbfbb
+     * @apiSuccess {Array} response.success an array of DPOC users / a single DPOC user
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 DPOC_Devices.findOne({_id: req.query.id}, {name: 1}, function (err, device) {
@@ -3242,6 +6488,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_DPOC_User
+         * @apiDescription Create DPOC user
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/DPOC/devices Create DPOC user
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj a DPOC user
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{name: "", email: ""}' http://localhost:8080/api/admin/applications/DPOC/devices
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .post(function (req, res) {
 
             addDeviceDPOC(req.body.name, req.body.email).then(
@@ -3253,6 +6528,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             );
         })
+        /**
+         * @apiName Delete_DPOC_User
+         * @apiDescription Delete DPOC user
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/DPOC/devices Delete DPOC user
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj a DPOC user
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/DPOC/devices?id=diwajfawfh7fenvnbfbb
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+     *          error: "",
+     *          data: {}
+     *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             DPOC_Devices.remove({_id: idToDelete}, function (err, wres) {
@@ -3265,6 +6569,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/DPOC/importDevices')
+    /**
+     * @apiName Import_DPOC_Users
+     * @apiDescription Import DPOC users
+     * @apiGroup Admin_API
+     * @api {post} /api/admin/applications/DPOC/importDevices Import DPOC users
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Array} arr an array of DPOC users
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{[{name: "", email: ""}]}' http://localhost:8080/api/admin/applications/DPOC/importDevices
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .post(function (req, res) {
             var processedWithErrors = [];
             async.each(req.body, function (device, callback) {
@@ -3291,6 +6624,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/januvia/users')
+    /**
+     * @apiName Get_Januvia_Users
+     * @apiDescription Retrieve a list of Januvia users / a single Januvia user
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/januvia/users Retrieve a list of Januvia users / a single Januvia user
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the user
+     * @apiParam {String} type can be "manager", "reprezentant" or "medic"
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/januvia/users?id=null
+     * @apiSuccess {Array} response.success an array containing Januvia users / a single Januvia user
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 JanuviaUsers.findOne({_id: req.query.id}).populate("city users_associated").exec(function (err, user) {
@@ -3322,6 +6685,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Januvia_User
+         * @apiDescription Create a Januvia user
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/applications/januvia/users Create a Januvia user
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/applications/januvia/users
+         * @apiSuccess {Object} response.success the new user
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var user = new JanuviaUsers({
                 name: "Untitled",
@@ -3335,6 +6726,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Januvia_User
+         * @apiDescription Update a Januvia user
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/applications/januvia/users Update a Januvia user
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the user
+         * @apiParam {Object} obj the updated user info
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/applications/januvia/users?id=dwajhd824ynfghmnvyug
+         * @apiSuccess {Object} response.success the updated user
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             try{
                 var idToEdit = ObjectId(req.query.id);
@@ -3359,6 +6780,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Delete_Januvia_User
+         * @apiDescription Delete a Januvia user
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/applications/januvia/users Delete a Januvia user
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the user
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/applications/januvia/users?id=dwajhd824ynfghmnvyug
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             JanuviaUsers.findOne({_id: req.query.id}, function (err, user) {
                 if(err){
@@ -3385,11 +6835,68 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/applications/januvia/user_types')
+    /**
+     * @apiName Get_Januvia_User_types
+     * @apiDescription Retrieve a list of Januvia user types
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/applications/januvia/user_types Retrieve a list of Januvia user types
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/applications/januvia/user_types
+     * @apiSuccess {Array} response.success an array containing Januvia user types
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             handleSuccess(res, new JanuviaUsers().schema.path('type').enumValues);
         });
 
     router.route('/admin/applications/januvia/parseExcel')
+    /**
+     * @apiName Parse_Januvia_Users_Excel
+     * @apiDescription Import Januvia users from Excel
+     * @apiGroup Admin_API
+     * @api {post} /api/admin/applications/januvia/parseExcel Import Januvia users from Excel
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Object} obj a file object
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/applications/januvia/parseExcel
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .post(function (req, res) {
             var file = req.body.file;
             var workbook = xlsx.read(file, {type: 'binary'});
@@ -3407,6 +6914,51 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/location/counties')
+    /**
+     * @apiName Get_County_Or_City
+     * @apiDescription Retrieve a county / array of counties
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/location/counties Retrieve a county / array of counties
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the county
+     * @apiParam {String} city the id of the city
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/location/counties?id=null&city=dwahdjajwdjawhdjadawdawda
+     * @apiSuccess {Array} response.success an array containing counties / an object containing a county
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with city id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 Counties.findOne({_id: req.query.id}, function (err, county) {
@@ -3440,6 +6992,51 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/location/cities')
+    /**
+     * @apiName Get_City_Or_County
+     * @apiDescription Retrieve a city / array of counties / array of cities of a county
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/location/cities Retrieve a city / array of counties / array of cities of a county
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the city
+     * @apiParam {String} county the id of the county
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/location/cities?id=null&county=dwahdjajwdjawhdjadawdawda
+     * @apiSuccess {Array} response.success an array containing counties / cities of a county / an object containing a city
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with county id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     * @apiUse EntityNotFound
+     * @apiErrorExample {json} Error-Response (4xx):
+     *     HTTP/1.1 404 EntityNotFound Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 Cities.findOne({_id: req.query.id}, function (err, city) {
@@ -3473,6 +7070,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/system/activationCodes/codes')
+    /**
+     * @apiName Get_Activation_Codes
+     * @apiDescription Retrieve an array of activation codes
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/system/activationCodes/codes Retrieve an array of activation codes
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/system/activationCodes/codes
+     * @apiSuccess {Array} response.success an array containing activation codes
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             ActivationCodes.find({}).populate('profession').exec(function (err, codes) {
                 if(err){
@@ -3482,6 +7107,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Activation_Code
+         * @apiDescription Update an activation code
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/system/activationCodes/codes Update an activation code
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the activation code
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{new: ""}' http://localhost:8080/api/admin/system/activationCodes/codes?id=djawijdfaiwnf823525
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             ActivationCodes.findOne({_id: idToUpdate}).select('+value').exec(function (err, code) {
@@ -3500,6 +7154,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/system/parameters')
+    /**
+     * @apiName Get_Params
+     * @apiDescription Retrieve an array of system parameteres
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/system/parameters Retrieve an array of system parameteres
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/system/parameters
+     * @apiSuccess {Array} response.success an array containing system parameteres
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             Parameters.find({}).exec(function (err, params) {
                 if(err){
@@ -3509,6 +7191,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Params
+         * @apiDescription Update a system parameter
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/system/parameters Update a system parameter
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the parameter
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{default_value: "", value: ""}' http://localhost:8080/api/admin/system/parameters?id=djawijdfaiwnf823525
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             Parameters.findOne({_id: idToUpdate}).exec(function (err, parameter) {
@@ -3528,6 +7239,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/ManageAccounts/users')
+    /**
+     * @apiName Get_Users
+     * @apiDescription Retrieve an array of users / a single user
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/ManageAccounts/users Retrieve an array of users / a single user
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the user
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/ManageAccounts/users?id=null
+     * @apiSuccess {Array} response.success an array containing users / an object with a user
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 User.findOne({_id: req.query.id}).select('+enabled +phone +routing_role').populate('division specialty').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
@@ -3548,6 +7296,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 })
             }
         })
+        /**
+         * @apiName Update_User
+         * @apiDescription Update a user's data
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/ManageAccounts/users Update a user's data
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the user
+         * @apiParam {Object} obj the user's new data
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/users/ManageAccounts/users?id=wda21451dcascacwafa
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             var dataToUpdate = req.body;
@@ -3578,6 +7356,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/ManageAccounts/professions')
+    /**
+     * @apiName Get_Professions
+     * @apiDescription Retrieve an array of professions
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/ManageAccounts/professions Retrieve an array of professions
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/ManageAccounts/professions
+     * @apiSuccess {Array} response.success an array containing professions
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
                 if(err){
@@ -3589,6 +7395,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/ManageAccounts/groups')
+    /**
+     * @apiName Get_Groups
+     * @apiDescription Retrieve an array of special groups
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/ManageAccounts/groups Retrieve an array of special groups
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/ManageAccounts/groups
+     * @apiSuccess {Array} response.success an array containing special groups
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             UserGroup.find({}).populate('profession').exec(function (err, groups) {
                 if(err){
@@ -3600,6 +7434,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/newAccounts/state/:type')
+    /**
+     * @apiName Get_Accounts_By_State
+     * @apiDescription Retrieve an array of accounts filtered by state
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/newAccounts/state/:type Retrieve an array of accounts filtered by state
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} type the status of the account (can be ACCEPTED, PENDING, REJECTED)
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/newAccounts/state/ACCEPTED
+     * @apiSuccess {Array} response.success an array containing the filtered accounts
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             User.find({state: req.params.type}).select('+state +proof_path').populate('profession').exec(function (err, users) {
                 if(err){
@@ -3609,6 +7472,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Change_Account_State
+         * @apiDescription Change the status of an account
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/newAccounts/state/:type Change the status of an account
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} type the status of the account (can be ACCEPTED, PENDING, REJECTED)
+         * @apiParam {String} id the id of the account
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{id: ""}' http://localhost:8080/api/admin/users/newAccounts/state/ACCEPTED
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : [{
+         *
+         *        }],
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         * @apiUse BadRequest
+         * @apiErrorExample {json} Error-Response (4xx):
+         *     HTTP/1.1 400 BadRequest Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             if(req.params.type && req.body.id){
                 User.update({_id: req.body.id}, {$set: {state: req.params.type}}, function (err, wres) {
@@ -3725,6 +7625,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/newAccounts/count')
+    /**
+     * @apiName Get_Number_Of_New_Accounts
+     * @apiDescription Retrieve the number of new accounts
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/newAccounts/count Retrieve the number of new accounts
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/newAccounts/count
+     * @apiSuccess {Object} response.success an object containing the number of new accounts
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *          total: 11
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             User.aggregate([
                 {$group: {_id: "$state", total: {$sum: 1}}}
@@ -3738,6 +7666,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/specialty')
+    /**
+     * @apiName Get_Specialty
+     * @apiDescription Retrieve a list of specialties / a single specialty
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/users/specialty Retrieve a list of specialties / a single specialty
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the specialty
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/users/specialty?id=null
+     * @apiSuccess {Array} response.success an array of specialties / a single specialty
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 Speciality.findOne({_id: req.query.id},function(err,speciality){
@@ -3758,6 +7723,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Specialty
+         * @apiDescription Create a specialty item
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/users/specialty Create a specialty item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/users/specialty
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var newSpecialty = new Speciality ({
                 name: 'Untitled'
@@ -3770,6 +7763,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Update_Specialty
+         * @apiDescription Update a specialty item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/users/specialty Update a specialty item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} specialty the updated specialty
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{specialty: {}}' http://localhost:8080/api/admin/intros?id=mndkawmndknawnfw
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var updated = req.body.specialty;
             updated.lastUpdated = new Date();
@@ -3782,6 +7804,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }))
 
         })
+        /**
+         * @apiName Delete_Specialty
+         * @apiDescription Delete a specialty item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/users/specialty Delete a specialty item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the specialty
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/users/specialty?id=mndkawmndknawnfw
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             Speciality.findOne({_id: req.query.id}, function (err, specialty) {
                 if (err) {
@@ -3800,6 +7851,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             })
         });
     router.route('/admin/intros')
+    /**
+     * @apiName Get_Intro
+     * @apiDescription Retrieve a list of intros / a single intro
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/intros/ Retrieve a list of intros / a single intro
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the intro
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/intros?id=null
+     * @apiSuccess {Array} response.success an array of intros / a single intro
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 var presentations={};
@@ -3827,6 +7915,34 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Create_Intro
+         * @apiDescription Create a intro item
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/intros/ Create a intro item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/intros
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req,res){
             var intro = new Presentations({
                 description: 'Untitled'
@@ -3839,6 +7955,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Intro
+         * @apiDescription Update a intro item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/intros/ Update a intro item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the intro
+         * @apiParam {Object} intro the updated intro
+         * @apiParam {Boolean} isEnabled disable/enable a intro
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{intro: {}}' http://localhost:8080/api/admin/intros?id=mndkawmndknawnfw
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             if(req.body.isEnabled!=undefined){
                 Presentations.update({_id: req.query.id},{$set:{enabled: req.body.isEnabled}}).exec(function (err, presentation) {
@@ -3859,6 +8006,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Delete_Intro
+         * @apiDescription Delete a intro item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/intros/ Delete a intro item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} idToDelete the id of the intro
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/intros?id=mndkawmndknawnfw
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             Presentations.remove({_id: req.query.idToDelete}, function (err, count) {
                 if(err){
