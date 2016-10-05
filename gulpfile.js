@@ -347,7 +347,24 @@ gulp.task("tpaCleanup", function () {
     });
 
 });
-
+/**
+ * Gulp tasks
+ * @module gulpModule
+ */
+/**
+ * Migrate databases between any environments
+ *
+ * @function
+ * @name stageToProd
+ * @description Migrate databases between any environments. If you want to change the databases, search
+ * for the mongoose.connect expression and change databases parameter. Check the databases object for
+ * available databases.
+ * WARNING! Existing item will not be updated, so you need to delete and recreate them
+ * Also, the Amazon S3 elements are not automatically moved (user DragonDisk)
+ * @param {String} date - the date when an item was last updated in order to filter content
+ * @example
+ * gulp stageToProd --date 22/09/2016
+ */
 gulp.task('stageToProd', function () {
     var mongoose = require('mongoose');
     var Amazon = require('./config/amazon.js'),
@@ -591,9 +608,9 @@ gulp.task('stageToProd', function () {
             console.log('Found ' + objectWithStageItems.articles.length + ' articles!');
             console.log('Found ' + objectWithStageItems.pathologies.length + ' pathologies!');
             console.log('Found ' + objectWithStageItems.brochureSections.length + ' brochure sections!');
-            objectWithStageItems.specialProducts = _.filter(objectWithStageItems.specialProducts, function (prod) {
-                return prod.product.product_name == 'Arcoxia';
-            });
+            // objectWithStageItems.specialProducts = _.filter(objectWithStageItems.specialProducts, function (prod) {
+            //     return prod.product.product_name == 'Arcoxia';
+            // });
             console.log('Found ' + objectWithStageItems.specialProducts.length + ' special products!');
             console.log('Found ' + objectWithStageItems.userGroups.length + ' groups!');
             console.log('Found ' + objectWithStageItems.specialty.length + ' specialties!');
