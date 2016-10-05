@@ -2407,6 +2407,43 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/products')
+    /**
+     * @apiName Get_Products
+     * @apiDescription Get a list of products / a single product
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/products Get a list of products / a single product
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the product
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/products?id=null
+     * @apiSuccess {Array} response.success a list of products / a single product
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 Products.findOne({_id: req.query.id}).populate("therapeutic-areasID pathologiesID groupsID").exec(function(err, product) {
@@ -2427,6 +2464,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Add_Product
+         * @apiDescription Add a product
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/products Add a product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/products
+         * @apiSuccess {Object} response.success the saved product
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              saved: {
+         *
+         *              }
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req, res) {
             var product = new Products({
                 last_updated: new Date(),
@@ -2440,6 +2507,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleSuccess(res, {saved: saved}, 2);
             });
         })
+        /**
+         * @apiName Update_Product
+         * @apiDescription Update a product
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/products Update a product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} product the product object
+         * @apiParam {Object} [info] an object for updating logo image / attached RCP (looks like - {logo: true //or false for RCP , path: ''})
+         * @apiParam {String} id the id of the product
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{product: {}, info: {logo: true, path: ''}}' http://localhost:8080/api/admin/content/products?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function(req,res){
             if(req.body.info){
                 var info = req.body.info;
@@ -2471,6 +2569,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Delete_Product
+         * @apiDescription Delete a product
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/products Delete a product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the product
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/products?id=djwanfjan29152hnfha
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req,res){
             var id = req.query.id;
             Products.findOne({_id: id}, function (err, product) {
@@ -2512,6 +2639,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/admin/content')
+    /**
+     * @apiName Get_Articles
+     * @apiDescription Get a list of articles / a single article
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content Get a list of articles / a single article
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the article
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content?id=null
+     * @apiSuccess {Array} response.success a list of articles / a single article
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *             specialProduct: {},
+     *             associatedProduct: {}
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function(req, res) {
             if(req.query.id){
                 Content.findOne({_id:req.query.id}).populate('pathologiesID').exec(function(err, cont) {
@@ -2532,6 +2697,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Add_Article
+         * @apiDescription Add an article
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/content Add an article
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST http://localhost:8080/api/admin/content
+         * @apiSuccess {Object} response.success the saved article
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              saved: {
+         *
+         *              }
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function(req, res) {
             var content = new Content({
                 title: 'Untitled',
@@ -2547,7 +2742,39 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
-    .put(function(req, res) {
+        /**
+         * @apiName Update_Article
+         * @apiDescription Update an article
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/content Update an article
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} article the article object
+         * @apiParam {Object} [info] an object containing the path to the new logo of the article or an array of associated images paths (looks like - {image: '', associated_images: ['','']})
+         * @apiParam {Object} [enableArticle] an object containing the new status of the article (looks like - {enable: true //or false})
+         * @apiParam {String} id the id of the article
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{file_path_prod: ''}' http://localhost:8080/api/admin/content/specialProducts/products?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
+        .put(function(req, res) {
             if(req.body.info){
                 var info = req.body.info;
                 if(info.image){
@@ -2589,6 +2816,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             }
     })
+        /**
+         * @apiName Delete_Article
+         * @apiDescription Delete article
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/content Delete article
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the article
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/content?id=djwanfjan29152hnfha
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function(req, res) {
             var id =req.query.id;
             Content.findOne({_id: id}, function (err, content) {
@@ -2618,6 +2874,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
     router.route('/admin/content/groupsByIds')
+    /**
+     * @apiName Get_Filtered_User_Groups
+     * @apiDescription Get a list of user groups filtered by ids
+     * @apiGroup Admin_API
+     * @api {post} /api/admin/content/groupsByIds Get a list of user groups filtered by ids
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Array} ids the ids of user groups we want
+     * @apiExample {curl} Example usage:
+     *     curl -i -x POST -d '{ids: []}' http://localhost:8080/api/admin/content/groupsByIds?id=null
+     * @apiSuccess {Array} response.success a list of user groups filtered by ids
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .post(function (req, res) {
             var ids = req.body.ids || [];
             UserGroup.find({_id: {$in: ids}}).populate('profession').exec(function (err, groups) {
@@ -2630,6 +2915,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialProducts/products')
+    /**
+     * @apiName Get_Special_Products
+     * @apiDescription Get a list of special products / a single special product & it's simple product counterpart
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content/specialProducts/products Get a list of special products / a single special product & it's simple product counterpart
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} [id] the id of the special product
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content/specialProducts/products?id=null
+     * @apiSuccess {Array} response.success a list of special products / a single special product & it's simple product counterpart
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *             specialProduct: {},
+     *             associatedProduct: {}
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             var q = {};
             if(req.query.id){
@@ -2658,6 +2981,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Add_Special_Product
+         * @apiDescription Add a special product
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/content/specialProducts/products Add a special product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} productType the type of the special product (can be "product", "resource")
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{productType: 'product'}' http://localhost:8080/api/admin/content/specialProducts/products
+         * @apiSuccess {Object} response.success the saved special product
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              justSaved: {
+         *
+         *              }
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toCreate = new specialProduct({
                 product_name: 'Untitled',
@@ -2672,6 +3026,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Special_Product
+         * @apiDescription Update a special product
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/content/specialProducts/products Update a special product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the menu object
+         * @apiParam {String} file_path_prod the path for the RCP file to attach to the simple product counterpart (included in previous parameter as property)
+         * @apiParam {String} id the id of the special product
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{file_path_prod: ''}' http://localhost:8080/api/admin/content/specialProducts/products?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             if(req.body.file_path_prod){
                 var forAssociatedProd = {
@@ -2701,6 +3086,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Delete_Special_Product
+         * @apiDescription Delete special product
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/content/specialProducts/products Delete special product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the special product
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/content/specialProducts/products?id=djwanfjan29152hnfha
+         * @apiSuccess {Object} response.success an object with how many special products were deleted and how many related items were deleted
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *            deletedProducts : 1,
+         *            deletedConnections: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = ObjectId(req.query.id);
             var attachedCount = 0;
@@ -2742,6 +3157,44 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialProducts/menu')
+    /**
+     * @apiName Get_Special_Product_Menu
+     * @apiDescription Get a special product's menu / a single menu item
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content/specialProducts/menu Get a special product's menu / a single menu item
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} id the id of the menu item
+     * @apiParam {String} product_id the id of the special product
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content/specialProducts/menu?id=null&product_id=jdwajuugeugbnbdbv999
+     * @apiSuccess {Array} response.success a special product's menu / a single menu item
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiSuccessExample {json} Success-Response (with id):
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             if(req.query.id){
                 //find one by id
@@ -2774,6 +3227,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 handleError(res,err,400,6);
             }
         })
+        /**
+         * @apiName Add_Menu_Item_To_Special_Product
+         * @apiDescription Add a menu item to a special product
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/content/specialProducts/menu Add a menu item to a special product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj a menu item (see specialProduct_Menu model)
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/content/specialProducts/menu
+         * @apiSuccess {Object} response.success the saved menu item
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              saved: {
+         *
+         *              }
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var menu = new specialProductMenu(req.body);
             menu.save(function (err, saved) {
@@ -2784,6 +3268,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Update_Special_Product_Menu_Item
+         * @apiDescription Update a special product menu item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/content/specialProducts/menu Update a special product menu item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the menu object
+         * @apiParam {String} id the id of the menu item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/content/specialProducts/menu?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an empty object
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             specialProductMenu.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
@@ -2793,6 +3307,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Delete_Special_Product_Menu_Item
+         * @apiDescription Delete special product menu item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/content/specialProducts/menu Delete special product menu item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the special product menu item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/content/specialProducts/menu?id=djwanfjan29152hnfha
+         * @apiSuccess {Object} response.success an object with how many menu items were deleted
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *            deleteCount : 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var deleteCount = 0;
             var idToDelete = ObjectId(req.query.id);
@@ -2825,6 +3368,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialProducts/addMenuChild')
+    /**
+     * @apiName Update_Special_Product_Child_Menu_Item
+     * @apiDescription Update a special product child menu item
+     * @apiGroup Admin_API
+     * @api {put} /api/admin/content/specialProducts/addMenuChild Update a special product child menu item
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {Object} child_id the child menu item object
+     * @apiParam {String} id the id of the child menu item
+     * @apiExample {curl} Example usage:
+     *     curl -i -x PUT -d '{child_id: {}}' http://localhost:8080/api/admin/content/specialProducts/addMenuChild?id=nfnbnuebvneajab
+     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {
+     *
+     *        },
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+         *          error: "",
+         *          data: {}
+         *     }
+     */
         .put(function (req, res) {
             specialProductMenu.update({_id: req.query.id}, {$addToSet: {children_ids: req.body.child_id}}, function (err, wRes) {
                 if(err){
@@ -2836,6 +3409,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialProducts/glossary')
+    /**
+     * @apiName Get_Special_Product_Glossary
+     * @apiDescription Get a special product's glossary / a single glossary item
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content/specialProducts/glossary Get a special product's glossary / a single glossary item
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} _id the id of the glossary item
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content/specialProducts/glossary?_id=null
+     * @apiSuccess {Array} response.success a special product's glossary / a single glossary item
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : [{
+     *
+     *        }],
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             var q = {};
             if(req.query){
@@ -2849,6 +3451,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Add_Glossary_Item_To_Special_Product
+         * @apiDescription Add a glossary item to a special product
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/content/specialProducts/glossary Add a glossary item to a special product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj a glossary item (see specialProduct_glossary model)
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/content/specialProducts/glossary
+         * @apiSuccess {Object} response.success the saved glossary item
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              saved: {
+         *
+         *              }
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toAdd = new specialProductGlossary(req.body);
             toAdd.save(function (err, saved) {
@@ -2859,6 +3492,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Special_Product_Glossary_Item
+         * @apiDescription Update a special product glossary item
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/content/specialProducts/glossary Update a special product glossary item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the glossary object
+         * @apiParam {String} id the id of the glossary item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/content/specialProducts/glossary?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with the number of updated glossary items
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          updateCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = req.query.id;
             if(!idToUpdate){
@@ -2873,6 +3536,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Delete_Special_Product_Glossary_Item
+         * @apiDescription Delete special product glossary item
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/content/specialProducts/glossary Delete special product glossary item
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the special product glossary item
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/content/specialProducts/glossary?id=djwanfjan29152hnfha
+         * @apiSuccess {Object} response.success an object with how many glossary item were deleted
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *            removeCount : 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             var idToDelete = req.query.id;
             if(!idToDelete){
@@ -2889,6 +3581,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/content/specialProducts/resources')
+    /**
+     * @apiName Get_Special_Product_Resources
+     * @apiDescription Get a list of special product resources / a single resource
+     * @apiGroup Admin_API
+     * @api {get} /api/admin/content/specialProducts/resources Get a list of special product resources / a single resource
+     * @apiVersion 1.0.0
+     * @apiPermission admin
+     * @apiPermission devModeAdmin
+     * @apiParam {String} _id the id of the resource
+     * @apiExample {curl} Example usage:
+     *     curl -i http://localhost:8080/api/admin/content/specialProducts/resources?_id=null
+     * @apiSuccess {Array} response.success a list of special product resources / a single resource
+     * @apiSuccess {String} response.message A message
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        success : {resources : [{
+     *
+     *        }]},
+     *        message: "Cererea a fost procesata cu succes!"
+     *     }
+     * @apiUse ErrorOnServer
+     * @apiErrorExample {json} Error-Response (500):
+     *     HTTP/1.1 500 Server Error
+     *     {
+     *          error: "",
+     *          data: {}
+     *     }
+     */
         .get(function (req, res) {
             var q = {};
             if(req.query){
@@ -2902,6 +3623,37 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         })
+        /**
+         * @apiName Add_Resource_To_Special_Product
+         * @apiDescription Add a resource to a special product
+         * @apiGroup Admin_API
+         * @api {post} /api/admin/content/specialProducts/resources Add a resource to a special product
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj a resource (see specialProduct_files model)
+         * @apiExample {curl} Example usage:
+         *     curl -i -x POST -d '{}' http://localhost:8080/api/admin/content/specialProducts/resources
+         * @apiSuccess {Object} response.success the saved resource
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *              saved: {
+         *
+         *              }
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .post(function (req, res) {
             var toAdd = new specialProductFiles(req.body);
             toAdd.save(function (err, saved) {
@@ -2912,6 +3664,36 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         })
+        /**
+         * @apiName Update_Special_Product_Resource
+         * @apiDescription Update a special product resource
+         * @apiGroup Admin_API
+         * @api {put} /api/admin/content/specialProducts/resources Update a special product resource
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {Object} obj the resource object
+         * @apiParam {String} id the id of the resource
+         * @apiExample {curl} Example usage:
+         *     curl -i -x PUT -d '{}' http://localhost:8080/api/admin/content/specialProducts/resources?id=nfnbnuebvneajab
+         * @apiSuccess {Object} response.success an object with the number of updated resources
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *          updateCount: 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .put(function (req, res) {
             var idToUpdate = ObjectId(req.query.id);
             if(!idToUpdate){
@@ -2926,6 +3708,35 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 });
             }
         })
+        /**
+         * @apiName Delete_Special_Product_Resource
+         * @apiDescription Delete special product resource
+         * @apiGroup Admin_API
+         * @api {delete} /api/admin/content/specialProducts/resources Delete special product resource
+         * @apiVersion 1.0.0
+         * @apiPermission admin
+         * @apiPermission devModeAdmin
+         * @apiParam {String} id the id of the special product resource
+         * @apiExample {curl} Example usage:
+         *     curl -i -x DELETE http://localhost:8080/api/admin/content/specialProducts/resources?id=djwanfjan29152hnfha
+         * @apiSuccess {Object} response.success an object with how many resources were deleted
+         * @apiSuccess {String} response.message A message
+         * @apiSuccessExample {json} Success-Response:
+         *     HTTP/1.1 200 OK
+         *     {
+         *        success : {
+         *            removeCount : 1
+         *        },
+         *        message: "Cererea a fost procesata cu succes!"
+         *     }
+         * @apiUse ErrorOnServer
+         * @apiErrorExample {json} Error-Response (500):
+         *     HTTP/1.1 500 Server Error
+         *     {
+         *          error: "",
+         *          data: {}
+         *     }
+         */
         .delete(function (req, res) {
             specialProductFiles.remove({_id: req.query.id}, function (err, wres) {
                 if(err){
@@ -3055,7 +3866,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
          * @apiPermission devModeAdmin
          * @apiParam {String} speaker_id the id of the speaker to remove from list
          * @apiParam {String} product_id the id of the special product to update speakers list
-         * @apiParam {String} id the id of the guidelines Category
          * @apiExample {curl} Example usage:
          *     curl -i -x DELETE -d '{speaker_id: '', product_id: ''}' http://localhost:8080/api/admin/content/specialProducts/speakers
          * @apiSuccess {Object} response.success an empty object
