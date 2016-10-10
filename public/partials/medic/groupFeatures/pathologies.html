@@ -16,10 +16,10 @@
     </div>
     <div class="col-xs-12 col-md-2 col-md-pull-10" ng-if="pathology.associated_items">
         <div class="col-md-10 col-sm-6 col-xs-6 noPadding" ng-repeat="prod in pathology.associated_items">
-            <img class="img-responsive img-thumbnail customBorder handCursor col-xs-12" ng-if="prod.logo_path" ui-sref="groupSpecialProduct.menuItem({product_id: prod._id})" ng-src="{{prod.logo_path ? pathAmazonDev+prod.logo_path : defaultProductImage}}" />
+            <img ng-class="{'noBorderBottom' : !pathology.specialApps}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ng-if="prod.logo_path" ui-sref="groupSpecialProduct.menuItem({product_id: prod._id})" ng-src="{{prod.logo_path ? pathAmazonDev+prod.logo_path : defaultProductImage}}" />
         </div>
         <div class="col-md-10 noPadding col-sm-6 col-xs-6" ng-if="pathology.specialApps" ng-repeat="app in pathology.specialApps">
-            <img class="img-responsive img-thumbnail customBorder handCursor col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" ng-src="{{defaultProofImage}}" />
+            <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail customBorder handCursor col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" ng-src="{{defaultProofImage}}" />
         </div>
         <angular-floating-button class="col-md-12 noPadding"></angular-floating-button>
     </div>
