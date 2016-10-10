@@ -1359,7 +1359,31 @@ body {
 .specialProductMainWrapper {
   margin-top: 20px;
   .breadcrumb{
-    background-color: #eeeeee;
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 10px;
+    list-style: none;
+    li{
+      a{
+        color: #78797B;
+      }
+    }
+    .active{
+      color: #1AA5A0;
+    }
+    .fontL;
+    @media (max-width: @screen-md-min){
+      margin-top: 10px;
+    }
+  }
+  .breadcrumb>li+li {
+    &:before {
+      .fontL;
+      padding: 0 10px;
+      color: #78797B;
+      content: "\276F";
+      font-weight: bolder;
+    }
   }
   .customBorder{
     border-radius: 0;
@@ -1508,6 +1532,7 @@ body {
     }
   }
   #descriptionDiv {
+    bottom: 5px;
     #initialDescriptionDiv {
       margin-right: -30px;
     }

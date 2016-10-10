@@ -7736,7 +7736,39 @@ fieldset[disabled] .navbarMedic .profile .btn {
   margin-top: 20px;
 }
 .specialProductMainWrapper .breadcrumb {
-  background-color: #eeeeee;
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: 10px;
+  list-style: none;
+  font-size: 17px;
+}
+.specialProductMainWrapper .breadcrumb li a {
+  color: #78797B;
+}
+.specialProductMainWrapper .breadcrumb .active {
+  color: #1AA5A0;
+}
+@media (max-width: 767px) {
+  .specialProductMainWrapper .breadcrumb {
+    font-size: 15px;
+  }
+}
+@media (max-width: 992px) {
+  .specialProductMainWrapper .breadcrumb {
+    margin-top: 10px;
+  }
+}
+.specialProductMainWrapper .breadcrumb > li + li:before {
+  font-size: 17px;
+  padding: 0 10px;
+  color: #78797B;
+  content: "\276F";
+  font-weight: bolder;
+}
+@media (max-width: 767px) {
+  .specialProductMainWrapper .breadcrumb > li + li:before {
+    font-size: 15px;
+  }
 }
 .specialProductMainWrapper .customBorder {
   border-radius: 0;
@@ -7879,6 +7911,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
   padding: 0;
   background-color: transparent;
   border: 0px solid #dddddd;
+}
+.specialProductMainWrapper #descriptionDiv {
+  bottom: 5px;
 }
 .specialProductMainWrapper #descriptionDiv #initialDescriptionDiv {
   margin-right: -30px;
