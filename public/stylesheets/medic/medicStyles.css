@@ -7808,6 +7808,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
   border: 0;
   border-radius: 0px;
 }
+#menuDiv .customGreen {
+  color: #01877C;
+}
 #menuDiv .productPageMenu .parent a {
   text-decoration: none;
   outline: none !important;
