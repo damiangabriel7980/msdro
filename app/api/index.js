@@ -163,10 +163,12 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 display_name: pathology.display_name,
                                 description: pathology.description,
                                 header_image: pathology.header_image,
-                                specialApps: pathology.specialApps.length ? pathology.specialApps: null,
                                 order_index: pathology.order_index,
                                 video_intro: pathology.video_intro
                             };
+                            if(pathology.specialApps && pathology.specialApps.length){
+                                objectToPush.specialApps = pathology.specialApps;
+                            }
                             var associatedItemsClean = [];
                             async.each(associated, function(singleItem, callbackItem){
                                 getSpecialProductMenu(singleItem._id, true).then(
