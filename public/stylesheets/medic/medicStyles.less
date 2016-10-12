@@ -1356,243 +1356,262 @@ body {
 }
 
 //============================================================================================= PRODUCT PAGE
-.specialProductMainWrapper {
+.marginTop20{
   margin-top: 20px;
-  .customBorder{
-    border-radius: 0;
-    border: none;
-    border-bottom: 1px solid lightgrey;
+}
+.breadcrumb{
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: 10px;
+  list-style: none;
+  li{
+    a{
+      color: #78797B;
+    }
   }
-  .noBorderBottom{
-    border-bottom: none;
+  .active{
+    color: #1AA5A0;
   }
-  #menuDiv {
-    margin-left: 0;
-    .menuMarginBottom {
-      margin-bottom: 0;
+  .fontL;
+  @media (max-width: @screen-md-min){
+    margin-top: 10px;
+  }
+}
+.breadcrumb>li+li {
+  &:before {
+    .fontL;
+    padding: 0 10px;
+    color: #78797B;
+    content: "\276F";
+    font-weight: bolder;
+  }
+}
+.customBorder{
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid lightgrey;
+}
+#menuDiv {
+  margin-left: 0;
+  .menuMarginBottom {
+    margin-bottom: 0;
+  }
+  .panel-body {
+    padding: 0;
+  }
+  .list-group {
+    margin-bottom: 0px;
+  }
+  .borderRadiusSpecial {
+    border-radius: 0px;
+  }
+  .panel-heading {
+    background-color: #fcfcfc;
+    padding: 15px 15px;
+  }
+  .panel{
+    box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+  span{
+    outline: none;
+  }
+  .panel-group {
+    .panel {
+      margin-top: -1px;
     }
-    .customGreen{
-      color: #01877C;
-    }
-    .panel-body {
-      padding: 0;
-    }
-    .list-group {
-      margin-bottom: 0px;
-    }
-    .borderRadiusSpecial {
+    div {
+      border: 0;
       border-radius: 0px;
     }
-    .panel-heading {
-      background-color: #fcfcfc;
-      padding: 15px 15px;
-    }
-    .panel{
-      box-shadow: none;
-      -webkit-box-shadow: none;
-    }
-    span{
-      outline: none;
-    }
-    .panel-group {
-      .panel {
-        margin-top: -1px;
-      }
-      div {
-        border: 0;
-        border-radius: 0px;
-      }
-    }
+  }
 
-    .productPageMenu {
-      .parent {
-        a {
-          text-decoration: none;
-          outline: none !important;
-        }
-        .menuItemWrapper{
-          font-weight: bold;
-          width: 100%;
-          display: -webkit-box;
-          display: -moz-box;
-          display: -ms-flexbox;
-          display: -webkit-flex;
-          display: flex;
-          -webkit-flex-direction: row;
-          -webkit-flex-wrap: wrap;
-          -webkit-flex-flow: inherit;
-          -ms-flex-direction: row;
-          -ms-flex-wrap: wrap;
-          flex-direction: row;
-          flex-wrap: wrap;
-          flex-flow: inherit;
-        }
-        .menuItemArrow{
-          width: 15px;
-          top: 0;
-        }
-        .menuItemText{
-          margin-left: 6px;
-          width: 160px;
-        }
-        .panel-heading {
-          .MSDgreenDarker;
-          .panel-title {
-            font-size: inherit;
-            color: #696969;
-          }
-        }
-        &.active {
-          background-color: #00a39e;
-          color: white;
-          .panel-heading {
-            background-color: #00a39e;
-            color: white !important;
-            .MSDgreenDarker {
-              color: @body-bg !important;
-            }
-            .panel-title {
-              color: white;
-            }
-          }
-        }
+  .productPageMenu {
+    .parent {
+      a {
+        text-decoration: none;
+        outline: none !important;
       }
-      .oddParent {
-        .panel-heading {
-          background-color: @green;
-          .panel-title {
-            color: white;
-          }
-          &.active {
-            background-color: #00a39e !important;
-            color: white;
-          }
-        }
+      .menuItemWrapper{
+        font-weight: bold;
+        width: 100%;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row;
+        -webkit-flex-wrap: wrap;
+        -webkit-flex-flow: inherit;
+        -ms-flex-direction: row;
+        -ms-flex-wrap: wrap;
+        flex-direction: row;
+        flex-wrap: wrap;
+        flex-flow: inherit;
       }
-      .child {
-        a {
-          text-decoration: none;
-        }
+      .menuItemArrow{
+        width: 15px;
+        top: 0;
+      }
+      .menuItemText{
+        margin-left: 6px;
+        width: 160px;
+      }
+      .panel-heading {
         .MSDgreenDarker;
-        .handCursor;
-        .fontS;
-        position: relative;
-        display: block;
-        padding: 10px 15px;
-        background-color: @body-bg;
-        &.active {
-          color: darkorange;
+        .panel-title {
+          font-size: inherit;
+          color: #696969;
+        }
+      }
+      &.active {
+        background-color: #00a39e;
+        color: white;
+        .panel-heading {
+          background-color: #00a39e;
+          color: white !important;
+          .MSDgreenDarker {
+            color: @body-bg !important;
+          }
+          .panel-title {
+            color: white;
+          }
         }
       }
     }
-    .mobileDropdown {
-      padding-bottom: 10px;
-      padding-left: 0;
-      padding-right: 0;
-      .glyphicon-Special-Product {
-        margin-top: 2px;
+    .oddParent {
+      .panel-heading {
+        background-color: @green;
+        .panel-title {
+          color: white;
+        }
+        &.active {
+          background-color: #00a39e !important;
+          color: white;
+        }
       }
-      .my-dropdown-menu {
+    }
+    .child {
+      a {
+        text-decoration: none;
+      }
+      .MSDgreenDarker;
+      .handCursor;
+      .fontS;
+      position: relative;
+      display: block;
+      padding: 10px 15px;
+      background-color: @body-bg;
+      &.active {
+        color: darkorange;
+      }
+    }
+  }
+  .mobileDropdown {
+    padding-bottom: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    .glyphicon-Special-Product {
+      margin-top: 2px;
+    }
+    .my-dropdown-menu {
+      padding: 0;
+      background-color: transparent;
+      border: 0px solid #cccccc;
+      border: 0px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0px;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background-clip: border-box;
+      list-style: none;
+      .my-list-menu-item {
         padding: 0;
         background-color: transparent;
-        border: 0px solid #cccccc;
-        border: 0px solid rgba(0, 0, 0, 0.15);
-        border-radius: 0px;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        background-clip: border-box;
-        list-style: none;
-        .my-list-menu-item {
-          padding: 0;
-          background-color: transparent;
-          border: 0px solid @grayLighter;
-        }
+        border: 0px solid @grayLighter;
       }
     }
   }
-  #descriptionDiv {
-    #initialDescriptionDiv {
-      margin-right: -30px;
+}
+#descriptionDiv {
+  bottom: 5px;
+  #initialDescriptionDiv {
+    margin-right: -30px;
+  }
+  .noPadding {
+    padding: 0;
+  }
+  .specialProductTitle {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: @green;
+    .fontXXL;
+    font-weight: bold
+  }
+  .justify {
+    text-align: justify;
+  }
+  .DescriptionWrapper {
+    background-color: @body-bg;
+    border-radius: 0px;
+    .prescription {
+      margin-top: 15px
     }
-    .marginTop20{
-      margin-top: 20px;
-    }
-    .noPadding {
-      padding: 0;
-    }
-    .specialProductTitle {
-      margin-top: 20px;
-      margin-bottom: 20px;
-      color: @green;
-      .fontXXL;
-      font-weight: bold
-    }
-    .justify {
-      text-align: justify;
-    }
-    .DescriptionWrapper {
-      background-color: @body-bg;
-      border-radius: 0px;
-      .prescription {
-        margin-top: 15px
-      }
-      .brochureTitle{
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        float: left;
-        @media (max-width: @screen-md-min) {
-          position: relative;
-        }
-        .noMarginBottom{
-          margin-bottom: 0;
-        }
-      }
-      .brochureNoImage{
+    .brochureTitle{
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      float: left;
+      @media (max-width: @screen-md-min) {
         position: relative;
-        padding: 0;
-        margin-bottom: 15px;
       }
-      .job_id {
-        margin-top: 20px
+      .noMarginBottom{
+        margin-bottom: 0;
       }
-      .fileLinks {
-        color: @green-darker !important;
-        &:focus {
-          text-decoration: none !important;
-        }
+    }
+    .brochureNoImage{
+      position: relative;
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    .job_id {
+      margin-top: 20px
+    }
+    .fileLinks {
+      color: @green-darker !important;
+      &:focus {
+        text-decoration: none !important;
       }
-      .glossary {
-        font-weight: bold;
-        color: @green-darker;
+    }
+    .glossary {
+      font-weight: bold;
+      color: @green-darker;
+      padding-bottom: 10px;
+      .Description {
         padding-bottom: 10px;
-        .Description {
-          padding-bottom: 10px;
-        }
       }
-      .glossaryPrintButtons {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        i {
-          cursor: pointer;
-        }
+    }
+    .glossaryPrintButtons {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      i {
+        cursor: pointer;
       }
-      .safety {
-        margin-bottom: 50px;
+    }
+    .safety {
+      margin-bottom: 50px;
+    }
+    .siteMap {
+      ul {
+        list-style: none;
+        font-weight: bold;
+        padding: 0;
+        line-height: 2em;
+        cursor: pointer;
+        color: @green !important;
       }
-      .siteMap {
-        ul {
-          list-style: none;
-          font-weight: bold;
-          padding: 0;
-          line-height: 2em;
-          cursor: pointer;
-          color: @green !important;
-        }
-        .siteMapList {
-          cursor: pointer;
-          color: @green !important;
-        }
+      .siteMapList {
+        cursor: pointer;
+        color: @green !important;
       }
     }
   }

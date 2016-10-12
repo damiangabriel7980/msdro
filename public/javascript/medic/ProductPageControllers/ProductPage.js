@@ -6,6 +6,7 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
     };
     specialProductService.SpecialProduct.query({id: $stateParams.product_id}).$promise.then(function(result){
         $scope.specialProductPage = Success.getObject(result);
+        $scope.pathologyAssociated = $scope.specialProductPage.pathologiesID[0];
         if($scope.specialProductPage.productType === 'resource'){
             $state.params.isResource = true;
         }
