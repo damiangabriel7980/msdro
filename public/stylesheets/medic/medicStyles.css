@@ -7740,11 +7740,17 @@ fieldset[disabled] .navbarMedic .profile .btn {
   border: none;
   border-bottom: 1px solid lightgrey;
 }
+.specialProductMainWrapper .noBorderBottom {
+  border-bottom: none;
+}
 .specialProductMainWrapper #menuDiv {
   margin-left: 0;
 }
 .specialProductMainWrapper #menuDiv .menuMarginBottom {
   margin-bottom: 0;
+}
+.specialProductMainWrapper #menuDiv .customGreen {
+  color: #01877C;
 }
 .specialProductMainWrapper #menuDiv .panel-body {
   padding: 0;

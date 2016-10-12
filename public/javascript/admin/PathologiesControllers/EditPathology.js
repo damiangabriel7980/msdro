@@ -22,7 +22,9 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
 
     PathologiesService.pathologies.query({id: idToEdit}).$promise.then(function(response){
         $scope.pathology = Success.getObject(response);
-        $scope.myApps.selectedApps = $scope.pathology.specialApps;
+        if($scope.pathology.specialApps){
+            $scope.myApps.selectedApps = $scope.pathology.specialApps
+        }
         $scope.editableTabs = [
             {
                 title: 'Descriere',
@@ -45,14 +47,17 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
 
     $scope.updatePathology = function(closeModal){
         $scope.pathology.last_updated = Date.now();
-        var id_apps = [];
-        for(var j=0;j<$scope.myApps.selectedApps.length;j++){
-            id_apps.push($scope.myApps.selectedApps[j]._id);
+        if($scope.myApps.selectedApps){
+            var id_apps = [];
+            angular.forEach($scope.myApps, function (app, index) {
+                id_apps.push(app._id);
+            });
+            $scope.pathology.specialApps = id_apps;
         }
-        angular.forEach($scope.editableTabs, function (value, key) {
-            $scope.pathology[value.propertyUsedToBind] = value.model;
+        angular.forEach($scope.editableTabs, function (editableTab, key) {
+            $scope.pathology[editableTab.propertyUsedToBind] = editableTab.model;
         });
-        $scope.pathology.specialApps = id_apps;
+
         PathologiesService.pathologies.update({id: idToEdit}, $scope.pathology).$promise.then(function (resp) {
             if(closeModal){
                 $scope.closeModal();
