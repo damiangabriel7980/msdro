@@ -33,18 +33,6 @@
                 </accordion-heading>
             </accordion-group>
         </accordion>
-        <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
-            <accordion-group is-open="status.isFirstOpen" class="parent oddParent" ui-sref-active="active" ui-sref="groupSpecialProduct.sitemap({product_id: specialProductPage._id, isResource: $state.params.isResource})">
-                <accordion-heading>
-                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Sitemap</div>
-                </accordion-heading>
-            </accordion-group>
-            <accordion-group is-open="status.isFirstOpen" ng-if="!$state.params.isResource" class="parent oddParent" ui-sref="productList.all.groupedByPathology({idArea: 0})">
-                <accordion-heading>
-                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Vezi toate produsele</div>
-                </accordion-heading>
-            </accordion-group>
-        </accordion>
         <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg mobileDropdown">
         <a class="btn btn-primary col-xs-12 text-center pull-left dropdown-toggle" dropdown-toggle>{{mobileMenuTitle}}<i class="glyphicon glyphicon-chevron-down pull-right glyphicon-Special-Product" ></i></a>
 
@@ -87,7 +75,18 @@
         </ul>
 
         </div>
-        <img class="img-responsive hidden-sm hidden-xs img-thumbnail handCursor col-xs-12" ng-if="specialProductPage.logo_path" ng-click="selectFirstMenuItem()" no-cache-src="{{pathAmazonDev+specialProductPage.logo_path}}" />
+        <div class="col-xs-12 noPadding" ng-if="relatedProducts.length">
+            <div class="col-xs-12 noPadding">
+                <h3 class="customGreen">
+                    Din aceeași patologie
+                </h3>
+            </div>
+            <div class="col-xs-12 noPadding"  ng-repeat="prod in relatedProducts | orderBy: 'product_name'">
+                <div class="col-md-12 col-sm-6 col-xs-6 noPadding">
+                    <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ng-if="prod.logo_path" ui-sref="groupSpecialProduct.menuItem({product_id: prod._id})" ui-sref-opts="{inherit: false,reload: true}" no-cache-src="{{prod.logo_path ? pathAmazonDev+prod.logo_path : defaultProductImage}}" />
+                </div>
+            </div>
+        </div>
         <angular-floating-button class="col-md-12 noPadding"></angular-floating-button>
     </div>
     <div class="col-md-10 col-xs-12" id="descriptionDiv">
