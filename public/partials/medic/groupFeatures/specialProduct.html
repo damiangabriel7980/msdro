@@ -33,6 +33,13 @@
                 </accordion-heading>
             </accordion-group>
         </accordion>
+        <accordion close-others="oneAtATime" class="productPageMenu hidden-xs hidden-sm">
+            <accordion-group is-open="status.isFirstOpen" ng-repeat="pathology in specialProductPage.pathologiesID" ng-if="pathology.description" class="parent oddParent" ui-sref="pathologies({pathology_id: pathology._id})">
+                <accordion-heading>
+                    <div><i class="glyphicon glyphicon-chevron-right"></i>&nbsp;&nbsp;Înapoi la {{pathology.display_name}}</div>
+                </accordion-heading>
+            </accordion-group>
+        </accordion>
         <div dropdown is-open="isCollapsed.isFirstOpen" class="col-xs-12 col-sm-12 hidden-md hidden-lg mobileDropdown">
         <a class="btn btn-primary col-xs-12 text-center pull-left dropdown-toggle" dropdown-toggle>{{mobileMenuTitle}}<i class="glyphicon glyphicon-chevron-down pull-right glyphicon-Special-Product" ></i></a>
 
