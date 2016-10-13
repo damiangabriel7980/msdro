@@ -3646,6 +3646,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                     generateToken(function (err, activationToken) {
                                         var emailTo = [{email: user.username, name: user.name}];
                                         var emailTemplate = Config().createAccountTemplateV2;
+                                        var activationLink = 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken;
                                         if(user.enabled){
                                             emailTemplate = "Staywell_createdAccount_noActivation";
                                         }
@@ -3660,7 +3661,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                             },
                                             {
                                                 "name": "activationLink",
-                                                "content": 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken
+                                                "content": activationLink
                                             },
                                             {
                                                 "name": "loginAddress",
@@ -3671,7 +3672,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                             emailTemplate,
                                             templateContent,
                                             emailTo,
-                                            'Activare cont MSD'
+                                            'Activare cont MSD',
+                                            activationLink
                                         ).then(
                                             function (success) {
                                                 handleSuccess(res, {updateCount: wres}, 8);

@@ -390,7 +390,8 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             }
                         ],
                         emailTo,
-                        'Activare cont MSD'
+                        'Activare cont MSD',
+                        activationLink
                     ).then(
                         function (success) {
                             //do nothing
@@ -447,7 +448,8 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             }
                         ],
                         emailTo,
-                        'Activare cont MSD'
+                        'Activare cont MSD',
+                        activationLink
                     ).then(
                         function (success) {
                             //do nothing
