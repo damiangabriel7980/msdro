@@ -3645,7 +3645,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                     };
                                     generateToken(function (err, activationToken) {
                                         var emailTo = [{email: user.username, name: user.name}];
-                                        var emailTemplate = "Staywell_createdAccount";
+                                        var emailTemplate = Config().createAccountTemplateV2;
                                         if(user.enabled){
                                             emailTemplate = "Staywell_createdAccount_noActivation";
                                         }

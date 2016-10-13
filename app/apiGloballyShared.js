@@ -17,6 +17,7 @@ var SHA512   = require('crypto-js/sha512');
 
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
+var Config = require('../config/environment');
 
 const activationPrefixStaywell = function (hostname) {
     return 'http://' + hostname + '/activateAccountStaywell/';
@@ -373,7 +374,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
                     MailerModule.send(
-                        "Staywell_createdAccount",
+                        Config().createAccountTemplateV2,
                         [
                             {
                                 "name": "title",
@@ -430,7 +431,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
                     MailerModule.send(
-                        "Staywell_createdAccountMobile",
+                        Config().createAccountMobileTemplateV2,
                         [
                             {
                                 "name": "title",
