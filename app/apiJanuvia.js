@@ -21,8 +21,9 @@ module.exports = function(app, logger, router) {
 	 * @api {get} /apiJanuvia/users Retrieve a list of Januvia Application users
 	 * @apiVersion 1.0.0
 	 * @apiPermission none
+	 * @apiParam {Date} last_modified a date to compare with the last updated date of the Januvia users database
 	 * @apiExample {curl} Example usage:
-	 *     curl -i http://localhost:8080/apiJanuvia/users
+	 *     curl -i http://localhost:8080/apiJanuvia/users?last_modified=23/06/2016
 	 * @apiSuccess {Array} response.success         an array containing a list of Januvia Application users
 	 * @apiSuccess {String}   response.message       A success message.
 	 * @apiSuccessExample {json} Success-Response:

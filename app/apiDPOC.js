@@ -204,12 +204,6 @@ module.exports = function(app, logger, router) {
      *     {
      *
      *     }
-     * @apiUse AccessForbidden
-     * @apiErrorExample {json} Error-Response (4xx):
-     *     HTTP/1.1 403 AccessForbidden Error
-     *     {
-     *
-     *     }
      */
     router.route('/validate')
         .get(validateDevice, function (req, res) {

@@ -14,6 +14,10 @@
  *
  */
 /**
+ * @apiDefine devModeStreamAdmin In order to access this api change in the config/environment.js the dev_mode property (set it to true and in loggedInWith fill with an email with stream admin rights)
+ *
+ */
+/**
  * @apiDefine streamAdmin Only users with streamAdmin rights can access this route
  */
 /**

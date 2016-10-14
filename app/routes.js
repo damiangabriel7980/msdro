@@ -53,9 +53,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response the main page
      * @apiSuccessExample {html} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *     '<html></html>'
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
      *     HTTP/1.1 500 Server Error
@@ -117,9 +115,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response the login page/the main page of public section with the login modal opened
      * @apiSuccessExample {html} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *     '<html></html>'
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
      *     HTTP/1.1 500 Server Error
@@ -151,9 +147,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response the main page of the preview section
      * @apiSuccessExample {html} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *     '<html></html>'
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
      *     HTTP/1.1 500 Server Error
@@ -182,9 +176,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response the main page of the preview section
      * @apiSuccessExample {html} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *    '<html></html>'
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
      *     HTTP/1.1 500 Server Error
@@ -217,9 +209,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *    '<html></html>'
      * @apiError (Error 4xx) {html} HTMLErrorMessage
      * @apiErrorExample {html} Error-Response (4xx):
      *     HTTP/1.1 4xx Error
@@ -254,9 +244,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *     '<html></html>'
      * @apiError (Error 4xx) {html} HTMLErrorMessage
      * @apiErrorExample {html} Error-Response (4xx):
      *     HTTP/1.1 4xx Error
@@ -331,15 +319,13 @@ module.exports = function(app, logger, passport) {
      * @api {get} /unsubscribe Reset a user's password - change password and return success page
      * @apiVersion 1.0.0
      * @apiPermission none
-     * @apiParam {String} hashedEmail a hashed email
+     * @apiParam {String} user a hashed email
      * @apiExample {curl} Example usage:
      *     curl -i http://localhost:8080/unsubscribe?user=iojwdj818281631361hdwwd
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *     '<html></html>'
      * @apiError (Error 4xx) {html} HTMLErrorMessage
      * @apiErrorExample {html} Error-Response (4xx):
      *     HTTP/1.1 4xx Error
@@ -429,9 +415,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {XML} response a XML document
      * @apiSuccessExample {XML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *     '<xml></xml>'
      */
     app.get('/sitemap', function (req, res) {
         res.sendFile('/private_storage/sitemap.xml', {root: __dirname});
@@ -449,9 +433,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *     '<html></html>'
      */
     app.get('/skillshare', function (req, res) {
         res.sendFile('/private_storage/skillshare.html', {root: __dirname});
@@ -545,9 +527,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *        accepted: true
-     *     }
+     *     '<html></html>'
      */
     //redirect user to home page and open login
     app.get('/login', function (req, res) {
@@ -569,9 +549,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *        accepted: true
-     *     }
+     *     '<html></html>'
      */
     app.get('/activateAccount/:token', function(req, res) {
         res.redirect(307, '/apiMobileShared/activateAccount/'+req.params.token);
@@ -591,9 +569,7 @@ module.exports = function(app, logger, passport) {
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *        accepted: true
-     *     }
+     *     '<html></html>'
      */
     app.get('/activateAccountStaywell/:token', function (req, res) {
         //put a requestedActivation variable on this session

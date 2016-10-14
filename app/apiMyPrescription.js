@@ -40,10 +40,9 @@ module.exports = function (app, logger, router) {
    * @api {get} /apiMyPrescription/config Retrieve a list of prescriptions
    * @apiVersion 1.0.0
    * @apiPermission medic
-   * @apiUse HeaderAuthorization
    * @apiHeader {String} last-modified a date used for filtering prescriptions
    * @apiExample {curl} Example usage:
-   *     curl -i -H "Authorization: Bearer " -H "last-modified : someDate" http://localhost:8080/apiMyPrescription/config
+   *     curl -i -H "last-modified : someDate" http://localhost:8080/apiMyPrescription/config
    * @apiSuccess {Array} arr an array of prescriptions (or an empty object if the last-modified header is not sent
    * @apiSuccessExample {json} Success-Response:
    *     HTTP/1.1 200 OK
@@ -91,10 +90,9 @@ module.exports = function (app, logger, router) {
    * @api {get} /apiMyPrescription/drug Retrieve a product from medic section by a code
    * @apiVersion 1.0.0
    * @apiPermission medic
-   * @apiUse HeaderAuthorization
    * @apiParam {String} drugCode the code of the product
    * @apiExample {curl} Example usage:
-   *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiMyPrescription/drug?drugCode=windw28312c87dw1
+   *     curl -i http://localhost:8080/apiMyPrescription/drug?drugCode=windw28312c87dw1
    * @apiSuccess {Object} obj an object containing the product
    * @apiSuccessExample {json} Success-Response:
    *     HTTP/1.1 200 OK
@@ -159,17 +157,22 @@ module.exports = function (app, logger, router) {
    * @api {get} /apiMyPrescription/drug Retrieve a product from medic section by a code
    * @apiVersion 1.0.0
    * @apiPermission medic
-   * @apiUse HeaderAuthorization
    * @apiParam {String} id the id of the product
    * @apiExample {curl} Example usage:
-   *     curl -i -H "Authorization: Bearer " http://localhost:8080/apiMyPrescription/drug/id?id=windw28312c87dw1
+   *     curl -i http://localhost:8080/apiMyPrescription/drug/id?id=windw28312c87dw1
    * @apiSuccess {Object} obj an object containing the product
    * @apiSuccessExample {json} Success-Response:
    *     HTTP/1.1 200 OK
    *     {
-   *        [
+   *        {
    *
-   *        ]
+   *        }
+   *     }
+   * @apiSuccess {Object} obj an empty object
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 304 Not Modified
+   *     {
+   *
    *     }
    * @apiUse ErrorOnServer
    * @apiErrorExample {json} Error-Response (500):

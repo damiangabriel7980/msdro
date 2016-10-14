@@ -29,36 +29,9 @@ module.exports = function(app, logger, router) {
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "success": [
-     *       {
-     *         "_id": "",
-     *         "title": "",
-     *         "enable": true,
-     *         "order_index": 0,
-     *         "image_path": "",
-     *         "description": "",
-     *         "link_name": "",
-     *         "last_updated": "",
-     *         "content_id": "",
-     *         "type": 1,
-     *         "links": {
-     *             "url": "",
-     *             "content": {
-     *                  "_id": "",
-     *                  "title": "",
-     *                  "author": "",
-     *                  "description": "",
-     *                  "type": 4,
-     *                  "text" : ""
-     *                  "enable": true,
-     *                  "date_added": "",
-     *                  "last_updated": "",
-     *                  "file_path": "",
-     *                  "image_path": "",
-     *                  "therapeutic-areasID": []
-     *         }
-     * }
-     *       ],
+     *       "success": [{
+     *
+     *       }],
      *       "message": "Cererea a fost procesata cu succes"
      *     }
      * @apiUse ErrorOnServer
@@ -101,44 +74,16 @@ module.exports = function(app, logger, router) {
      * @apiSuccessExample {json} Success-Response (in case of missing id in query params):
      *     HTTP/1.1 200 OK
      *     {
-     *       "success": [
-     *       {
-     *         "_id": "",
-     *         "title": "",
-     *         "enable": true,
-     *         "author": 0,
-     *         "description": "",
-     *         "text": "",
-     *         "type": Number,
-     *         "date_added": "",
-     *         "last_updated": "",
-     *         "image_path": "",
-     *         "file_path": "",
-     *         "nrOfViews" : Number,
-     *         "therapeutic-areasID" : Array
-     *         "category" : ""
-     *       }
-     *     ],
+     *       "success": [{
+     *
+     *       }],
      *       "message": "Cererea a fost procesata cu succes"
      *     }
      * @apiSuccessExample {json} Success-Response (in case of id in query params):
      *     HTTP/1.1 200 OK
      *     {
      *       "success": {
-     *         "_id": "",
-     *         "title": "",
-     *         "enable": true,
-     *         "author": 0,
-     *         "description": "",
-     *         "text": "",
-     *         "type": Number,
-     *         "date_added": "",
-     *         "last_updated": "",
-     *         "image_path": "",
-     *         "file_path": "",
-     *         "nrOfViews" : Number,
-     *         "therapeutic-areasID" :
-     *         "category" : ""
+     *
      *       },
      *       "message": "Cererea a fost procesata cu succes"
      *     }
@@ -255,20 +200,7 @@ module.exports = function(app, logger, router) {
          *     HTTP/1.1 200 OK
          *     {
          *       "success": {
-         *         "_id": "",
-         *         "title": "",
-         *         "enable": true,
-         *         "author": 0,
-         *         "description": "",
-         *         "text": "",
-         *         "type": Number,
-         *         "date_added": "",
-         *         "last_updated": "",
-         *         "image_path": "",
-         *         "file_path": "",
-         *         "nrOfViews" : Number,
-         *         "therapeutic-areasID" : Array
-         *         "category" : ""
+         *
          *       },
          *       "message": "Cererea a fost procesata cu succes"
          *     }
@@ -309,20 +241,7 @@ module.exports = function(app, logger, router) {
      *     {
      *       "success": [
      *       {
-     *         "_id": "",
-     *         "title": "",
-     *         "enable": true,
-     *         "author": 0,
-     *         "description": "",
-     *         "text": "",
-     *         "type": Number,
-     *         "date_added": "",
-     *         "last_updated": "",
-     *         "image_path": "",
-     *         "file_path": "",
-     *         "nrOfViews" : Number,
-     *         "therapeutic-areasID" : Array
-     *         "category" : ""
+     *
      *       }
      *     ],
      *       "message": "Cererea a fost procesata cu succes"
@@ -395,20 +314,7 @@ module.exports = function(app, logger, router) {
      *     {
      *       "success": [
      *       {
-     *         "_id": "",
-     *         "title": "",
-     *         "enable": true,
-     *         "author": 0,
-     *         "description": "",
-     *         "text": "",
-     *         "type": Number,
-     *         "date_added": "",
-     *         "last_updated": "",
-     *         "image_path": "",
-     *         "file_path": "",
-     *         "nrOfViews" : Number,
-     *         "therapeutic-areasID" : Array
-     *         "category" : ""
+     *
      *       }
      *     ],
      *       "message": "Cererea a fost procesata cu succes"
@@ -460,14 +366,9 @@ module.exports = function(app, logger, router) {
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "success": [
-     *       {
-     *         "_id": "",
-     *         "name": "",
-     *         "enabled": true,
-     *         "last_updated": ""
-     *       }
-     *     ],
+     *       "success": [{
+     *
+     *       }],
      *       "message": "Cererea a fost procesata cu succes"
      *     }
      * @apiUse ErrorOnServer
@@ -507,24 +408,9 @@ module.exports = function(app, logger, router) {
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "success": [
-     *       {
-     *         "_id": "",
-     *         "title": "",
-     *         "enable": true,
-     *         "author": 0,
-     *         "description": "",
-     *         "text": "",
-     *         "type": Number,
-     *         "date_added": "",
-     *         "last_updated": "",
-     *         "image_path": "",
-     *         "file_path": "",
-     *         "nrOfViews" : Number,
-     *         "therapeutic-areasID" : Array
-     *         "category" : ""
-     *       }
-     *     ],
+     *       "success": [{
+     *
+     *       }],
      *       "message": "Cererea a fost procesata cu succes"
      *     }
      * @apiUse ErrorOnServer
@@ -570,23 +456,9 @@ module.exports = function(app, logger, router) {
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "success": [
-     *       {
-     *         "_id": "",
-     *         "description": "",
-     *         "enable": true,
-     *         "end": "",
-     *         "groupsID" : Array,
-     *         "last_updated" : "",
-     *         "name" : ""
-     *         "place" : "",
-     *         "start" : "",
-     *         "type" : "",
-     *         "listconferences" : Array,
-     *         "pathologiesID" : Array,
-     *         "isPublic" : true
-     *       }
-     *     ],
+     *       "success": [{
+     *
+     *       }],
      *       "message": "Cererea a fost procesata cu succes"
      *     }
      * @apiUse ErrorOnServer
@@ -629,16 +501,9 @@ module.exports = function(app, logger, router) {
      * @apiSuccessExample {json} Success-Response (all categories):
      *     HTTP/1.1 200 OK
      *     {
-     *       "success": [
-     *       {
-     *         "_id": "",
-     *         "name": "",
-     *         "isEnabled": true,
-     *         "description": "",
-     *         "image_path" : Array,
-     *         "last_updated" : ""
-     *       }
-     *     ],
+     *       "success": [{
+     *
+     *       }],
      *       "message": "Cererea a fost procesata cu succes"
      *     }
      * @apiSuccessExample {json} Success-Response (one category):
@@ -646,12 +511,7 @@ module.exports = function(app, logger, router) {
      *     {
      *       "success":
      *       {
-     *         "_id": "",
-     *         "name": "",
-     *         "isEnabled": true,
-     *         "description": "",
-     *         "image_path" : Array,
-     *         "last_updated" : ""
+     *
      *       },
      *       "message": "Cererea a fost procesata cu succes"
      *     }
