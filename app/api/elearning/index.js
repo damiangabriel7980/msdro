@@ -26,15 +26,14 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {put} /api/admin/elearning/updateIndex Update courses indexes
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {Array} courseMap An array of courses
 	 * @apiParam {Array} chapterMap An array of chapters
 	 * @apiParam {Array} subChaptersMap An array of sub-chapters
 	 * @apiParam {Array} slidesMap An array of slides
 	 * @apiParam {Array} questionsMap An array of questions
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -x POST -H "Authorization: Bearer " -d '{courseMap: [{id: '', order: ''}]}' http://localhost:8080/api/admin/elearning/updateIndex
+	 *     curl -i -x POST -d '{courseMap: [{id: '', order: ''}]}' http://localhost:8080/api/admin/elearning/updateIndex
 	 * @apiSuccess {Object} response.success an empty object
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -167,11 +166,10 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {get} /api/admin/elearning/courses Retrieve a list of elearning courses / a single course
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {String} [id] the id of a course
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/courses?id=wdnan828dnwdwoogr
+	 *     curl -i http://localhost:8080/api/admin/elearning/courses?id=wdnan828dnwdwoogr
 	 * @apiSuccess {Object} response.success a single course / an array of courses
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -223,11 +221,10 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {post} /api/admin/elearning/courses Create an elearning course
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {Object} course a course object
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x POST -H "Authorization: Bearer " -d '{course : {}}' http://localhost:8080/api/admin/elearning/courses
+		 *     curl -i -x POST -d '{course : {}}' http://localhost:8080/api/admin/elearning/courses
 		 * @apiSuccess {Object} response.success the newly created course
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -278,14 +275,13 @@ module.exports = function(env, logger, amazon, router){
 			 * @apiGroup Elearning_API
 			 * @api {put} /api/admin/elearning/courses Update an elearning course
 			 * @apiVersion 1.0.0
-			 * @apiPermission admin
-			 * @apiUse HeaderAuthorization
+			 * @apiPermission devModeAdmin
 			 * @apiParam {Object} course a course object
 			 * @apiParam {String} imagePath the file path to the course image
 			 * @apiParam {Object} status if we want to enable/disable a course (contains the property isEnabled which holds the new
 			 * status of the course
 			 * @apiExample {curl} Example usage:
-			 *     curl -i -x PUT -H "Authorization: Bearer " -d '{course : {}, imagePath: null, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/courses?id=dnwadnwan8284y854nfg
+			 *     curl -i -x PUT -d '{course : {}, imagePath: null, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/courses?id=dnwadnwan8284y854nfg
 			 * @apiSuccess {Object} response.success an empty object / an object confirming if the course was updated
 			 * @apiSuccess {String} response.message A message
 			 * @apiSuccessExample {json} Success-Response:
@@ -395,11 +391,10 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {delete} /api/admin/elearning/courses Delete an elearning course
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {String} id the id of the course
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/courses?id=dnwadnwan8284y854nfg
+		 *     curl -i -x DELETE http://localhost:8080/api/admin/elearning/courses?id=dnwadnwan8284y854nfg
 		 * @apiSuccess {Object} response.success an empty object
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -526,11 +521,10 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {get} /api/admin/elearning/chapters Retrieve a list of elearning chapters / a single chapter
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {String} [id] the id of a chapter
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/chapters?id=wdnan828dnwdwoogr
+	 *     curl -i   http://localhost:8080/api/admin/elearning/chapters?id=wdnan828dnwdwoogr
 	 * @apiSuccess {Object} response.success a single chapter / an array of chapters
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -582,12 +576,11 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {post} /api/admin/elearning/chapters Create an elearning chapter
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {Object} chapter a chapter object
 		 * @apiParam {String} courseId id of course to associate to
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x POST -H "Authorization: Bearer " -d '{chapter : {}, courseId: ''}' http://localhost:8080/api/admin/elearning/chapters
+		 *     curl -i -x POST   -d '{chapter : {}, courseId: ''}' http://localhost:8080/api/admin/elearning/chapters
 		 * @apiSuccess {Object} response.success the newly created chapter
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -643,13 +636,12 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {put} /api/admin/elearning/chapters Update an elearning chapter
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {Object} chapter a chapter object
 		 * @apiParam {Object} status if we want to enable/disable a chapter (contains the property isEnabled which holds the new
 		 * status of the chapter
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x PUT -H "Authorization: Bearer " -d '{chapter : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/chapters?id=dnwadnwan8284y854nfg
+		 *     curl -i -x PUT   -d '{chapter : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/chapters?id=dnwadnwan8284y854nfg
 		 * @apiSuccess {Object} response.success an empty object
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -696,11 +688,10 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {delete} /api/admin/elearning/chapters Delete an elearning chapter
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {String} id the id of the chapter
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/chapters?id=dnwadnwan8284y854nfg
+		 *     curl -i -x DELETE   http://localhost:8080/api/admin/elearning/chapters?id=dnwadnwan8284y854nfg
 		 * @apiSuccess {Object} response.success an empty object
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -819,11 +810,10 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {get} /api/admin/elearning/subchapters Retrieve a list of elearning subchapters / a single subchapter
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {String} [id] the id of a subchapter
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/subchapters?id=wdnan828dnwdwoogr
+	 *     curl -i   http://localhost:8080/api/admin/elearning/subchapters?id=wdnan828dnwdwoogr
 	 * @apiSuccess {Object} response.success a single subchapter / an array of subchapters
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -875,12 +865,11 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {post} /api/admin/elearning/subchapters Create an elearning subchapter
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {Object} subchapter a subchapter object
 		 * @apiParam {String} chapterId id of chapter to associate to
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x POST -H "Authorization: Bearer " -d '{subchapter : {}, chapterId: ''}' http://localhost:8080/api/admin/elearning/subchapters
+		 *     curl -i -x POST   -d '{subchapter : {}, chapterId: ''}' http://localhost:8080/api/admin/elearning/subchapters
 		 * @apiSuccess {Object} response.success the newly created subchapter
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -936,13 +925,12 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {put} /api/admin/elearning/subchapters Update an elearning subchapter
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {Object} subchapter a subchapter object
 		 * @apiParam {Object} status if we want to enable/disable a subchapter (contains the property isEnabled which holds the new
 		 * status of the subchapter
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x PUT -H "Authorization: Bearer " -d '{subchapter : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/subchapters?id=dnwadnwan8284y854nfg
+		 *     curl -i -x PUT   -d '{subchapter : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/subchapters?id=dnwadnwan8284y854nfg
 		 * @apiSuccess {Object} response.success an empty object
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -989,11 +977,10 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {delete} /api/admin/elearning/subchapters Delete an elearning subchapter
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {String} id the id of the subchapter
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/subchapters?id=dnwadnwan8284y854nfg
+		 *     curl -i -x DELETE   http://localhost:8080/api/admin/elearning/subchapters?id=dnwadnwan8284y854nfg
 		 * @apiSuccess {Object} response.success an empty object
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -1094,11 +1081,10 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {get} /api/admin/elearning/slides Retrieve a list of elearning slides / a single slide
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {String} [id] the id of a slide
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/slides?id=wdnan828dnwdwoogr
+	 *     curl -i   http://localhost:8080/api/admin/elearning/slides?id=wdnan828dnwdwoogr
 	 * @apiSuccess {Object} response.success a single slide / an array of slides
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -1162,12 +1148,11 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {post} /api/admin/elearning/slides Create an elearning slide
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {Object} subchapter a slide object
 		 * @apiParam {String} id id of subchapter to associate to
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x POST -H "Authorization: Bearer " -d '{slide : {}, id: ''}' http://localhost:8080/api/admin/elearning/slides
+		 *     curl -i -x POST   -d '{slide : {}, id: ''}' http://localhost:8080/api/admin/elearning/slides
 		 * @apiSuccess {Object} response.success the newly created slide
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -1223,14 +1208,13 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {put} /api/admin/elearning/slides Update an elearning slide
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {Object} slide a slide object
 		 * @apiParam {Boolean} isSlide if the slide is a presentation or a questionnaire
 		 * @apiParam {Object} status if we want to enable/disable a slide (contains the property isEnabled which holds the new
 		 * status of the slide
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x PUT -H "Authorization: Bearer " -d '{slide : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/slides?id=dnwadnwan8284y854nfg
+		 *     curl -i -x PUT   -d '{slide : {}, status: {isEnabled: false}}' http://localhost:8080/api/admin/elearning/slides?id=dnwadnwan8284y854nfg
 		 * @apiSuccess {Object} response.success an empty object
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -1324,11 +1308,10 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {delete} /api/admin/elearning/slides Delete an elearning slide
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {String} id the id of the slide
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/slides?id=dnwadnwan8284y854nfg
+		 *     curl -i -x DELETE   http://localhost:8080/api/admin/elearning/slides?id=dnwadnwan8284y854nfg
 		 * @apiSuccess {Object} response.success an empty object
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response:
@@ -1424,12 +1407,11 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {post} /api/admin/elearning/questions Create an elearning question
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {Object} question a question object
 	 * @apiParam {String} id id of slide to associate to
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -x POST -H "Authorization: Bearer " -d '{question : {}, id: ''}' http://localhost:8080/api/admin/elearning/questions
+	 *     curl -i -x POST   -d '{question : {}, id: ''}' http://localhost:8080/api/admin/elearning/questions
 	 * @apiSuccess {Object} response.success a property containing the status of the update process
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -1524,11 +1506,10 @@ module.exports = function(env, logger, amazon, router){
 			 * @apiGroup Elearning_API
 			 * @api {put} /api/admin/elearning/questions Update an elearning question
 			 * @apiVersion 1.0.0
-			 * @apiPermission admin
-			 * @apiUse HeaderAuthorization
+			 * @apiPermission devModeAdmin
 			 * @apiParam {Object} question a question object
 			 * @apiExample {curl} Example usage:
-			 *     curl -i -x PUT -H "Authorization: Bearer " -d '{question : {}}' http://localhost:8080/api/admin/elearning/questions?id=dnwadnwan8284y854nfg
+			 *     curl -i -x PUT   -d '{question : {}}' http://localhost:8080/api/admin/elearning/questions?id=dnwadnwan8284y854nfg
 			 * @apiSuccess {Object} response.success an empty object
 			 * @apiSuccess {String} response.message A message
 			 * @apiSuccessExample {json} Success-Response:
@@ -1563,11 +1544,10 @@ module.exports = function(env, logger, amazon, router){
 			 * @apiGroup Elearning_API
 			 * @api {delete} /api/admin/elearning/questions Delete an elearning question
 			 * @apiVersion 1.0.0
-			 * @apiPermission admin
-			 * @apiUse HeaderAuthorization
+			 * @apiPermission devModeAdmin
 			 * @apiParam {String} id the id of the question
 			 * @apiExample {curl} Example usage:
-			 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/questions?id=dnwadnwan8284y854nfg
+			 *     curl -i -x DELETE   http://localhost:8080/api/admin/elearning/questions?id=dnwadnwan8284y854nfg
 			 * @apiSuccess {Object} response.success an empty object
 			 * @apiSuccess {String} response.message A message
 			 * @apiSuccessExample {json} Success-Response:
@@ -1636,12 +1616,11 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {post} /api/admin/elearning/answers Create an elearning answer
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {Object} answer a answer object
 	 * @apiParam {String} id id of question to associate to
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -x POST -H "Authorization: Bearer " -d '{answer : {}, id: ''}' http://localhost:8080/api/admin/elearning/answers
+	 *     curl -i -x POST   -d '{answer : {}, id: ''}' http://localhost:8080/api/admin/elearning/answers
 	 * @apiSuccess {Object} response.success the newly created answer
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -1697,11 +1676,10 @@ module.exports = function(env, logger, amazon, router){
 			 * @apiGroup Elearning_API
 			 * @api {put} /api/admin/elearning/answers Update an elearning answer
 			 * @apiVersion 1.0.0
-			 * @apiPermission admin
-			 * @apiUse HeaderAuthorization
+			 * @apiPermission devModeAdmin
 			 * @apiParam {Object} answer a answer object
 			 * @apiExample {curl} Example usage:
-			 *     curl -i -x PUT -H "Authorization: Bearer " -d '{answer : {}}' http://localhost:8080/api/admin/elearning/answers?id=dnwadnwan8284y854nfg
+			 *     curl -i -x PUT   -d '{answer : {}}' http://localhost:8080/api/admin/elearning/answers?id=dnwadnwan8284y854nfg
 			 * @apiSuccess {Object} response.success an empty object
 			 * @apiSuccess {String} response.message A message
 			 * @apiSuccessExample {json} Success-Response:
@@ -1736,11 +1714,10 @@ module.exports = function(env, logger, amazon, router){
 			 * @apiGroup Elearning_API
 			 * @api {delete} /api/admin/elearning/answers Delete an elearning answer
 			 * @apiVersion 1.0.0
-			 * @apiPermission admin
-			 * @apiUse HeaderAuthorization
+			 * @apiPermission devModeAdmin
 			 * @apiParam {String} id the id of the answer
 			 * @apiExample {curl} Example usage:
-			 *     curl -i -x DELETE -H "Authorization: Bearer " http://localhost:8080/api/admin/elearning/answers?id=dnwadnwan8284y854nfg
+			 *     curl -i -x DELETE   http://localhost:8080/api/admin/elearning/answers?id=dnwadnwan8284y854nfg
 			 * @apiSuccess {Object} response.success an empty object
 			 * @apiSuccess {String} response.message A message
 			 * @apiSuccessExample {json} Success-Response:
@@ -1796,11 +1773,10 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {get} /api/elearning/courses Retrieve a list of elearning courses / a single course (for medic section)
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {String} [id] the id of a course
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/elearning/courses?id=wdnan828dnwdwoogr
+	 *     curl -i   http://localhost:8080/api/elearning/courses?id=wdnan828dnwdwoogr
 	 * @apiSuccess {Object} response.success a single course / an array of courses
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response:
@@ -1861,11 +1837,10 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {get} /api/elearning/subchapters Retrieve a single subchapter (for medic section)
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {String} id the id of a subchapter
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/elearning/subchapters?id=wdnan828dnwdwoogr
+	 *     curl -i   http://localhost:8080/api/elearning/subchapters?id=wdnan828dnwdwoogr
 	 * @apiSuccess {Object} response.success a single subchapter
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response :
@@ -1913,11 +1888,10 @@ module.exports = function(env, logger, amazon, router){
 	 * @apiGroup Elearning_API
 	 * @api {get} /api/elearning/slides Retrieve a single slide (for medic section)
 	 * @apiVersion 1.0.0
-	 * @apiPermission admin
-	 * @apiUse HeaderAuthorization
+	 * @apiPermission devModeAdmin
 	 * @apiParam {Array} id the id of a slide
 	 * @apiExample {curl} Example usage:
-	 *     curl -i -H "Authorization: Bearer " http://localhost:8080/api/elearning/slides?id=wdnan828dnwdwoogr
+	 *     curl -i   http://localhost:8080/api/elearning/slides?id=wdnan828dnwdwoogr
 	 * @apiSuccess {Object} response.success a single slide
 	 * @apiSuccess {String} response.message A message
 	 * @apiSuccessExample {json} Success-Response :
@@ -1982,12 +1956,11 @@ module.exports = function(env, logger, amazon, router){
 		 * @apiGroup Elearning_API
 		 * @api {post} /api/elearning/slides Post the answers of a test slide (for medic section)
 		 * @apiVersion 1.0.0
-		 * @apiPermission admin
-		 * @apiUse HeaderAuthorization
+		 * @apiPermission devModeAdmin
 		 * @apiParam {String} id the id of a slide
 		 * @apiParam {Object} qaMap an object mapping the question and the user's answer
 		 * @apiExample {curl} Example usage:
-		 *     curl -i -x POST -H "Authorization: Bearer " -d '{qid : aid}' http://localhost:8080/api/elearning/slides?id=wdnan828dnwdwoogr
+		 *     curl -i -x POST   -d '{qid : aid}' http://localhost:8080/api/elearning/slides?id=wdnan828dnwdwoogr
 		 * @apiSuccess {Object} response.success an object containing the score
 		 * @apiSuccess {String} response.message A message
 		 * @apiSuccessExample {json} Success-Response :

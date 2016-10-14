@@ -398,13 +398,14 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
      * @apiParam {Object} activation Contains the properties : type - can be 'code' or 'file' and value - can be file or code string
      * @apiExample {curl} Example usage:
      *     curl -i -x POST -H "Authorization: Bearer " -d '{user: {}, activation: {}}' http://localhost:8080/apiGloballyShared/createAccountStaywell
-     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {Object} response.success an object containing the current state of the user and the username
      * @apiSuccess {String} response.message A message
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *        success : {
-     *
+     *             user: '',
+     *             state: ''
      *        },
      *        message : "A message"
      *     }
@@ -483,13 +484,14 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
      * @apiParam {Object} activation Contains the properties : type - can be 'code' or 'file' and value - can be file or code string
      * @apiExample {curl} Example usage:
      *     curl -i -x POST -H "Authorization: Bearer " -d '{user: {}, activation: {}}' http://localhost:8080/apiGloballyShared/completeProfile
-     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {Object} response.success an object containing the current state of the user and the username
      * @apiSuccess {String} response.message A message
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *        success : {
-     *
+     *              user: '',
+     *              state: ''
      *        },
      *        message : "A message"
      *     }
@@ -532,13 +534,14 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
      *   title, name, email, password, registeredFrom, job
      * @apiExample {curl} Example usage:
      *     curl -i -x POST -H "Authorization: Bearer " -d '{user: {}}' http://localhost:8080/apiGloballyShared/createAccountMobile
-     * @apiSuccess {Object} response.success an empty object
+     * @apiSuccess {Object} response.success an object containing the current state of the user and the username
      * @apiSuccess {String} response.message A message
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *        success : {
-     *
+     *              user: '',
+     *              state: ''
      *        },
      *        message : "A message"
      *     }

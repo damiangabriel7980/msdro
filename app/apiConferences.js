@@ -67,13 +67,19 @@ module.exports = function(app, my_config, logger, tokenSecret, router) {
      * @apiVersion 1.0.0
      * @apiPermission medic
      * @apiUse HeaderAuthorization
+     * @apiParam {Object} user a user object containing the following properties:
+     *   title, name, email, password, registeredFrom, job
      * @apiExample {curl} Example usage:
-     *     curl -i -X POST -H "Authorization: Bearer " http://localhost:8080/apiConferences/createAccount
-     * @apiSuccess {json} response an empty object
+     *     curl -i -X POST -H "Authorization: Bearer " -d '{user: {}}' http://localhost:8080/apiConferences/createAccount
+     * @apiSuccess {json} response an object containing the current state of the user and the username
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *
+     *        success : {
+     *              user: '',
+     *              state: ''
+     *        },
+     *        message : "A message"
      *     }
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
@@ -96,13 +102,17 @@ module.exports = function(app, my_config, logger, tokenSecret, router) {
      * @apiVersion 1.0.0
      * @apiPermission medic
      * @apiUse HeaderAuthorization
+     * @apiParam {String} email the user's email
      * @apiExample {curl} Example usage:
-     *     curl -i -X POST -H "Authorization: Bearer " http://localhost:8080/apiConferences/resetPass
-     * @apiSuccess {json} response an empty object
+     *     curl -i -X POST -H "Authorization: Bearer " -d '{email : ''}' http://localhost:8080/apiConferences/resetPass
+     * @apiSuccess {json} response an object containing the email the reset password email was sent to
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *
+     *        success : {
+     *          mailto: ''
+     *        },
+     *        message : "A message"
      *     }
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):

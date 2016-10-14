@@ -46,13 +46,19 @@ module.exports = function(app, logger, tokenSecret, router) {
      * @apiVersion 1.0.0
      * @apiPermission medic
      * @apiUse HeaderAuthorization
+     * @apiParam {Object} user a user object containing the following properties:
+     *   title, name, email, password, registeredFrom, job
      * @apiExample {curl} Example usage:
-     *     curl -i -X POST -H "Authorization: Bearer " http://localhost:8080/apiMobileShared/createAccount
-     * @apiSuccess {json} response an empty object
+     *     curl -i -X POST -H "Authorization: Bearer " -d '{user: {}}' http://localhost:8080/apiMobileShared/createAccount
+     * @apiSuccess {json} response an object containing the current state of the user and the username
      * @apiSuccessExample {json} Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *
+     *        success : {
+     *              user: '',
+     *              state: ''
+     *        },
+     *        message : "A message"
      *     }
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
@@ -74,13 +80,17 @@ module.exports = function(app, logger, tokenSecret, router) {
      * @apiVersion 1.0.0
      * @apiPermission medic
      * @apiUse HeaderAuthorization
+     * @apiParam {String} email the user's email
      * @apiExample {curl} Example usage:
-     *     curl -i -X POST -H "Authorization: Bearer " http://localhost:8080/apiMobileShared/resetPass
-     * @apiSuccess {json} response an empty object
+     *     curl -i -X POST -H "Authorization: Bearer " -d '{email : ''}' http://localhost:8080/apiMobileShared/resetPass
+     * @apiSuccess {json} response an object
      * @apiSuccessExample {json} Success-Response:
-     *     HTTP/1.1 200 OK
+     *     HTTP/1.1 307 Temporary Redirect
      *     {
-     *
+     *        success : {
+     *          mailto: ''
+     *        },
+     *        message : "A message"
      *     }
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
@@ -110,9 +120,7 @@ module.exports = function(app, logger, tokenSecret, router) {
      * @apiSuccess {html} response a HTML page
      * @apiSuccessExample {HTML} Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *
-     *     }
+     *    '<html></html>'
      * @apiUse ErrorOnServer
      * @apiErrorExample {json} Error-Response (500):
      *     HTTP/1.1 500 Server Error
