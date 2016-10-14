@@ -82,7 +82,7 @@
         </ul>
 
         </div>
-        <div class="col-xs-12 noPadding" ng-if="relatedProducts.length">
+        <div class="col-xs-12 noPadding" ng-if="relatedProducts.length || specialApps">
             <div class="col-xs-12 noPadding">
                 <h3 class="customGreen">
                     Din aceeași patologie
@@ -90,7 +90,12 @@
             </div>
             <div class="col-xs-12 noPadding"  ng-repeat="prod in relatedProducts | orderBy: 'product_name'">
                 <div class="col-md-12 col-sm-6 col-xs-6 noPadding">
-                    <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ng-if="prod.logo_path" ui-sref="groupSpecialProduct.menuItem({product_id: prod._id})" ui-sref-opts="{inherit: false,reload: true}" no-cache-src="{{prod.logo_path ? pathAmazonDev+prod.logo_path : defaultProductImage}}" />
+                    <img ng-class="{'noBorderBottom' : $last && !specialApps}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ng-if="prod.logo_path" ui-sref="groupSpecialProduct.menuItem({product_id: prod._id})" ui-sref-opts="{inherit: false,reload: true}" no-cache-src="{{prod.logo_path ? pathAmazonDev+prod.logo_path : defaultProductImage}}" />
+                </div>
+            </div>
+            <div class="col-xs-12 noPadding"  ng-repeat="app in specialApps | orderBy: 'name'">
+                <div class="col-md-12 col-sm-6 col-xs-6 noPadding">
+                    <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" ui-sref-opts="{inherit: false,reload: true}" no-cache-src="{{defaultProofImage}}" />
                 </div>
             </div>
         </div>

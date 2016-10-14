@@ -7735,6 +7735,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .marginTop20 {
   margin-top: 20px;
 }
+.noBorderBottom {
+  border-bottom: none !important;
+}
 .breadcrumb {
   background-color: transparent;
   padding: 0;

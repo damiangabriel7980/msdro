@@ -14,6 +14,9 @@ app.controllerProvider.register('ProductPage', ['$scope', '$rootScope', '$stateP
             $scope.relatedProducts = Success.getObject(result)[0].associated_items.filter(function (associatedItem) {
                 return associatedItem._id != $scope.specialProductPage._id;
             });
+            if(Success.getObject(result)[0].specialApps && Success.getObject(result)[0].specialApps.length){
+                $scope.specialApps = Success.getObject(result)[0].specialApps;
+            }
         })
     }).catch(function(){
         $state.reload();
