@@ -163,10 +163,12 @@ var getPathologiesWithItems = function(entityToAssociate, itemQParams, pathQPara
                                 display_name: pathology.display_name,
                                 description: pathology.description,
                                 header_image: pathology.header_image,
-                                specialApps: pathology.specialApps,
                                 order_index: pathology.order_index,
                                 video_intro: pathology.video_intro
                             };
+                            if(pathology.specialApps && pathology.specialApps.length){
+                                objectToPush.specialApps = pathology.specialApps;
+                            }
                             var associatedItemsClean = [];
                             async.each(associated, function(singleItem, callbackItem){
                                 getSpecialProductMenu(singleItem._id, true).then(
@@ -3643,7 +3645,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                     };
                                     generateToken(function (err, activationToken) {
                                         var emailTo = [{email: user.username, name: user.name}];
-                                        var emailTemplate = "Staywell_createdAccount";
+                                        var emailTemplate = Config().createAccountTemplate;
+                                        var activationLink = 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken;
                                         if(user.enabled){
                                             emailTemplate = "Staywell_createdAccount_noActivation";
                                         }
@@ -3658,7 +3661,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                             },
                                             {
                                                 "name": "activationLink",
-                                                "content": 'http://' + req.headers.host + '/activateAccountStaywell/' + activationToken
+                                                "content": activationLink
                                             },
                                             {
                                                 "name": "loginAddress",
@@ -3669,7 +3672,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                             emailTemplate,
                                             templateContent,
                                             emailTo,
-                                            'Activare cont MSD'
+                                            'Activare cont MSD',
+                                            {
+                                                "name": "activationLink",
+                                                "content": activationLink
+                                            }
                                         ).then(
                                             function (success) {
                                                 handleSuccess(res, {updateCount: wres}, 8);

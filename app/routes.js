@@ -167,7 +167,7 @@ module.exports = function(app, logger, passport) {
                                     }
                                 ];
                                 MailerModule.send(
-                                    "Staywell_completedReset",
+                                    Config().completedResetTemplate,
                                     templateContent,
                                     emailTo,
                                     'Resetare parola MSD'
