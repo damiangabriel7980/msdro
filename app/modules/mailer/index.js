@@ -7,7 +7,7 @@ var Q = require('q');
 
 var Parameters = require('../../models/parameters');
 
-exports.send = function (template_name, template_content, to, subject, activationURL) {
+exports.send = function (template_name, template_content, to, subject, globalVars) {
     var deferred = Q.defer();
     //get from_email from system parameters
     Parameters.findOne({name: "FROM_EMAIL"}, function (err, param) {
@@ -22,10 +22,7 @@ exports.send = function (template_name, template_content, to, subject, activatio
                     from_email: param.value || param.default_value,
                     to: to,
                     subject: subject,
-                    "global_merge_vars": activationURL ? [{
-                        "name": "activationLink",
-                        "content": activationURL
-                    }] : []
+                    "global_merge_vars": globalVars ? [globalVars] : []
                 }
             }, function(err){
                 if(err){

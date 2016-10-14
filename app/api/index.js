@@ -3673,7 +3673,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                                             templateContent,
                                             emailTo,
                                             'Activare cont MSD',
-                                            activationLink
+                                            {
+                                                "name": "activationLink",
+                                                "content": activationLink
+                                            }
                                         ).then(
                                             function (success) {
                                                 handleSuccess(res, {updateCount: wres}, 8);

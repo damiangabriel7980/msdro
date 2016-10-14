@@ -391,7 +391,10 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                         ],
                         emailTo,
                         'Activare cont MSD',
-                        activationLink
+                        {
+                            "name": "activationLink",
+                            "content": activationLink
+                        }
                     ).then(
                         function (success) {
                             //do nothing
@@ -449,7 +452,10 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                         ],
                         emailTo,
                         'Activare cont MSD',
-                        activationLink
+                        {
+                            "name": "activationLink",
+                            "content": activationLink
+                        }
                     ).then(
                         function (success) {
                             //do nothing
@@ -561,9 +567,9 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                 function(token, user, done) {
                     //email user
                     var emailTo = [{email: user.username, name: user.name}];
-
+                    var templateToUse = Config().resetPasswordTemplateV2();
                     MailerModule.send(
-                        "Staywell_requestedReset",
+                        templateToUse,
                         [
                             {
                                 "name": "title",
@@ -579,7 +585,11 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             }
                         ],
                         emailTo,
-                        'Resetare parola MSD'
+                        'Resetare parola MSD',
+                        {
+                            "name": "resetLink",
+                            "content": resetPasswordPrefix(req.headers.host) + token
+                        }
                     ).then(
                         function () {
                             done(false, user.username);
