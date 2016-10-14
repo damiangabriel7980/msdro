@@ -567,7 +567,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                 function(token, user, done) {
                     //email user
                     var emailTo = [{email: user.username, name: user.name}];
-                    var templateToUse = Config().resetPasswordTemplateV2();
+                    var templateToUse = Config().resetPasswordTemplateV2;
                     MailerModule.send(
                         templateToUse,
                         [
