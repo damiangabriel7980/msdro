@@ -70,6 +70,6 @@
     "url" : "http://localhost:8080",
     "name": "Staywell",
     "version": "1.0.0",
-    "description": "Staywell API Documentation"
+    "description": "There are 3 possibilities for accessing the API:<br><ul><li style='line-height: 2em; font-size: 20px'>Without any authorization at all : These routes do not require any type of authentication (Main_Routes, Public_API, Content_Preview, Januvia_Application, Guidelines, IPad Applications, Token_API) .</li><li style='line-height: 2em; font-size: 20px'>Sending an authorization token in the header: Before accessing these routes, you must first make a POST call to the next URL - http://localhost:8080/authenticateToken , sending a username and a password in the body in order to retrieve a token. After receiving this token, use it the HTTP headers like this “Authorization Bearer <b>tokenHere</b>” (MSD_DOC, Mobile_API, Global_API, DPOC, Contract Management, Check-In_Conferences_API).</li><li style='line-height: 2em; font-size: 20px'>Enabling the <b>dev_mode</b> in the <b>environment.js</b> file (change the <b>isEnabled</b> property to <b>true</b> and the <b>loggedInWith</b> property with a username which has medic/admin/streamadmin rights - according to your needs) . After making these modifications, any of the routes <b>/api/admin</b>, <b>/api/</b> and <b>/api/streamadmin</b> will be accessible, if the user has the right to access the requested API (Live_Conferences, Admin_API, Medic_API, Elearning_API).</li></ul>"
   }
 }

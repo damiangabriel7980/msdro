@@ -18,7 +18,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Public_Carousel_Images
      * @apiDescription Retrive carousel images for public section
-     * @apiGroup Public Carousel
+     * @apiGroup Public_API
      * @api {get} /apiPublic/getCarouselData retrieve carousel images for public section
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -56,7 +56,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Public_Content
      * @apiDescription Retrive content for public section
-     * @apiGroup Public Content
+     * @apiGroup Public_API
      * @api {get} /apiPublic/content retrieve content for public section
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -187,7 +187,7 @@ module.exports = function(app, logger, router) {
         /**
          * @apiName Update_Public_Content
          * @apiDescription Update number of views for a public content item
-         * @apiGroup Public Content
+         * @apiGroup Public_API
          * @api {put} /apiPublic/content update number of views for a public content item
          * @apiVersion 1.0.0
          * @apiPermission None
@@ -228,7 +228,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Public_Content_For_Mobile
      * @apiDescription Retrive content for public section (mobile version)
-     * @apiGroup Public Content
+     * @apiGroup Public_API
      * @api {get} /apiPublic/mobileContent retrieve content for public section (mobile version)
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -300,7 +300,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Search_Public_Content
      * @apiDescription Search in public content for keyword/phrase
-     * @apiGroup Public Content
+     * @apiGroup Public_API
      * @api {get} /apiPublic/publicSearch search in public content for keyword/phrase
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -355,7 +355,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Therapeutic_Areas
      * @apiDescription Get the public therapeutic areas
-     * @apiGroup Therapeutic Areas
+     * @apiGroup Public_API
      * @api {get} /apiPublic/therapeuticAreas Get the public therapeutic areas
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -396,7 +396,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Most_Read_Public_Content
      * @apiDescription Retrive the most read content for public section
-     * @apiGroup Public Content
+     * @apiGroup Public_API
      * @api {get} /apiPublic/content retrieve the most read content for public section
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -445,7 +445,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Public_Events
      * @apiDescription Get the public events
-     * @apiGroup Public Events
+     * @apiGroup Public_API
      * @api {get} /apiPublic/events Get the public events
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -487,7 +487,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Public_Categories
      * @apiDescription Get the public categories
-     * @apiGroup Public Categories
+     * @apiGroup Public_API
      * @api {get} /apiPublic/categories Get the public categories
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -547,7 +547,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Terms_Conditions
      * @apiDescription Get the terms & conditions
-     * @apiGroup Terms & conditions
+     * @apiGroup Public_API
      * @api {get} /apiPublic/termsAndConditionsStaywell Get the terms & conditions
      * @apiVersion 1.0.0
      * @apiPermission None
@@ -566,7 +566,7 @@ module.exports = function(app, logger, router) {
     /**
      * @apiName Retrive_Terms_Conditions_MSD
      * @apiDescription Get the terms & conditions (MSD)
-     * @apiGroup Terms & conditions MSD
+     * @apiGroup Public_API
      * @api {get} /apiPublic/termsAndConditionsStaywell Get the terms & conditions (MSD)
      * @apiVersion 1.0.0
      * @apiPermission None
