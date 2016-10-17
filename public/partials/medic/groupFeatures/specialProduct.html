@@ -104,9 +104,16 @@
     <div class="col-md-10 col-xs-12" id="descriptionDiv">
         <div class="col-xs-12 col-md-12 noPadding">
             <ol class="breadcrumb">
-                <li><a ui-sref="home">Acasă</a></li>
-                <li><a ui-sref="pathologies({pathology_id: pathologyAssociated._id})">{{pathologyAssociated.display_name}}</a></li>
-                <li class="active"><strong>{{specialProductPage.product_name}}</strong></li>
+                <li>
+                    <a ui-sref="home">Acasă</a>
+                </li>
+                <li>
+                    <a ng-if="pathologyAssociated.description" ui-sref="pathologies({pathology_id: pathologyAssociated._id})">{{pathologyAssociated.display_name}}</a>
+                    <span class="noLink" ng-if="!pathologyAssociated.description">{{pathologyAssociated.display_name}}</span>
+                </li>
+                <li class="active">
+                    <strong>{{specialProductPage.product_name}}</strong>
+                </li>
             </ol>
         </div>
         <ui-view>
