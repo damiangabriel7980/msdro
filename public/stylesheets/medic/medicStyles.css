@@ -7748,6 +7748,9 @@ fieldset[disabled] .navbarMedic .profile .btn {
 .breadcrumb li a {
   color: #78797B;
 }
+.breadcrumb li .noLink {
+  color: #78797B;
+}
 .breadcrumb .active {
   color: #1AA5A0;
 }
