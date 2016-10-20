@@ -7732,52 +7732,96 @@ fieldset[disabled] .navbarMedic .profile .btn {
   padding: 0 15px 0 0;
   color: white;
 }
-.specialProductMainWrapper {
+.marginTop20 {
   margin-top: 20px;
 }
-.specialProductMainWrapper .customBorder {
+.noBorderBottom {
+  border-bottom: none !important;
+}
+.breadcrumb {
+  background-color: transparent;
+  padding: 0;
+  margin-bottom: 10px;
+  list-style: none;
+  font-size: 17px;
+}
+.breadcrumb li a {
+  color: #78797B;
+}
+.breadcrumb li .noLink {
+  color: #78797B;
+}
+.breadcrumb .active {
+  color: #1AA5A0;
+}
+@media (max-width: 767px) {
+  .breadcrumb {
+    font-size: 15px;
+  }
+}
+@media (max-width: 992px) {
+  .breadcrumb {
+    margin-top: 10px;
+  }
+}
+.breadcrumb > li + li:before {
+  font-size: 17px;
+  padding: 0 10px;
+  color: #78797B;
+  content: "\276F";
+  font-weight: bolder;
+}
+@media (max-width: 767px) {
+  .breadcrumb > li + li:before {
+    font-size: 15px;
+  }
+}
+.customBorder {
   border-radius: 0;
   border: none;
   border-bottom: 1px solid lightgrey;
 }
-.specialProductMainWrapper #menuDiv {
+#menuDiv {
   margin-left: 0;
 }
-.specialProductMainWrapper #menuDiv .menuMarginBottom {
+#menuDiv .menuMarginBottom {
   margin-bottom: 0;
 }
-.specialProductMainWrapper #menuDiv .panel-body {
+#menuDiv .panel-body {
   padding: 0;
 }
-.specialProductMainWrapper #menuDiv .list-group {
+#menuDiv .list-group {
   margin-bottom: 0px;
 }
-.specialProductMainWrapper #menuDiv .borderRadiusSpecial {
+#menuDiv .borderRadiusSpecial {
   border-radius: 0px;
 }
-.specialProductMainWrapper #menuDiv .panel-heading {
+#menuDiv .panel-heading {
   background-color: #fcfcfc;
   padding: 15px 15px;
 }
-.specialProductMainWrapper #menuDiv .panel {
+#menuDiv .panel {
   box-shadow: none;
   -webkit-box-shadow: none;
 }
-.specialProductMainWrapper #menuDiv span {
+#menuDiv span {
   outline: none;
 }
-.specialProductMainWrapper #menuDiv .panel-group .panel {
+#menuDiv .panel-group .panel {
   margin-top: -1px;
 }
-.specialProductMainWrapper #menuDiv .panel-group div {
+#menuDiv .panel-group div {
   border: 0;
   border-radius: 0px;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent a {
+#menuDiv .customGreen {
+  color: #01877C;
+}
+#menuDiv .productPageMenu .parent a {
   text-decoration: none;
   outline: none !important;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemWrapper {
+#menuDiv .productPageMenu .parent .menuItemWrapper {
   font-weight: bold;
   width: 100%;
   display: -webkit-box;
@@ -7794,46 +7838,46 @@ fieldset[disabled] .navbarMedic .profile .btn {
   flex-wrap: wrap;
   flex-flow: inherit;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemArrow {
+#menuDiv .productPageMenu .parent .menuItemArrow {
   width: 15px;
   top: 0;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent .menuItemText {
+#menuDiv .productPageMenu .parent .menuItemText {
   margin-left: 6px;
   width: 160px;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent .panel-heading {
+#menuDiv .productPageMenu .parent .panel-heading {
   color: #006d69;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent .panel-heading .panel-title {
+#menuDiv .productPageMenu .parent .panel-heading .panel-title {
   font-size: inherit;
   color: #696969;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent.active {
+#menuDiv .productPageMenu .parent.active {
   background-color: #00a39e;
   color: white;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading {
+#menuDiv .productPageMenu .parent.active .panel-heading {
   background-color: #00a39e;
   color: white !important;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading .MSDgreenDarker {
+#menuDiv .productPageMenu .parent.active .panel-heading .MSDgreenDarker {
   color: #fff !important;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .parent.active .panel-heading .panel-title {
+#menuDiv .productPageMenu .parent.active .panel-heading .panel-title {
   color: white;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading {
+#menuDiv .productPageMenu .oddParent .panel-heading {
   background-color: #01877B;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading .panel-title {
+#menuDiv .productPageMenu .oddParent .panel-heading .panel-title {
   color: white;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .oddParent .panel-heading.active {
+#menuDiv .productPageMenu .oddParent .panel-heading.active {
   background-color: #00a39e !important;
   color: white;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .child {
+#menuDiv .productPageMenu .child {
   color: #006d69;
   cursor: pointer;
   font-size: 12px;
@@ -7842,26 +7886,26 @@ fieldset[disabled] .navbarMedic .profile .btn {
   padding: 10px 15px;
   background-color: #fff;
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .child a {
+#menuDiv .productPageMenu .child a {
   text-decoration: none;
 }
 @media (max-width: 767px) {
-  .specialProductMainWrapper #menuDiv .productPageMenu .child {
+  #menuDiv .productPageMenu .child {
     font-size: 11px;
   }
 }
-.specialProductMainWrapper #menuDiv .productPageMenu .child.active {
+#menuDiv .productPageMenu .child.active {
   color: darkorange;
 }
-.specialProductMainWrapper #menuDiv .mobileDropdown {
+#menuDiv .mobileDropdown {
   padding-bottom: 10px;
   padding-left: 0;
   padding-right: 0;
 }
-.specialProductMainWrapper #menuDiv .mobileDropdown .glyphicon-Special-Product {
+#menuDiv .mobileDropdown .glyphicon-Special-Product {
   margin-top: 2px;
 }
-.specialProductMainWrapper #menuDiv .mobileDropdown .my-dropdown-menu {
+#menuDiv .mobileDropdown .my-dropdown-menu {
   padding: 0;
   background-color: transparent;
   border: 0px solid #cccccc;
@@ -7872,21 +7916,21 @@ fieldset[disabled] .navbarMedic .profile .btn {
   background-clip: border-box;
   list-style: none;
 }
-.specialProductMainWrapper #menuDiv .mobileDropdown .my-dropdown-menu .my-list-menu-item {
+#menuDiv .mobileDropdown .my-dropdown-menu .my-list-menu-item {
   padding: 0;
   background-color: transparent;
   border: 0px solid #dddddd;
 }
-.specialProductMainWrapper #descriptionDiv #initialDescriptionDiv {
+#descriptionDiv {
+  bottom: 5px;
+}
+#descriptionDiv #initialDescriptionDiv {
   margin-right: -30px;
 }
-.specialProductMainWrapper #descriptionDiv .marginTop20 {
-  margin-top: 20px;
-}
-.specialProductMainWrapper #descriptionDiv .noPadding {
+#descriptionDiv .noPadding {
   padding: 0;
 }
-.specialProductMainWrapper #descriptionDiv .specialProductTitle {
+#descriptionDiv .specialProductTitle {
   margin-top: 20px;
   margin-bottom: 20px;
   color: #01877B;
@@ -7894,67 +7938,67 @@ fieldset[disabled] .navbarMedic .profile .btn {
   font-weight: bold;
 }
 @media (max-width: 767px) {
-  .specialProductMainWrapper #descriptionDiv .specialProductTitle {
+  #descriptionDiv .specialProductTitle {
     font-size: 20px;
   }
 }
-.specialProductMainWrapper #descriptionDiv .justify {
+#descriptionDiv .justify {
   text-align: justify;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper {
+#descriptionDiv .DescriptionWrapper {
   background-color: #fff;
   border-radius: 0px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .prescription {
+#descriptionDiv .DescriptionWrapper .prescription {
   margin-top: 15px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle {
+#descriptionDiv .DescriptionWrapper .brochureTitle {
   position: absolute;
   left: 0;
   bottom: 0;
   float: left;
 }
 @media (max-width: 992px) {
-  .specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle {
+  #descriptionDiv .DescriptionWrapper .brochureTitle {
     position: relative;
   }
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureTitle .noMarginBottom {
+#descriptionDiv .DescriptionWrapper .brochureTitle .noMarginBottom {
   margin-bottom: 0;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .brochureNoImage {
+#descriptionDiv .DescriptionWrapper .brochureNoImage {
   position: relative;
   padding: 0;
   margin-bottom: 15px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .job_id {
+#descriptionDiv .DescriptionWrapper .job_id {
   margin-top: 20px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .fileLinks {
+#descriptionDiv .DescriptionWrapper .fileLinks {
   color: #006d69 !important;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .fileLinks:focus {
+#descriptionDiv .DescriptionWrapper .fileLinks:focus {
   text-decoration: none !important;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .glossary {
+#descriptionDiv .DescriptionWrapper .glossary {
   font-weight: bold;
   color: #006d69;
   padding-bottom: 10px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .glossary .Description {
+#descriptionDiv .DescriptionWrapper .glossary .Description {
   padding-bottom: 10px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .glossaryPrintButtons {
+#descriptionDiv .DescriptionWrapper .glossaryPrintButtons {
   padding-top: 5px;
   padding-bottom: 5px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .glossaryPrintButtons i {
+#descriptionDiv .DescriptionWrapper .glossaryPrintButtons i {
   cursor: pointer;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .safety {
+#descriptionDiv .DescriptionWrapper .safety {
   margin-bottom: 50px;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .siteMap ul {
+#descriptionDiv .DescriptionWrapper .siteMap ul {
   list-style: none;
   font-weight: bold;
   padding: 0;
@@ -7962,7 +8006,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
   cursor: pointer;
   color: #01877B !important;
 }
-.specialProductMainWrapper #descriptionDiv .DescriptionWrapper .siteMap .siteMapList {
+#descriptionDiv .DescriptionWrapper .siteMap .siteMapList {
   cursor: pointer;
   color: #01877B !important;
 }

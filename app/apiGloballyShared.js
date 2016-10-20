@@ -17,6 +17,7 @@ var SHA512   = require('crypto-js/sha512');
 
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
+var Config = require('../config/environment');
 
 const activationPrefixStaywell = function (hostname) {
     return 'http://' + hostname + '/activateAccountStaywell/';
@@ -373,7 +374,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
                     MailerModule.send(
-                        "Staywell_createdAccount",
+                        Config().createAccountTemplate,
                         [
                             {
                                 "name": "title",
@@ -389,7 +390,11 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             }
                         ],
                         emailTo,
-                        'Activare cont MSD'
+                        'Activare cont MSD',
+                        {
+                            "name": "activationLink",
+                            "content": activationLink
+                        }
                     ).then(
                         function (success) {
                             //do nothing
@@ -430,7 +435,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                     var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
 
                     MailerModule.send(
-                        "Staywell_createdAccountMobile",
+                        Config().createAccountMobileTemplate,
                         [
                             {
                                 "name": "title",
@@ -446,7 +451,11 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             }
                         ],
                         emailTo,
-                        'Activare cont MSD'
+                        'Activare cont MSD',
+                        {
+                            "name": "activationLink",
+                            "content": activationLink
+                        }
                     ).then(
                         function (success) {
                             //do nothing
@@ -558,9 +567,9 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                 function(token, user, done) {
                     //email user
                     var emailTo = [{email: user.username, name: user.name}];
-
+                    var templateToUse = Config().resetPasswordTemplate;
                     MailerModule.send(
-                        "Staywell_requestedReset",
+                        templateToUse,
                         [
                             {
                                 "name": "title",
@@ -576,7 +585,11 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                             }
                         ],
                         emailTo,
-                        'Resetare parola MSD'
+                        'Resetare parola MSD',
+                        {
+                            "name": "resetLink",
+                            "content": resetPasswordPrefix(req.headers.host) + token
+                        }
                     ).then(
                         function () {
                             done(false, user.username);
