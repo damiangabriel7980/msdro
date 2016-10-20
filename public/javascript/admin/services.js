@@ -761,7 +761,7 @@ services.factory('tinyMCEConfig', function () {
           plugins: [
               "advlist autolink lists link image charmap print preview anchor",
               "searchreplace visualblocks code fullscreen",
-              "insertdatetime media table contextmenu paste charmap",
+              "insertdatetime media table contextmenu paste codemirror charmap",
               "jsplus_bootstrap_include,jsplus_bootstrap_show_blocks,jsplus_bootstrap_block_conf,jsplus_bootstrap_templates,jsplus_bootstrap_row_add_up,jsplus_bootstrap_row_add_down," +
               "jsplus_bootstrap_button,jsplus_bootstrap_icons,jsplus_bootstrap_badge,jsplus_bootstrap_label,jsplus_bootstrap_breadcrumbs,jsplus_bootstrap_alert," +
               "jsplus_bootstrap_col_move_left,jsplus_bootstrap_col_move_right,jsplus_bootstrap_row_move_up,jsplus_bootstrap_row_move_down,jsplus_bootstrap_delete_col,jsplus_bootstrap_delete_row"
@@ -769,7 +769,16 @@ services.factory('tinyMCEConfig', function () {
           extended_valid_elements: 'div[*],span[*],i[*]',
           valid_children: '+div[a|p|div|p|ul|ol|li|h1|h2|h3|h4|h5|h5|h6]',
           height: 500,
-          toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jsplus_bootstrap_show_blocks,jsplus_bootstrap_button," +
+          codemirror: {
+              indentOnInit: true, // Whether or not to indent code on init.
+              fullscreen: false,   // Default setting is false
+              config: {           // CodeMirror config object
+                  lineNumbers: true
+              },
+              width: 800,
+              height: 600
+          },
+          toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | code | link image | jsplus_bootstrap_show_blocks,jsplus_bootstrap_button," +
           "jsplus_bootstrap_icons,jsplus_bootstrap_badge,jsplus_bootstrap_label,jsplus_bootstrap_breadcrumbs,jsplus_bootstrap_alert," +
           "jsplus_bootstrap_block_conf,jsplus_bootstrap_row_add_up,jsplus_bootstrap_templates,jsplus_bootstrap_row_add_down,jsplus_bootstrap_col_move_left,jsplus_bootstrap_col_move_right," +
           "jsplus_bootstrap_row_move_up,jsplus_bootstrap_row_move_down,jsplus_bootstrap_delete_col,jsplus_bootstrap_delete_row"
