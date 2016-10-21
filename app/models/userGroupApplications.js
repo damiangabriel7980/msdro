@@ -8,7 +8,8 @@ var schema		= new Schema({
     url:   String,
     isEnabled: Boolean,
     groups: [{type: Schema.Types.ObjectId, ref: 'UserGroup', index: true}],
-    code: String
+    code: String,
+    logo_path: String
 });
 
 schema.plugin(deepPopulate, {
