@@ -95,7 +95,7 @@
             </div>
             <div class="col-xs-12 noPadding">
                 <div class="col-md-12 col-sm-6 col-xs-6 noPadding" ng-repeat="app in specialApps | orderBy: 'name'">
-                    <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" ui-sref-opts="{inherit: false,reload: true}" no-cache-src="{{defaultProofImage}}" />
+                    <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" ui-sref-opts="{inherit: false,reload: true}" no-cache-src="{{app.logo_path ? pathAmazonDev + app.logo_path : defaultProofImage}}" />
                 </div>
             </div>
         </div>
