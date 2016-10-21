@@ -19,6 +19,11 @@
             <label>Cod:</label>
             <input ng-model="app.code" type="text" class="form-control">
         </div>
+        <div class="col-md-12 ">
+            <single-upload-manager label="logo" on-complete-function="logoChanged(key)"
+                                   bucket="{{amazonBucket}}" on-delete-function="logoChanged(key, true)"
+                                   path="{{'specialApps/'+app._id+'/logo/'}}" file-name="{{'image' + app._id}}"></single-upload-manager>
+        </div>
         <div class="col-md-12 form-group">
             <label>Grupuri speciale:</label>
             <my-multiple-select all-objects="specialGroups" selected-objects="app.groups" track-by="_id" display-by="display_name"
@@ -28,7 +33,7 @@
     <div class="modal-footer">
         <div class="col-md-12">
             <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Anuleaza</button>
-            <button type="button" class="btn btn-primary pull-right" ng-click="finalize()">{{modal.action}}</button>
+            <button type="button" class="btn btn-primary pull-right" ng-click="finalize(true)">{{modal.action}}</button>
         </div>
     </div>
 </div>

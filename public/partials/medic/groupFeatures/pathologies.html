@@ -19,7 +19,7 @@
             <img ng-class="{'noBorderBottom' : $last && !pathology.specialApps}" class="img-responsive img-thumbnail handCursor customBorder col-xs-12" ng-if="prod.logo_path" ui-sref="groupSpecialProduct.menuItem({product_id: prod._id})" ng-src="{{prod.logo_path ? pathAmazonDev+prod.logo_path : defaultProductImage}}" />
         </div>
         <div class="col-md-10 noPadding col-sm-6 col-xs-6" ng-if="pathology.specialApps" ng-repeat="app in pathology.specialApps">
-            <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail customBorder handCursor col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" ng-src="{{defaultProofImage}}" />
+            <img ng-class="{'noBorderBottom' : $last}" class="img-responsive img-thumbnail customBorder handCursor col-xs-12" ui-sref="groupFeatures({specialApp: app._id})" no-cache-src="{{app.logo_path ? pathAmazonDev + app.logo_path : defaultProofImage}}" />
         </div>
         <angular-floating-button class="col-md-12 noPadding"></angular-floating-button>
     </div>

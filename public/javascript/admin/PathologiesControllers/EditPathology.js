@@ -49,7 +49,7 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
         $scope.pathology.last_updated = Date.now();
         if($scope.myApps.selectedApps){
             var id_apps = [];
-            angular.forEach($scope.myApps, function (app, index) {
+            angular.forEach($scope.myApps.selectedApps, function (app, index) {
                 id_apps.push(app._id);
             });
             $scope.pathology.specialApps = id_apps;
