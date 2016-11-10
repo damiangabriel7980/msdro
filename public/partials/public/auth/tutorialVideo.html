@@ -1,0 +1,22 @@
+<div class="video-modal">
+    <div class="modal-header">
+        <div class="modal-title "><h3><span class="fa fa-sign-in"></span>&nbsp;Tutorial creare cont</h3></div>
+    </div>
+    <video class="video-container" autoplay controls>
+        <source ng-src="https://s3-eu-west-1.amazonaws.com/msdqa/resources/Tutorial+creare+cont+Staywell.mp4"
+                type="video/mp4">
+    </video>
+    <div class="modal-body">
+        <div>
+            <ul class="pointerLinks" style="margin: 10px 0">
+                <li>Ai uitat parola? <a ng-click="renderView('reset')">Cere resetarea parolei</a>
+
+                </li>
+                <li>Nu ai cont? <a ng-click="showSignup()">Creează cont nou</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-default pull-left" ng-click="closeModal()">Închide</a>
+    </div>
+</div>
