@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!--Get amazon bucket-->
+    <script>
+        const DEFAULT_AMAZON_BUCKET = "<%=amazonBucket%>";
+        const DEFAULT_AMAZON_PREFIX = "<%=amazonPrefix%>";
+    </script>
+
+    <!--Core-modules-->
+    <script src="components/jquery/dist/jquery.min.js"></script>
+    <!--<script src="components/jquery-ui/ui/minified/jquery-ui.min.js"></script>-->
+    <script src="components/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+    <script type="text/javascript" src="components/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
+
+    <script type="text/javascript" src="components/qrcode/lib/qrcode.min.js"></script>
+<script type="text/javascript" src="components/angular-qr/angular-qr.min.js"></script>
+    <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="components/angular-resource/angular-resource.min.js"></script>
+    <script src="components/angular-route/angular-route.min.js"></script>
+    <script src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="modules/angular-select-autocomplete/directive.js"></script>
+    <script src="components/aws-sdk/dist/aws-sdk.min.js"></script>
+    <script src="modules/tinymce/tinymce.min.js"></script>
+    <script src="components/ui-select/dist/select.js"></script>
+    <link rel="stylesheet" href="components/ui-select/dist/select.css">
+        <script src="modules/tinymce/jquery.tinymce.min.js"></script>
+    <script src="modules/ui-tinymce/tinymce.js"></script>
+    <script src="components/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="components/async/lib/async.js"></script>
+
+        <!--GridManager-->
+        <link rel="stylesheet" href="components/gridmanager.js/dist/css/jquery.gridmanager.css">
+        <script src="components/gridmanager.js/dist/js/jquery.gridmanager.js"></script>
+
+        <link rel="stylesheet" href="components/angular-ui-tree/dist/angular-ui-tree.min.css">
+        <script type="text/javascript" src="components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+
+    <!--Controllers-->
+    <script src="javascript/admin/app.js"></script>
+    <script src="javascript/admin/controllers.js"></script>
+    <script src="javascript/admin/services.js"></script>
+    <script src="javascript/shared/controllers.js"></script>
+    <script src="javascript/shared/services.js"></script>
+    <script src="javascript/admin/customDirectives.js"></script>
+    <script src="javascript/admin/NavbarController.js"></script>
+    <script src="javascript/admin/IntroControllers/Intros.js"></script>
+    <script src="javascript/admin/IntroControllers/IntroDetails.js"></script>
+    <script src="javascript/admin/IntroControllers/IntroDelete.js"></script>
+    <script src="javascript/admin/IntroControllers/IntroToggle.js"></script>
+    <script src="javascript/admin/UsersControllers/ManageAccounts/ManageAccounts.js"></script>
+    <script src="javascript/admin/UsersControllers/ManageAccounts/ViewAccount.js"></script>
+    <script src="javascript/admin/UsersControllers/Groups.js"></script>
+    <script src="javascript/admin/UsersControllers/Groups.js"></script>
+    <script src="javascript/admin/UsersControllers/AddGroup.js"></script>
+    <script src="javascript/admin/UsersControllers/EditGroup.js"></script>
+    <script src="javascript/admin/UsersControllers/Specialty/Specialty.js"></script>
+    <script src="javascript/admin/UsersControllers/Specialty/EditSpecialty.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/NewAccounts.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/UsersAccepted.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/UsersRejected.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/UsersPending.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/AcceptUser.js"></script>
+    <script src="javascript/admin/UsersControllers/NewAccounts/RejectUser.js"></script>
+    <script src="javascript/admin/PublicContentControllers/PublicContent.js"></script>
+    <script src="javascript/admin/PublicContentControllers/EditPublicContent.js"></script>
+    <script src="javascript/admin/PublicContentControllers/categories/PublicCategories.js"></script>
+    <script src="javascript/admin/PublicContentControllers/categories/EditPublicContentCategory.js"></script>
+    <script src="javascript/admin/CarouselPublicControllers/CarouselPublic.js"></script>
+    <script src="javascript/admin/CarouselPublicControllers/EditCarouselPublic.js"></script>
+    <script src="javascript/admin/CarouselMedicControllers/CarouselMedic.js"></script>
+    <script src="javascript/admin/CarouselMedicControllers/EditCarouselMedic.js"></script>
+
+    <script src="javascript/admin/ProductsControllers/Products.js"></script>
+    <script src="javascript/admin/ProductsControllers/EditProduct.js"></script>
+    <script src="javascript/admin/ProductsControllers/pdfPreviewController.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageModal.js"></script>
+    <script src="javascript/admin/ProductPageControllers/DeleteProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EnableProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EditProductPage.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageMenu.js"></script>
+    <script src="javascript/admin/ProductPageControllers/selectProductType.js"></script>
+    <script src="javascript/admin/ProductPageControllers/AddProductPageMenu.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EditProductPageMenu.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageResources.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageGlossary.js"></script>
+    <script src="javascript/admin/ProductPageControllers/CrudProductPageGlossary.js"></script>
+    <script src="javascript/admin/ProductPageControllers/AddProductPageResource.js"></script>
+    <script src="javascript/admin/ProductPageControllers/EditProductPageResource.js"></script>
+    <script src="javascript/admin/ProductPageControllers/ProductPageSpeakers.js"></script>
+    <script src="javascript/admin/SpecialAppsControllers/EditSpecialApp.js"></script>
+    <script src="javascript/admin/SpecialAppsControllers/ViewSpecialApps.js"></script>
+    <script src="javascript/admin/ArticlesControllers/Articles.js"></script>
+    <script src="javascript/admin/ArticlesControllers/EditArticles.js"></script>
+    <script src="javascript/admin/EventsControllers/ViewEvents.js"></script>
+    <script src="javascript/admin/EventsControllers/ViewSpeakers.js"></script>
+    <script src="javascript/admin/EventsControllers/UpdateSpeaker.js"></script>
+    <script src="javascript/admin/EventsControllers/EditEvent.js"></script>
+    <script src="javascript/admin/EventsControllers/EditConference.js"></script>
+    <script src="javascript/admin/EventsControllers/EditRoom.js"></script>
+    <script src="javascript/admin/EventsControllers/EditTalk.js"></script>
+    <script src="javascript/admin/EventsControllers/ModalGenerateQR.js"></script>
+
+    <script src="javascript/admin/TherapeuticAreasControllers/TherapeuticAreas.js"></script>
+    <script src="javascript/admin/TherapeuticAreasControllers/EditTherapeuticAreas.js"></script>
+
+        <script src="javascript/admin/ElearningControllers/Courses.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditChapter.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditCourse.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditSlide.js"></script>
+        <script src="javascript/admin/ElearningControllers/EditSubChapter.js"></script>
+
+    <script src="javascript/admin/brochureControllers/brochureEdit.js"></script>
+    <script src="javascript/admin/brochureControllers/brochureView.js"></script>
+    <script src="javascript/admin/PathologiesControllers/Pathologies.js"></script>
+    <script src="javascript/admin/PathologiesControllers/EditPathology.js"></script>
+    <script src="javascript/admin/MultimediaControllers/Multimedia.js"></script>
+    <script src="javascript/admin/MultimediaControllers/EditMultimedia.js"></script>
+    <script src="javascript/admin/MultimediaControllers/DeleteMultimedia.js"></script>
+    <script src="javascript/admin/applicationsControllers/qa/qaController.js"></script>
+    <script src="javascript/admin/applicationsControllers/qa/addTopicController.js"></script>
+    <script src="javascript/admin/applicationsControllers/qa/editTopicController.js"></script>
+    <script src="javascript/admin/applicationsControllers/qa/deleteTopicController.js"></script>
+    <script src="javascript/admin/applicationsControllers/qa/addAnswerGiverController.js"></script>
+    <script src="javascript/admin/applicationsControllers/qa/editAnswerGiverController.js"></script>
+    <script src="javascript/admin/applicationsControllers/qa/deleteAnswerGiverController.js"></script>
+    <script src="javascript/admin/applicationsControllers/ContractManagement/ContractManagement.js"></script>
+    <script src="javascript/admin/applicationsControllers/ContractManagement/EditTemplate.js"></script>
+    <script src="javascript/admin/applicationsControllers/DPOC/ViewDevicesDPOC.js"></script>
+    <script src="javascript/admin/applicationsControllers/DPOC/AddDeviceDPOC.js"></script>
+    <script src="javascript/admin/applicationsControllers/DPOC/ImportDevicesDPOC.js"></script>
+    <script src="javascript/admin/applicationsControllers/januvia/JanuviaUsersView.js"></script>
+    <script src="javascript/admin/applicationsControllers/januvia/JanuviaUserEdit.js"></script>
+    <script src="javascript/admin/applicationsControllers/AppUpdate/AppUpdateController.js"></script>
+    <script src="javascript/admin/applicationsControllers/AppUpdate/AppUpdateEditController.js"></script>
+    <script src="javascript/admin/applicationsControllers/guideLine/guideLineCategoryController.js"></script>
+    <script src="javascript/admin/applicationsControllers/guideLine/guideLineFIleController.js"></script>
+    <script src="javascript/admin/applicationsControllers/guideLine/guidelineFileModal.js"></script>
+    <script src="javascript/admin/applicationsControllers/guideLine/guidelineCategoryModal.js"></script>
+    <script src="javascript/admin/applicationsControllers/myPrescription/myPrescriptionController.js"></script>
+    <script src="javascript/admin/SystemControllers/ActivationCodes/ActivationCodes.js"></script>
+    <script src="javascript/admin/SystemControllers/ActivationCodes/EditActivationCode.js"></script>
+    <script src="javascript/admin/SystemControllers/Divisions/DivisionController.js"></script>
+    <script src="javascript/admin/SystemControllers/Divisions/EditDivisionController.js"></script>
+    <script src="javascript/admin/SystemControllers/Parameters/SystemParameters.js"></script>
+    <script src="javascript/admin/SystemControllers/Parameters/EditSystemParameter.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterDashboard.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaigns.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignEdit.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignChooseTemplate.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignPopulateTemplate.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterDistributionLists.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterDistributionListEdit.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterUnsubscribedUsers.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterUnsubscribedEmails.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterTemplates.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterTemplateEdit.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterTemplatePreview.js"></script>
+    <script src="javascript/admin/NewsletterControllers/NewsletterCampaignSummary.js"></script>
+    <script src="modules/bulk_operations/bulk_operations_pdf_controller.js"></script>
+
+
+    <!--Plug-ins-->
+    <script src="components/ng-table/dist/ng-table.js"></script>
+    <script src="modules/multiple_select/multiple_select.js"></script>
+    <link rel="stylesheet" href="modules/multiple_select/multiple_select_style.css">
+    <script src="modules/therapeutic_select/therapeutic_select.js"></script>
+    <link rel="stylesheet" href="modules/therapeutic_select/therapeutic_select.css">
+    <script src="modules/s3_upload_manager/s3_upload_manager.js"></script>
+    <script src="modules/enhacedS3Upload/enhancedS3Upload.js"></script>
+    <script src="modules/single_upload_manager/singleUploadManager.js"></script>
+    <script src="modules/admin-emails-list/directive.js"></script>
+
+    <script src="modules/table-action-buttons/action_buttons.js"></script>
+    <link rel="stylesheet" href="modules/table-action-buttons/action_buttons.css">
+    <script src="modules/angular-bootstrap-tabs/angular-bootstrap-tabs.js"></script>
+    <link rel="stylesheet" href="modules/angular-bootstrap-tabs/angular-bootstrap-tabs.css">
+
+    <link rel="stylesheet" href="modules/admin-emails-list/styles.css">
+    <script src="modules/admin-widget-stats/directive.js"></script>
+        <link href="components/v-accordion/dist/v-accordion.css" rel="stylesheet" />
+        <script src="components/angular-animate/angular-animate.js"></script>
+        <script src="components/v-accordion/dist/v-accordion.js"></script>
+    <script src="modules/bulk_operations/bulk_operations.js"></script>
+    <!--ui-ace-->
+    <script type="text/javascript" src="components/ace-builds/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="components/angular-ui-ace/ui-ace.js"></script>
+    <script type="text/javascript" src="components/ace-builds/src-noconflict/ext-language_tools.js"></script>
+
+    <!--ng csv-->
+    <script type="text/javascript" src="components/ng-csv/build/ng-csv.min.js"></script>
+
+    <!--Stylesheets-->
+    <link rel='stylesheet' href='components/ng-table/dist/ng-table.min.css' />
+    <link rel='stylesheet' href='modules/angular-select-autocomplete/styles.css' />
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">-->
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/admin/defaultStyles.css">
+    <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
+
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top ng-scope" role="navigation" ng-controller="NavbarController">
+    <div class="col-xs-12">
+        <div class="navbar-header">
+            <a class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="navbar-brand" href="#">{{appVersion}}</a>
+        </div>
+
+        <div class="collapse navbar-collapse" collapse="navCollapsed">
+
+            <ul class="nav navbar-nav">
+                <li class="dropdown" ng-class="{'active': $state.includes('users')}">
+                    <a class="dropdown-toggle" data-toggle="dropdown"> Utilizatori <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ui-sref="users.manageAccounts"><a > Gestionare conturi </a></li>
+                        <!--<li class="divider"></li>-->
+                        <!--<li ui-sref="users.newAccounts.pending"><a > Conturi noi </a></li>-->
+                        <!--<li class="divider"></li>-->
+                        <!--<li ui-sref="users.groups"><a > Grupuri utilizatori </a></li>-->
+                        <!--<li class="divider"></li>-->
+                        <!--<li ui-sref="users.importUsers"><a > Import Users </a></li>-->
+                        <!--<li class="divider"></li>-->
+                        <!--<li ui-sref="users.specialty"><a > Specializari </a></li>-->
+                    </ul>
+                </li>
+                <li class="dropdown" ng-class="{'active': $state.includes('content')}">
+                    <a class="dropdown-toggle" data-toggle="dropdown"> Continut <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ui-sref="content.produse"><a > Produse </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.specialProducts"><a> Resurse & produse speciale </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.specialApps"><a > Aplicatii speciale </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.articles"><a > Articole </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.events.viewAll.events"><a > Evenimente </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.intro"><a > Intro </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.carouselMedic"><a > Carousel Medic </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.carouselPublic"><a > Carousel Public </a></li>
+                        <li class="divider"></li>
+                        <li ui-sref="content.publicContent.content"><a > Continut Public </a></li>
+                    </ul>
+                </li>
+                <li ng-class="{'active': $state.includes('newsletter')}"><a ui-sref="newsletter.dashboard.campaigns"> Newsletter </a></li>
+                <li class="dropdown" ng-class="{'active': $state.includes('elearning')}">
+                    <a class="dropdown-toggle" data-toggle="dropdown"> Elearning <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ui-sref="elearning.multimedia"><a > Multimedia </a></li>
+                            <li ui-sref="elearning.courses"><a > Cursuri & Teste </a></li>
+                    </ul>
+                </li>
+                <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
+                <li ng-class="{'active': $state.includes('pathologies')}"><a ui-sref="pathologies"> Patologii </a></li>
+                <li ng-class="{'active': $state.includes('brochure')}"><a ui-sref="brochure"> Brosura </a></li>
+                <li class="dropdown" ng-class="{'active': $state.includes('applications')}">
+                    <a class="dropdown-toggle" data-toggle="dropdown"> Aplicatii <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ui-sref="applications.qa"><a > Q/A </a></li>
+                        <li ui-sref="applications.contractManagement"><a > Contract management </a></li>
+                        <li ui-sref="applications.DPOC"><a > DPOC </a></li>
+                        <li ui-sref="applications.januvia"><a > Januvia </a></li>
+                        <li ui-sref="applications.guideLines.Category"><a>Guidelines</a></li></li>
+                        <li ui-sref="applications.myPrescription"><a>My Prescription</a></li>
+                        <li ui-sref="applications.edit"><a>Edit</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" ng-class="{'active': $state.includes('system')}">
+                    <a class="dropdown-toggle" data-toggle="dropdown"> Sistem <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ui-sref="system.parameters"><a> Parametrii </a></li>
+                        <!--<li ui-sref="system.activationCodes"><a> Coduri de activare </a></li>-->
+                        <li ui-sref="system.divisions"><a> Coduri de activare </a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> <%= user.username %> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li style="cursor: pointer;" ng-click="showProfile()"><a >Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="logout">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div ui-view class="view-container main-view-container"></div>
+
+</body>
+</html>

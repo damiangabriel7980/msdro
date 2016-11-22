@@ -376,7 +376,11 @@ var transportUser = function (req, res) {
                             res.render("admin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
                         }else if(roles[0].authority === "ROLE_STREAM_ADMIN") {
                             res.render("streamAdmin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
-                        }else {
+                        }else if(roles[0].authority === "ROLE_USER_MGMT_ADMIN") {
+                            console.log('FOUND ---------------------------------');
+                            res.render("mgmtAdmin/main.ejs", {user: req.user, amazonBucket: my_config.amazonBucket, amazonPrefix: my_config.amazonPrefix, GA_code: my_config.GA_code});
+                        }
+                        else {
                             req.logout();
                             res.redirect('/');
                         }
