@@ -813,6 +813,90 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
       });
 
+    router.route('/mgmtAdmin/bulkOperations')
+      .get(function(req,res){
+          var modelToModify = mongoose.model(req.query.model);
+
+          if (Array.isArray(req.query.items)){
+              modelToModify.find({'_id': {$in: req.query.items}}, function(err, items){
+                  if (err) {
+                      console.log(err);
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, items);
+                  }
+              })
+          } else {
+              modelToModify.find({'_id': req.query.items}).limit(1).exec(function(err, item){
+                  if (err) {
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, item)
+                  }
+              })
+          }
+
+      })
+      .put(function(req, res){
+        var modelToModify = mongoose.model(req.query.model);
+
+         async.each(req.body.items, function(item, callback){
+           modelToModify.findOneAndUpdate( {_id: item}, {$set:req.body.toSet}, function(err, updated){
+             if (err){
+               callback(err);
+             } else {
+               callback();
+             }
+           })
+         }, function(err, updated){
+           if(err) {
+             handleError(res, err, 500)
+           } else {
+             handleSuccess(res, updated);
+           }
+         })
+      })
+      .post(function(req, res){
+
+          //we are making the delete operation here, because on a DELETE endpoint we cannot send the array via req.body
+        var modelToModify = mongoose.model(req.query.model);
+          async.each(req.body.items,function(item, callback){
+          modelToModify.findOneAndRemove( {_id: item}, function(err, deleted){
+            if(err){
+              callback(err)
+            } else {
+                if(req.body.coupledEntities){
+                    var connectedEntites = req.body.coupledEntities;
+                    async.each(Object.keys(connectedEntites), function (itemToUpdate, callbackUpdate){
+                        var propertyToRemove = connectedEntites[itemToUpdate];
+                        var objectForPullOp = {
+                            propertyToRemove: item
+                        };
+                        var modelToChange = mongoose.model(itemToUpdate);
+                        modelToChange.update({}, {$pull: objectForPullOp}, {multi: true}, function (err, wres) {
+                            if(err){
+                                callbackUpdate(err);
+                            }else{
+                                callbackUpdate();
+                            }
+                        });
+                    }, function(err) {
+                        callback();
+                    });
+                } else {
+                    callback();
+                }
+            }
+          })
+        }, function(err, deleted){
+          if(err) {
+            handleError(res, err, 500);
+          } else {
+            handleSuccess(res, deleted);
+          }
+        })
+      });
+
     router.route('/admin/users/publicContent/categories')
         .get(function (req, res) {
             PublicCategories.find(function (err, categories) {

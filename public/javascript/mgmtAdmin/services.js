@@ -337,7 +337,7 @@ services.factory('IntroService', ['$resource', function($resource){
 
 services.factory('bulkOperationsService',['$resource', function($resource){
     return {
-        operations: $resource('api/admin/bulkOperations',{},{
+        operations: $resource('api/mgmtAdmin/bulkOperations',{},{
             update: {method: "PUT", isArray: false},
             delete: {method: "POST", isArray: false},
             query: {method: "GET", isArray: false}
