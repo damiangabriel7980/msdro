@@ -1246,6 +1246,83 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             })
         });
+    router.route('/mgmtAdmin/divisions')
+        .get(function (req, res) {
+            if (req.query.id) {
+                Divisions.findOne({_id: req.query.id}).exec(function (err, division) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, division);
+                    }
+                })
+            }
+            else {
+                Divisions.find({}).exec(function (err, divisions) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    }
+                    else {
+                        handleSuccess(res, divisions);
+                    }
+                })
+            }
+        })
+        .post(function (req, res) {
+            var division = new Divisions({
+                name: 'Untitled'
+            });
+            division.save(function (err, saved) {
+                if (err) {
+                    handleError(res, err, 500)
+                }
+                else {
+                    handleSuccess(res, saved, 2);
+                }
+            })
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            Divisions.findOne({_id: idToUpdate}).exec(function (err, division) {
+                if (err || !division) {
+                    handleError(res, err)
+                }
+                else {
+                    Divisions.update({_id: idToUpdate}, {
+                        $set: {
+                            name: req.body.name,
+                            code: SHA512(req.body.code).toString(),
+                            lastUpdated: new Date()
+                        }
+                    }, function (err, updated) {
+                        if (err) {
+                            handleError(res, err);
+                        }
+                        else {
+                            handleSuccess(res, updated, 3)
+                        }
+                    })
+                }
+            })
+        })
+        .delete(function (req, res) {
+            var id = req.query.id;
+            Divisions.findOne({_id: id}, function (err, division) {
+                if (err) {
+                    handleError(res, err, 500);
+                }
+                if (division) {
+                    Divisions.remove({_id: id}).exec(function (err, div) {
+                        if (err) {
+                            handleError(res, err, 500);
+                        }
+                        else {
+                            handleSuccess(res, {division: div}, 4);
+                        }
+                    })
+                }
+            })
+        });
 
     router.route('/admin/products')
         .get(function(req, res) {
@@ -3640,7 +3717,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/mgmtAdmin/users/ManageAccounts/professions')
+        .get(function (req, res) {
+            Professions.find({}).exec(function (err, professions) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, professions);
+                }
+            });
+        });
+
     router.route('/admin/users/ManageAccounts/groups')
+        .get(function (req, res) {
+            UserGroup.find({}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, groups);
+                }
+            });
+        });
+
+    router.route('/mgmtAdmin/users/ManageAccounts/groups')
         .get(function (req, res) {
             UserGroup.find({}).populate('profession').exec(function (err, groups) {
                 if(err){
@@ -3795,6 +3894,68 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/specialty')
+        .get(function (req, res) {
+            if(req.query.id){
+                Speciality.findOne({_id: req.query.id},function(err,speciality){
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, speciality);
+                    }
+                })
+            }
+            else{
+                Speciality.find({}).exec(function (err, specialities) {
+                    if (err) {
+                        handleError(res, err, 500)
+                    } else {
+                        handleSuccess(res, specialities);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var newSpecialty = new Speciality ({
+                name: 'Untitled'
+            });
+            newSpecialty.save(function (err, saved) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    handleSuccess(res, saved, 2);
+                }
+            })
+        })
+        .put(function (req, res) {
+            var updated = req.body.specialty;
+            updated.lastUpdated = new Date();
+            Speciality.update({_id: updated._id},{$set: updated},(function (err, updatedSpecialty) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    handleSuccess(res, {updated: updatedSpecialty}, 3);
+                }
+            }))
+
+        })
+        .delete(function (req, res) {
+            Speciality.findOne({_id: req.query.id}, function (err, specialty) {
+                if (err) {
+                    handleError(res, err, 500)
+                }
+                if (specialty) {
+                    Speciality.remove({_id: req.query.id}).exec(function (err, spec) {
+                        if (err) {
+                            handleError(res, err, 500);
+                        }
+                        else{
+                            handleSuccess(res, {specialty: spec}, 4)
+                        }
+                    })
+                }
+            })
+        });
+    router.route('/mgmtAdmin/users/specialty')
         .get(function (req, res) {
             if(req.query.id){
                 Speciality.findOne({_id: req.query.id},function(err,speciality){

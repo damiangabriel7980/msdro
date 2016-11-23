@@ -303,10 +303,10 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
             query: { method: 'GET', isArray: false },
             update: { method: 'PUT', isArray: false }
         }),
-        professions: $resource('api/admin/users/ManageAccounts/professions', {}, {
+        professions: $resource('api/mgmtAdmin/users/ManageAccounts/professions', {}, {
             query: { method: 'GET', isArray: false }
         }),
-        groups: $resource('api/admin/users/ManageAccounts/groups', {}, {
+        groups: $resource('api/mgmtAdmin/users/ManageAccounts/groups', {}, {
             query: { method: 'GET', isArray: false }
         })
     }
@@ -314,7 +314,7 @@ services.factory('ManageAccountsService', ['$resource', function($resource){
 
 services.factory('ManageSpecialtyService',['$resource',function($resource){
     return {
-        specialty: $resource('api/admin/users/specialty',{},{
+        specialty: $resource('api/mgmtAdmin/users/specialty',{},{
             query: { method: 'GET', isArray: false },
             save: { method: 'POST', isArray: false },
             update: { method: 'PUT', isArray: false },
@@ -409,7 +409,7 @@ services.factory('ProductService', ['$resource', function($resource){
 }]);
 services.factory('DivisionsService', ['$resource', function($resource){
     return {
-        divisions: $resource('api/admin/divisions', {}, {
+        divisions: $resource('api/mgmtAdmin/divisions', {}, {
             query: { method: 'GET', isArray: false },
             create: {method: 'POST', isArray: false},
             update: {method: 'PUT', isArray:false},
