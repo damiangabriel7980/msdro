@@ -299,7 +299,7 @@ services.factory('NewAccountsService', ['$resource', function($resource){
 
 services.factory('ManageAccountsService', ['$resource', function($resource){
     return {
-        users: $resource('api/admin/users/ManageAccounts/users', {}, {
+        users: $resource('api/mgmtAdmin/users/ManageAccounts/users', {}, {
             query: { method: 'GET', isArray: false },
             update: { method: 'PUT', isArray: false }
         }),

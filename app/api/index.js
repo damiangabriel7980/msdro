@@ -3579,6 +3579,56 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             }
         });
 
+    router.route('/mgmtAdmin/users/ManageAccounts/users')
+        .get(function (req, res) {
+            if(req.query.id){
+                User.findOne({_id: req.query.id}).select('+enabled +phone +routing_role').populate('division specialty').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, OneUser);
+                    }
+                })
+            }else{
+                User.find({state:"ACCEPTED"}).select('+enabled +phone +routing_role').populate('profession therapeutic-areasID groupsID conferencesID').exec(function (err, users) {
+                    if(err){
+                        console.log(err);
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                })
+            }
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+
+            var updateUser = function () {
+                User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res);
+                    }
+                });
+            };
+
+            if(dataToUpdate.username){
+                User.findOne({username: UtilsModule.regexes.emailQuery(dataToUpdate.username), _id:{$ne: idToUpdate}}, function (err, user) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else if(user){
+                        handleSuccess(res, {userExists: true});
+                    }else{
+                        updateUser();
+                    }
+                });
+            }else{
+                updateUser();
+            }
+        });
+
     router.route('/admin/users/ManageAccounts/professions')
         .get(function (req, res) {
             Professions.find({}).exec(function (err, professions) {
