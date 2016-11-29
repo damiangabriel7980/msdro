@@ -15,6 +15,11 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
             ['enabled', 'username', 'name', 'phone', 'address', 'phone'],
             [{'jobsID': 'job_name'}, {'citiesID': 'name'}],
             [{'profession' : 'display_name'}, {'specialty' : 'name'}, {'division': 'name'}]);
+
+        $scope.csv.rows.forEach(function (item) {
+           item.enabled = item.enabled === true ? 'ACTIV' : 'INACTIV';
+        });
+
         $scope.tableParams = new ngTableParams({
             page: 1,            // show first page
             count: 10,          // count per page
