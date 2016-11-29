@@ -6,17 +6,21 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
     };
 
     $scope.getHeader = function () {
-        return ['Enabled', 'Username', 'Nume', 'Telefon', 'Adresa','Profesie', 'Specialitate', 'Divizie', 'Job', 'Oras'];
+        return ['Enabled', 'Username', 'Nume', 'Telefon', 'Adresa', 'Ultima actualizare', 'Profesie', 'Specialitate', 'Divizie', 'Job', 'Oras'];
     };
 
     ManageAccountsService.users.query().$promise.then(function (resp) {
         var data = Success.getObject(resp);
         $scope.csv.rows = exportCSV.formatArrayCSV(data,
-            ['enabled', 'username', 'name', 'phone', 'address', 'phone'],
+            ['enabled', 'username', 'name', 'phone', 'address', 'phone', 'last_updated'],
             [{'jobsID': 'job_name'}, {'citiesID': 'name'}],
             [{'profession' : 'display_name'}, {'specialty' : 'name'}, {'division': 'name'}]);
 
         $scope.csv.rows.forEach(function (item) {
+            if(item.last_updated) {
+                item.last_updated = new Date(item.last_updated);
+                item.last_updated = item.last_updated.toLocaleDateString();
+            }
            item.enabled = item.enabled === true ? 'ACTIV' : 'INACTIV';
         });
 
