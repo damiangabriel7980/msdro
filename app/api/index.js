@@ -3751,7 +3751,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                User.find({state:"ACCEPTED"}).select('+enabled +phone +routing_role').populate('profession therapeutic-areasID groupsID conferencesID').exec(function (err, users) {
+                User.find({state:"ACCEPTED"}).select('+enabled +title +address +practiceType +citiesID +jobsID +phone +routing_role +practiceType').populate('profession division specialty citiesID jobsID therapeutic-areasID groupsID conferencesID').deepPopulate('citiesID.county').exec(function (err, users) {
                     if(err){
                         console.log(err);
                         handleError(res,err,500);
