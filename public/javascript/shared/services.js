@@ -435,7 +435,7 @@ services.factory('customOrder', function() {
         }
     }
 });
-services.factory('exportCSV', function(){
+services.factory('exportCSV', [function(){
     var formatArrayCSV = function(arrayOfObjects, arrayOfProperties, arrayOfPropertiesToStringify, arrayOfPropertyObjectsToAccess){
         var arrayToReturn = [];
         angular.forEach(arrayOfObjects, function(arrayItem, keyOfItem){
@@ -482,4 +482,4 @@ services.factory('exportCSV', function(){
     return {
         formatArrayCSV: formatArrayCSV
     }
-});
+}]);
