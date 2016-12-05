@@ -17,9 +17,16 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
             [{'profession' : 'display_name'}, {'specialty' : 'name'}, {'division': 'name'}]);
 
         $scope.csv.rows.forEach(function (item) {
+            if(item.jobsID == "null") {
+                item.jobsID = "";
+            }
             if(item.last_updated) {
                 item.last_updated = new Date(item.last_updated);
-                item.last_updated = item.last_updated.toLocaleDateString();
+                if(item.last_updated.getTime() === item.last_updated.getTime()) {
+                    item.last_updated = item.last_updated.toLocaleDateString();
+                } else {
+                    item.last_updated = "";
+                }
             }
            item.enabled = item.enabled === true ? 'ACTIV' : 'INACTIV';
         });
