@@ -23,7 +23,7 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
             if(item.last_updated) {
                 item.last_updated = new Date(item.last_updated);
                 if(item.last_updated.getTime() === item.last_updated.getTime()) {
-                    item.last_updated = item.last_updated.toLocaleDateString();
+                    item.last_updated = item.last_updated.getDate() + '/' + (item.last_updated.getMonth() + 1) + '/' + item.last_updated.getFullYear();
                 } else {
                     item.last_updated = "";
                 }
