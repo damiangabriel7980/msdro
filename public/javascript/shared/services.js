@@ -435,15 +435,13 @@ services.factory('customOrder', function() {
         }
     }
 });
-services.factory('exportCSV', [ 'DATEFIELDCONST', function(DATEFIELDCONST){
+services.factory('exportCSV', function(){
     var formatArrayCSV = function(arrayOfObjects, arrayOfProperties, arrayOfPropertiesToStringify, arrayOfPropertyObjectsToAccess){
         var arrayToReturn = [];
         angular.forEach(arrayOfObjects, function(arrayItem, keyOfItem){
             var objToPush = {};
             angular.forEach(arrayOfProperties, function(property, keyOfProp){
                 objToPush[property] = arrayItem[property] ? arrayItem[property] : ' ';
-                if(property === DATEFIELDCONST.DATEFIELD)
-                    objToPush[property] = objToPush[property].substr(0,10);
             });
             if(arrayOfPropertyObjectsToAccess){
                 angular.forEach(arrayOfPropertyObjectsToAccess, function(item, key){
@@ -484,4 +482,4 @@ services.factory('exportCSV', [ 'DATEFIELDCONST', function(DATEFIELDCONST){
     return {
         formatArrayCSV: formatArrayCSV
     }
-}]);
+});
