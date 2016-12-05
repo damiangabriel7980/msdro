@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!--Get amazon bucket-->
+    <script>
+        const DEFAULT_AMAZON_BUCKET = "<%=amazonBucket%>";
+        const DEFAULT_AMAZON_PREFIX = "<%=amazonPrefix%>";
+    </script>
+
+    <!--Core-modules-->
+    <script src="components/jquery/dist/jquery.min.js"></script>
+    <!--<script src="components/jquery-ui/ui/minified/jquery-ui.min.js"></script>-->
+    <script src="components/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+    <script type="text/javascript" src="components/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
+
+    <script type="text/javascript" src="components/qrcode/lib/qrcode.min.js"></script>
+<script type="text/javascript" src="components/angular-qr/angular-qr.min.js"></script>
+    <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="components/angular-resource/angular-resource.min.js"></script>
+    <script src="components/angular-route/angular-route.min.js"></script>
+    <script src="components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="modules/angular-select-autocomplete/directive.js"></script>
+    <script src="components/aws-sdk/dist/aws-sdk.min.js"></script>
+    <script src="modules/tinymce/tinymce.min.js"></script>
+    <script src="components/ui-select/dist/select.js"></script>
+    <link rel="stylesheet" href="components/ui-select/dist/select.css">
+        <script src="modules/tinymce/jquery.tinymce.min.js"></script>
+    <script src="modules/ui-tinymce/tinymce.js"></script>
+    <script src="components/ng-file-upload/ng-file-upload.min.js"></script>
+    <script src="components/async/lib/async.js"></script>
+
+        <!--GridManager-->
+        <link rel="stylesheet" href="components/gridmanager.js/dist/css/jquery.gridmanager.css">
+        <script src="components/gridmanager.js/dist/js/jquery.gridmanager.js"></script>
+
+        <link rel="stylesheet" href="components/angular-ui-tree/dist/angular-ui-tree.min.css">
+        <script type="text/javascript" src="components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+
+    <!--Controllers-->
+    <script src="javascript/mgmtAdmin/app.js"></script>
+    <script src="javascript/mgmtAdmin/controllers.js"></script>
+    <script src="javascript/mgmtAdmin/services.js"></script>
+    <script src="javascript/shared/controllers.js"></script>
+    <script src="javascript/shared/services.js"></script>
+    <script src="javascript/admin/customDirectives.js"></script>
+    <script src="javascript/admin/NavbarController.js"></script>
+    <script src="javascript/mgmtAdmin/UsersControllers/ManageAccounts/ManageAccounts.js"></script>
+    <script src="javascript/mgmtAdmin/UsersControllers/ManageAccounts/ViewAccount.js"></script>
+    <script src="modules/bulk_operations/bulk_operations_pdf_controller.js"></script>
+
+
+    <!--Plug-ins-->
+    <script src="components/ng-table/dist/ng-table.js"></script>
+    <script src="modules/multiple_select/multiple_select.js"></script>
+    <link rel="stylesheet" href="modules/multiple_select/multiple_select_style.css">
+    <script src="modules/therapeutic_select/therapeutic_select.js"></script>
+    <link rel="stylesheet" href="modules/therapeutic_select/therapeutic_select.css">
+    <script src="modules/s3_upload_manager/s3_upload_manager.js"></script>
+    <script src="modules/enhacedS3Upload/enhancedS3Upload.js"></script>
+    <script src="modules/single_upload_manager/singleUploadManager.js"></script>
+    <script src="modules/admin-emails-list/directive.js"></script>
+
+    <script src="modules/table-action-buttons/action_buttons.js"></script>
+    <link rel="stylesheet" href="modules/table-action-buttons/action_buttons.css">
+    <script src="modules/angular-bootstrap-tabs/angular-bootstrap-tabs.js"></script>
+    <link rel="stylesheet" href="modules/angular-bootstrap-tabs/angular-bootstrap-tabs.css">
+
+    <link rel="stylesheet" href="modules/admin-emails-list/styles.css">
+    <script src="modules/admin-widget-stats/directive.js"></script>
+        <link href="components/v-accordion/dist/v-accordion.css" rel="stylesheet" />
+        <script src="components/angular-animate/angular-animate.js"></script>
+        <script src="components/v-accordion/dist/v-accordion.js"></script>
+    <script src="modules/bulk_operations/bulk_operations.js"></script>
+    <!--ui-ace-->
+    <script type="text/javascript" src="components/ace-builds/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="components/angular-ui-ace/ui-ace.js"></script>
+    <script type="text/javascript" src="components/ace-builds/src-noconflict/ext-language_tools.js"></script>
+
+    <!--ng csv-->
+    <script type="text/javascript" src="components/ng-csv/build/ng-csv.min.js"></script>
+
+    <!--Stylesheets-->
+    <link rel='stylesheet' href='components/ng-table/dist/ng-table.min.css' />
+    <link rel='stylesheet' href='modules/angular-select-autocomplete/styles.css' />
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">-->
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/admin/defaultStyles.css">
+    <link rel="stylesheet" href="stylesheets/stylesThatReignSupreme.css">
+
+</head>
+<body>
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top ng-scope" role="navigation" ng-controller="NavbarController">
+    <div class="col-xs-12">
+        <div class="navbar-header">
+            <a class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="navbar-brand" href="#">{{appVersion}}</a>
+        </div>
+
+        <div class="collapse navbar-collapse" collapse="navCollapsed">
+
+            <ul class="nav navbar-nav">
+                <li class="dropdown" ng-class="{'active': $state.includes('users')}">
+                    <a class="dropdown-toggle" data-toggle="dropdown"> Utilizatori <b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ui-sref="users.manageAccounts"><a > Gestionare conturi </a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> <%= user.username %> <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li style="cursor: pointer;" ng-click="showProfile()"><a >Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="logout">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div ui-view class="view-container main-view-container"></div>
+
+</body>
+</html>

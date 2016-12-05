@@ -7312,6 +7312,15 @@ a:focus {
 .modal-dialog .modal-footer {
   padding: 10px 15px;
 }
+.modal-dialog .video-modal .video-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  padding: 15px 15px 0;
+}
+.modal-dialog .video-modal .modal-body {
+  padding: 0 15px;
+}
 .loginInput {
   margin-left: 26px;
   width: 50%;

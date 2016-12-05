@@ -813,6 +813,90 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         })
       });
 
+    router.route('/mgmtAdmin/bulkOperations')
+      .get(function(req,res){
+          var modelToModify = mongoose.model(req.query.model);
+
+          if (Array.isArray(req.query.items)){
+              modelToModify.find({'_id': {$in: req.query.items}}, function(err, items){
+                  if (err) {
+                      console.log(err);
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, items);
+                  }
+              })
+          } else {
+              modelToModify.find({'_id': req.query.items}).limit(1).exec(function(err, item){
+                  if (err) {
+                      handleError(res, err, 500);
+                  } else {
+                      handleSuccess(res, item)
+                  }
+              })
+          }
+
+      })
+      .put(function(req, res){
+        var modelToModify = mongoose.model(req.query.model);
+
+         async.each(req.body.items, function(item, callback){
+           modelToModify.findOneAndUpdate( {_id: item}, {$set:req.body.toSet}, function(err, updated){
+             if (err){
+               callback(err);
+             } else {
+               callback();
+             }
+           })
+         }, function(err, updated){
+           if(err) {
+             handleError(res, err, 500)
+           } else {
+             handleSuccess(res, updated);
+           }
+         })
+      })
+      .post(function(req, res){
+
+          //we are making the delete operation here, because on a DELETE endpoint we cannot send the array via req.body
+        var modelToModify = mongoose.model(req.query.model);
+          async.each(req.body.items,function(item, callback){
+          modelToModify.findOneAndRemove( {_id: item}, function(err, deleted){
+            if(err){
+              callback(err)
+            } else {
+                if(req.body.coupledEntities){
+                    var connectedEntites = req.body.coupledEntities;
+                    async.each(Object.keys(connectedEntites), function (itemToUpdate, callbackUpdate){
+                        var propertyToRemove = connectedEntites[itemToUpdate];
+                        var objectForPullOp = {
+                            propertyToRemove: item
+                        };
+                        var modelToChange = mongoose.model(itemToUpdate);
+                        modelToChange.update({}, {$pull: objectForPullOp}, {multi: true}, function (err, wres) {
+                            if(err){
+                                callbackUpdate(err);
+                            }else{
+                                callbackUpdate();
+                            }
+                        });
+                    }, function(err) {
+                        callback();
+                    });
+                } else {
+                    callback();
+                }
+            }
+          })
+        }, function(err, deleted){
+          if(err) {
+            handleError(res, err, 500);
+          } else {
+            handleSuccess(res, deleted);
+          }
+        })
+      });
+
     router.route('/admin/users/publicContent/categories')
         .get(function (req, res) {
             PublicCategories.find(function (err, categories) {
@@ -1170,6 +1254,83 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
 
     router.route('/admin/divisions')
+        .get(function (req, res) {
+            if (req.query.id) {
+                Divisions.findOne({_id: req.query.id}).exec(function (err, division) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, division);
+                    }
+                })
+            }
+            else {
+                Divisions.find({}).exec(function (err, divisions) {
+                    if (err) {
+                        handleError(res, err, 500);
+                    }
+                    else {
+                        handleSuccess(res, divisions);
+                    }
+                })
+            }
+        })
+        .post(function (req, res) {
+            var division = new Divisions({
+                name: 'Untitled'
+            });
+            division.save(function (err, saved) {
+                if (err) {
+                    handleError(res, err, 500)
+                }
+                else {
+                    handleSuccess(res, saved, 2);
+                }
+            })
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            Divisions.findOne({_id: idToUpdate}).exec(function (err, division) {
+                if (err || !division) {
+                    handleError(res, err)
+                }
+                else {
+                    Divisions.update({_id: idToUpdate}, {
+                        $set: {
+                            name: req.body.name,
+                            code: SHA512(req.body.code).toString(),
+                            lastUpdated: new Date()
+                        }
+                    }, function (err, updated) {
+                        if (err) {
+                            handleError(res, err);
+                        }
+                        else {
+                            handleSuccess(res, updated, 3)
+                        }
+                    })
+                }
+            })
+        })
+        .delete(function (req, res) {
+            var id = req.query.id;
+            Divisions.findOne({_id: id}, function (err, division) {
+                if (err) {
+                    handleError(res, err, 500);
+                }
+                if (division) {
+                    Divisions.remove({_id: id}).exec(function (err, div) {
+                        if (err) {
+                            handleError(res, err, 500);
+                        }
+                        else {
+                            handleSuccess(res, {division: div}, 4);
+                        }
+                    })
+                }
+            })
+        });
+    router.route('/mgmtAdmin/divisions')
         .get(function (req, res) {
             if (req.query.id) {
                 Divisions.findOne({_id: req.query.id}).exec(function (err, division) {
@@ -3540,7 +3701,57 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 })
             }else{
-                User.find({state:"ACCEPTED"}).select('+enabled +phone +routing_role').populate('profession therapeutic-areasID groupsID conferencesID').exec(function (err, users) {
+                User.find({state:"ACCEPTED"}).select('+enabled +title +address +practiceType +citiesID +jobsID +phone +routing_role +practiceType').populate('profession division specialty citiesID jobsID therapeutic-areasID groupsID conferencesID').deepPopulate('citiesID.county').exec(function (err, users) {
+                    if(err){
+                        console.log(err);
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                })
+            }
+        })
+        .put(function (req, res) {
+            var idToUpdate = ObjectId(req.query.id);
+            var dataToUpdate = req.body;
+
+            var updateUser = function () {
+                User.update({_id: idToUpdate}, {$set: req.body}, function (err, wres) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res);
+                    }
+                });
+            };
+
+            if(dataToUpdate.username){
+                User.findOne({username: UtilsModule.regexes.emailQuery(dataToUpdate.username), _id:{$ne: idToUpdate}}, function (err, user) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else if(user){
+                        handleSuccess(res, {userExists: true});
+                    }else{
+                        updateUser();
+                    }
+                });
+            }else{
+                updateUser();
+            }
+        });
+
+    router.route('/mgmtAdmin/users/ManageAccounts/users')
+        .get(function (req, res) {
+            if(req.query.id){
+                User.findOne({_id: req.query.id}).select('+enabled +phone +routing_role').populate('division specialty').deepPopulate('profession groupsID.profession').exec(function (err, OneUser) {
+                    if(err){
+                        handleError(res,err,500);
+                    }else{
+                        handleSuccess(res, OneUser);
+                    }
+                })
+            }else{
+                User.find({state:"ACCEPTED"}).select('+enabled +title +address +practiceType +citiesID +jobsID +phone +routing_role +practiceType').populate('profession division specialty citiesID jobsID therapeutic-areasID groupsID conferencesID').deepPopulate('citiesID.county').exec(function (err, users) {
                     if(err){
                         console.log(err);
                         handleError(res,err,500);
@@ -3590,7 +3801,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/mgmtAdmin/users/ManageAccounts/professions')
+        .get(function (req, res) {
+            Professions.find({}).exec(function (err, professions) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, professions);
+                }
+            });
+        });
+
     router.route('/admin/users/ManageAccounts/groups')
+        .get(function (req, res) {
+            UserGroup.find({}).populate('profession').exec(function (err, groups) {
+                if(err){
+                    handleError(res,err,500);
+                }else{
+                    handleSuccess(res, groups);
+                }
+            });
+        });
+
+    router.route('/mgmtAdmin/users/ManageAccounts/groups')
         .get(function (req, res) {
             UserGroup.find({}).populate('profession').exec(function (err, groups) {
                 if(err){
@@ -3745,6 +3978,68 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
         });
 
     router.route('/admin/users/specialty')
+        .get(function (req, res) {
+            if(req.query.id){
+                Speciality.findOne({_id: req.query.id},function(err,speciality){
+                    if (err) {
+                        handleError(res, err, 500);
+                    } else {
+                        handleSuccess(res, speciality);
+                    }
+                })
+            }
+            else{
+                Speciality.find({}).exec(function (err, specialities) {
+                    if (err) {
+                        handleError(res, err, 500)
+                    } else {
+                        handleSuccess(res, specialities);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var newSpecialty = new Speciality ({
+                name: 'Untitled'
+            });
+            newSpecialty.save(function (err, saved) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    handleSuccess(res, saved, 2);
+                }
+            })
+        })
+        .put(function (req, res) {
+            var updated = req.body.specialty;
+            updated.lastUpdated = new Date();
+            Speciality.update({_id: updated._id},{$set: updated},(function (err, updatedSpecialty) {
+                if (err) {
+                    handleError(res, err);
+                } else {
+                    handleSuccess(res, {updated: updatedSpecialty}, 3);
+                }
+            }))
+
+        })
+        .delete(function (req, res) {
+            Speciality.findOne({_id: req.query.id}, function (err, specialty) {
+                if (err) {
+                    handleError(res, err, 500)
+                }
+                if (specialty) {
+                    Speciality.remove({_id: req.query.id}).exec(function (err, spec) {
+                        if (err) {
+                            handleError(res, err, 500);
+                        }
+                        else{
+                            handleSuccess(res, {specialty: spec}, 4)
+                        }
+                    })
+                }
+            })
+        });
+    router.route('/mgmtAdmin/users/specialty')
         .get(function (req, res) {
             if(req.query.id){
                 Speciality.findOne({_id: req.query.id},function(err,speciality){

@@ -1,4 +1,4 @@
-app.controllerProvider.register('AuthModal', ['$scope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', 'Utils', 'Success', 'Error', function($scope, $modalInstance, intent, $sce, AuthService, $window, Utils, Success, Error) {
+app.controllerProvider.register('AuthModal', ['$scope', '$rootScope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', 'Utils', 'Success', 'Error', function($scope, $rootScope, $modalInstance, intent, $sce, AuthService, $window, Utils, Success, Error) {
 
     $scope.resetAlert = function (type, text) {
         if(Utils.isMobile() && text){
@@ -74,4 +74,7 @@ app.controllerProvider.register('AuthModal', ['$scope', '$modalInstance', 'inten
 
     };
 
+    $scope.getVideoUrl = function () {
+        return $sce.trustAsResourceUrl($rootScope.pathAmazonResources + 'Tutorial+creare+cont+Staywell.mp4');
+    };
 }]);

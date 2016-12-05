@@ -28,7 +28,7 @@ controllers.controller('ManageAccounts', ['$scope','ManageAccountsService', '$mo
                     item.last_updated = "";
                 }
             }
-           item.enabled = item.enabled === true ? 'ACTIV' : 'INACTIV';
+            item.enabled = item.enabled === true ? 'ACTIV' : 'INACTIV';
         });
 
         $scope.tableParams = new ngTableParams({
