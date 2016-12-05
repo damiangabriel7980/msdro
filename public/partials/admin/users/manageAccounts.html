@@ -4,7 +4,7 @@
             <h3>Gestionare Conturi</h3>
         </div>
         <div class="col-xs-10 noPadding">
-            <button class="btn btn-primary pull-right" ng-csv="csv.rows" csv-header="getHeader()"
+            <button class="btn btn-primary pull-right" ng-csv="csv.rows" field-separator="|" csv-header="getHeader()"
                     filename="{{csv.filename}}">Export Users
             </button>
         </div>
