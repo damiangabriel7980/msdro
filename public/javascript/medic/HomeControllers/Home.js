@@ -6,7 +6,7 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
     $scope.glycemizerURL = $sce.trustAsResourceUrl('partials/medic/widgets/Glycemizer.html');
     $scope.immunologyURL = $sce.trustAsResourceUrl('partials/medic/widgets/Immunology.html');
     $scope.univadisURL = $sce.trustAsResourceUrl('partials/medic/widgets/Univadis.html');
-    $scope.myInterval = 10;
+    $scope.myInterval = 5;
     $scope.HomeCarousel = [];
     $scope.selectedIndexCarousel = 0;
     $scope.setSlideCarousel = function(index)
