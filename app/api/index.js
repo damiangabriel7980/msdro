@@ -38,6 +38,7 @@ var pdf = require("html-pdf");
 var Pathologies = require('../models/pathologies');
 var brochureSection = require('../models/brochureSections');
 var Speciality = require('../models/specialty');
+var CostsList = require('../models/costs/costs_model');
 
 var xlsx = require("xlsx");
 
@@ -52,6 +53,7 @@ var ModelInfos = require('../modules/modelInfos');
 var ContentVerifier = require('../modules/contentVerifier');
 var januviaImport = require('../modules/importJanuviaUsers');
 var searchIndex = require('../modules/mongoosasticIndex/index');
+var costsImport = require('../modules/importUserCosts');
 
 //special Products
 var specialProduct = require('../models/specialProduct');
@@ -3451,6 +3453,117 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res, true, 409, 12, processedWithErrors);
                 }
             })
+        });
+
+    router.route('/admin/costs/')
+        .get(function (req, res) {
+            if(req.query.id) {
+                CostsList.findOne({_id: req.query.id}).populate("").exec(function (err, user) {
+                    if(err) {
+                        handleError(res, err);
+                    } else if (!user) {
+                        handleError(res, false, 401, 1);
+                    } else {
+                        handleSuccess(res, user);
+                    }
+                });
+            } else {
+                var q = {};
+                if(req.query.type) {
+                    q.type = req.query.type;
+                }
+                CostsList.find(q).deepPopulate('city.county', {
+                    populate: {
+                        'city.county': {
+                            select: 'name'
+                        }
+                    }
+                }).exec(function (err, users) {
+                    if(err) {
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, users);
+                    }
+                });
+            }
+        })
+        .post(function (req, res) {
+            var user = new CostsList({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            user.save(function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, user);
+                }
+            })
+        })
+        .put(function (req, res) {
+            try{
+                var idToEdit = ObjectId(req.query.id);
+            }catch(ex){
+                return handleError(res, err);
+            }
+            var toEdit = req.body;
+            CostsList.findOne({_id: idToEdit}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    _.extend(user, toEdit);
+                    user.save(function (err, user) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            handleSuccess(res, user);
+                        }
+                    });
+                }
+            })
+        })
+        .delete(function (req, res) {
+            CostsList.findOne({_id: req.query.id}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    user.remove(function (err, wres) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            //cascade delete associations
+                            CostsList.update({}, {$pull: {users_associated: user._id}}, {multi: true}).exec(function (err, wres) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    handleSuccess(res);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+    router.route('/admin/applications/parseCostsExcel')
+        .post(function (req, res) {
+            var file = req.body.file;
+            var workbook = xlsx.read(file, {type: 'binary'});
+            var first_sheet_name = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[first_sheet_name];
+            var toJson = xlsx.utils.sheet_to_json(worksheet);
+            costsImport.insertUsers(toJson).then(
+                function (success) {
+                    handleSuccess(res);
+                },
+                function (err) {
+                    handleError(res,err,500);
+                }
+            );
         });
 
     router.route('/admin/applications/januvia/users')
