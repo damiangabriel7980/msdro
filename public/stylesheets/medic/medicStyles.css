@@ -7308,6 +7308,7 @@ body .btn {
   width: 75%;
   margin: 0 auto;
   overflow: visible !important;
+  cursor: pointer;
 }
 .carousel-container .main-carousel .carouselMargins {
   margin-left: 10px;
