@@ -554,6 +554,20 @@ services.factory('JanuviaService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('UserCostsService', ['$resource', function ($resource) {
+    return {
+        users: $resource('api/admin/costs', {}, {
+            query: { method: 'GET', isArray: false },
+            create: { method: 'POST', isArray: false },
+            update: { method: 'PUT', isArray: false },
+            delete: { method: 'DELETE', isArray: false }
+        }),
+        parseExcel :  $resource('api/admin/parseCostsExcel', {}, {
+            create: { method: 'POST', isArray: false }
+        })
+    }
+}]);
+
 services.factory('LocationService', ['$resource', function($resource){
     return {
         counties: $resource('api/admin/location/counties', {}, {

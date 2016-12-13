@@ -17,20 +17,29 @@
             <td width="30">
                 <input type="checkbox" ng-click="addToSelectedItems(user._id)" ng-checked="checkValue(user._id)"/>
             </td>
+            <td data-title="'Email'" filter="{ 'name': 'email' }" sortable="'email'">
+                {{user.userName}}
+            </td>
             <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{user.name}}
             </td>
-            <td data-title="'Data adaugarii'" sortable="'date_created'">
-                {{user.date_created | date}}
+            <td data-title="'City'" sortable="'city'">
+                {{user.city}}
             </td>
-            <td data-title="'Tip utilizator'" sortable="'type'">
-                {{user.type}}
+            <td data-title="'Country'" sortable="'country'">
+                {{user.country}}
             </td>
-            <td data-title="'Oras'" filter="{ 'city.name': 'text' }" sortable="'city.name'">
-                {{user.city.name}}
+            <td data-title="'Amount'" sortable="'amount'">
+                {{user.amount}}
             </td>
-            <td data-title="'Judet'" filter="{ 'city.county.name': 'text' }" sortable="'city.county.name'">
-                {{user.city.county.name}}
+            <td data-title="'Currency'" sortable="'currency'">
+                {{user.currency}}
+            </td>
+            <td data-title="'Purpose'" sortable="'purpose'">
+                {{user.purpose}}
+            </td>
+            <td data-title="'ID baza de date'" sortable="'dbId'">
+                {{user.dbId}}
             </td>
             <td data-title="'Actiuni'">
                 <action-buttons show-toggle-button="false" show-edit-button="true" show-delete-button="true"

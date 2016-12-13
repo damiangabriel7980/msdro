@@ -38,7 +38,7 @@ var pdf = require("html-pdf");
 var Pathologies = require('../models/pathologies');
 var brochureSection = require('../models/brochureSections');
 var Speciality = require('../models/specialty');
-var CostsList = require('../models/costs/costs_model');
+var CostsList = require('../models/costs/medic_costs');
 
 var xlsx = require("xlsx");
 
@@ -3468,23 +3468,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             } else {
-                var q = {};
-                if(req.query.type) {
-                    q.type = req.query.type;
-                }
-                CostsList.find(q).deepPopulate('city.county', {
-                    populate: {
-                        'city.county': {
-                            select: 'name'
-                        }
-                    }
-                }).exec(function (err, users) {
+                CostsList.find({}, function (err, list) {
                     if(err) {
                         handleError(res, err);
                     }else{
-                        handleSuccess(res, users);
+                        handleSuccess(res, list);
                     }
-                });
+                })
             }
         })
         .post(function (req, res) {
@@ -3549,7 +3539,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
-    router.route('/admin/applications/parseCostsExcel')
+    router.route('/admin/parseCostsExcel')
         .post(function (req, res) {
             var file = req.body.file;
             var workbook = xlsx.read(file, {type: 'binary'});
