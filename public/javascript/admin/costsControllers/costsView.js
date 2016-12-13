@@ -59,10 +59,6 @@ controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ng
 
     $scope.selectedItems = new Set();
 
-    $scope.entities = {
-        'januvia_users': 'users_associated'
-    };
-
     $scope.addToSelectedItems = function(id){
         if($scope.selectedItems.has(id)){
             $scope.selectedItems.delete(id)
@@ -105,19 +101,12 @@ controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ng
 
     $scope.editUser = function (id) {
         $modal.open({
-            templateUrl: 'partials/admin/applications/januvia/modalEditUser.html',
+            templateUrl: 'partials/admin/userCosts/modalEditUser.html',
             windowClass: 'fade',
-            controller: 'JanuviaUserEdit',
+            controller: 'CostsEdit',
             resolve: {
                 idToEdit: function () {
                     return id;
-                },
-                userTypes: function () {
-                    var deferred = $q.defer();
-                    UserCostsService.user_types.query().$promise.then(function (resp) {
-                        deferred.resolve(Success.getObject(resp));
-                    });
-                    return deferred.promise;
                 }
             }
         });

@@ -17,10 +17,10 @@
             <td width="30">
                 <input type="checkbox" ng-click="addToSelectedItems(user._id)" ng-checked="checkValue(user._id)"/>
             </td>
-            <td data-title="'Email'" filter="{ 'name': 'email' }" sortable="'email'">
+            <td data-title="'Email'" filter="{ 'userName': 'text' }" sortable="'email'">
                 {{user.userName}}
             </td>
-            <td data-title="'Nume'" filter="{ 'name': 'text' }" sortable="'name'">
+            <td data-title="'Name'" filter="{ 'name': 'text' }" sortable="'name'">
                 {{user.name}}
             </td>
             <td data-title="'City'" sortable="'city'">
@@ -38,7 +38,7 @@
             <td data-title="'Purpose'" sortable="'purpose'">
                 {{user.purpose}}
             </td>
-            <td data-title="'ID baza de date'" sortable="'dbId'">
+            <td data-title="'ID baza de date'" filter="{ 'dbId': 'text' }" sortable="'dbId'">
                 {{user.dbId}}
             </td>
             <td data-title="'Actiuni'">
