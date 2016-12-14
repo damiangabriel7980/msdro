@@ -11,7 +11,7 @@
             <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
         </div>
     </div>
-    <bulk-operations model="januvia_users" connected-entities="entities" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
+    <bulk-operations model="medic_costs" connected-entities="entities" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="user in $data">
             <td width="30">
