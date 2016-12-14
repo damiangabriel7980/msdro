@@ -18,7 +18,13 @@ var amount = 'Amount';
 var currency = 'Currency';
 var purpose = 'Purpose';
 var idBd = 'id baza date';
-
+var dateOfPayment = 'Date of Payment';
+var meetingID = 'Meeting ID';
+var meetingVenue = 'Meeting Venue Address Line 1';
+var meetingVenueCity = 'Meeting Venue City';
+var meetingDate = 'Meeting Date1';
+var expenseID = 'Meeting Expense ID';
+var customerID = 'Customer ID';
 
 var DiacriticsToLetters = function (input, anotherChar) {
     if (typeof input !== 'string') input = "";
@@ -85,23 +91,36 @@ var insertUsers = function (arrayOfData) {
     var deferred = Q.defer();
 
     async.eachSeries(arrayOfData, function (item, callback) {
-        var medicToCreate = {};
-        console.log(item[email]);
-        medicToCreate.userName = lowerString(item[email]);
-        medicToCreate.name = Capitalise(item[firstName]) + ' ' + Capitalise(item[lastName]);
-        medicToCreate.city = Capitalise(item[city]);
-        medicToCreate.country = Capitalise(item[country]);
-        medicToCreate.amount = lowerString(item[amount]);
-        medicToCreate.currency = Capitalise(item[currency]);
-        medicToCreate.purpose = Capitalise(item[purpose]);
-        medicToCreate.dbId = item[idBd];
-        var medicCosts = new MedicsCosts(medicToCreate);
-        medicCosts.save(function (err, respMed) {
-            if (err) {
-                return callback(err);
+        MedicsCosts.findOne({expenseID: item[expenseID]}).exec(function (err, foundMedic) {
+            if (foundMedic && item[expenseID]) {
+                callback();
+            } else {
+                var medicToCreate = {};
+                medicToCreate.userName = lowerString(item[email]);
+                medicToCreate.name = Capitalise(item[firstName]) + ' ' + Capitalise(item[lastName]);
+                medicToCreate.city = Capitalise(item[city]);
+                medicToCreate.country = Capitalise(item[country]);
+                medicToCreate.amount = lowerString(item[amount]);
+                medicToCreate.currency = Capitalise(item[currency]);
+                medicToCreate.purpose = Capitalise(item[purpose]);
+                medicToCreate.dbId = item[idBd];
+
+                medicToCreate.dateOfPayment = item[dateOfPayment];
+                medicToCreate.meetingID = item[meetingID];
+                medicToCreate.meetingVenue = item[meetingVenue];
+                medicToCreate.meetingVenueCity = item[meetingVenueCity];
+                medicToCreate.meetingDate = item[meetingDate];
+                medicToCreate.expenseID = item[expenseID];
+                medicToCreate.customerID = item[customerID];
+                var medicCosts = new MedicsCosts(medicToCreate);
+                medicCosts.save(function (err, respMed) {
+                    if (err) {
+                        return callback(err);
+                    }
+                    callback();
+                });
             }
-            callback();
-        });
+        })
     }, function (err) {
         if (err) {
             deferred.reject(err);

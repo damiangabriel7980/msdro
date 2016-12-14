@@ -12,6 +12,13 @@ var schema = new Schema({
     currency: String,
     purpose: String,
     dbId: String,
+    meetingID: Number,
+    meetingVenue: String,
+    meetingVenueCity: String,
+    expenseID: Number,
+    customerID: Number,
+    dateOfPayment: Date,
+    meetingDate: Date,
     date_created: Date,
     last_modified: Date
 });
