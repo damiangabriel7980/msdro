@@ -96,13 +96,13 @@ var insertUsers = function (arrayOfData) {
                 callback();
             } else {
                 var medicToCreate = {};
-                medicToCreate.userName = lowerString(item[email]);
-                medicToCreate.name = Capitalise(item[firstName]) + ' ' + Capitalise(item[lastName]);
-                medicToCreate.city = Capitalise(item[city]);
-                medicToCreate.country = Capitalise(item[country]);
+                medicToCreate.userName = item[email];
+                medicToCreate.name = Capitalise((item[firstName] + ' ' + item[lastName]), true);
+                medicToCreate.city = item[city];
+                medicToCreate.country = item[country];
                 medicToCreate.amount = item[amount];
-                medicToCreate.currency = Capitalise(item[currency]);
-                medicToCreate.purpose = Capitalise(item[purpose]);
+                medicToCreate.currency = item[currency];
+                medicToCreate.purpose = item[purpose];
                 medicToCreate.dbId = item[idBd];
 
                 medicToCreate.dateOfPayment = item[dateOfPayment];
