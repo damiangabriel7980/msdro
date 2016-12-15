@@ -5,7 +5,6 @@ controllers.controller('MedicCosts', ['$scope', '$rootScope', '$stateParams', '$
 
     var refreshUsers = function () {
         medicCostsService.users.query().$promise.then(function(resp){
-            debugger;
             var users = Success.getObject(resp);
             var params = {
                 page: 1,            // show first page
@@ -56,6 +55,7 @@ controllers.controller('MedicCosts', ['$scope', '$rootScope', '$stateParams', '$
                     $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
                 }
             });
+
         });
     };
     refreshUsers();
