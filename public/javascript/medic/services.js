@@ -213,6 +213,14 @@ services.factory('brochureService', ['$resource', function($resource){
     }
 }]);
 
+services.factory('medicCostsService', ['$resource', function($resource){
+    return {
+        users: $resource('api/medicCosts', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
 services.factory('multimediaService', ['$resource', function($resource){
     return {
         multimedia: $resource('api/multimedia', {}, {

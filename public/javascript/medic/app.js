@@ -4,6 +4,7 @@ var app = angular.module('app',
         'ui.router',
         'controllers',
         'services',
+        'ngTable',
         'ui.bootstrap',
         'ngAnimate',
         'ngCookies',
@@ -46,6 +47,12 @@ app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
                 name: 'Brochure',
                 files: [
                     'javascript/medic/BrochureControllers/brochure.js'
+                ]
+            },
+            {
+                name: 'MedicCosts',
+                files: [
+                    'javascript/medic/CostsControllers/MedicCosts.js'
                 ]
             },
             {
@@ -642,6 +649,14 @@ app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($sta
             controller:'brochureSections',
             resolve: {
                 loadDeps: loadStateDeps(['Brochure'])
+            }
+        })
+        .state('cheltuieli', {
+            url: '/cheltuieli',
+            templateUrl: '/partials/medic/cheltuieli.html',
+            controller: 'MedicCosts',
+            resolve: {
+                loadDeps: loadStateDeps(['MedicCosts'])
             }
         })
         .state(STATECONST.MEDICALCOURSES, {

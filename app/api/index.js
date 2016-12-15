@@ -5355,6 +5355,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/medicCosts')
+        .get(function (req, res) {
+            if(req.query.id) {
+                CostsList.findOne({_id: req.query.id}).populate("").exec(function (err, user) {
+                    if(err) {
+                        handleError(res, err);
+                    } else if (!user) {
+                        handleError(res, false, 401, 1);
+                    } else {
+                        handleSuccess(res, user);
+                    }
+                });
+            } else {
+                CostsList.find({userName: req.user.username}, function (err, list) {
+                    if(err) {
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, list);
+                    }
+                })
+            }
+        });
+
     router.route('/medicalCourses')
         .get(function (req, res) {
             User.findOne({_id: req.user._id}).select("+citiesID").populate('specialty profession').deepPopulate('citiesID.county').exec(function (err, foundUser) {
