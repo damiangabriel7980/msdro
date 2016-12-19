@@ -1,0 +1,25 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h3 class="modal-title">Medici ce nu au fost gasiti:</h3>
+    </div>
+    <div class="modal-body col-xs-12">
+        <div class="col-md-12">
+            <table ng-table="tableParams" show-filter="false" class="table table-bordered">
+                <tr ng-repeat="user in $data">
+                    <td data-title="'Nume'" sortable="'name'">
+                        {{user.name}}
+                    </td>
+                    <td data-title="'Email'" sortable="'userName'">
+                        {{user.userName}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+        </div>
+    </div>
+</div>

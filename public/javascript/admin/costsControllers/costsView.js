@@ -90,8 +90,12 @@ controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ng
                 if (evt.target.readyState == FileReader.DONE) { // DONE == 2
                     var data = evt.target.result;
                     UserCostsService.parseExcel.create({file: data}).$promise.then(function(resp){
+                        $modal.open({
+                            templateUrl: 'partials/admin/userCosts/medicsNotFound.html',
+                            windowClass: 'fade',
+                            controller: 'MedicsNotFound'
+                        });
                         $state.reload();
-                        console.log(resp);
                     })
                 }
             };
