@@ -1,4 +1,4 @@
-controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', 'Utils', 'exportCSV', function ($scope, $state, UserCostsService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q, Utils, exportCSV) {
+controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ngTableParams', '$filter', '$modal', 'InfoModal', 'ActionModal', 'Success', '$q', 'Utils', 'exportCSV', 'Error', function ($scope, $state, UserCostsService, ngTableParams, $filter, $modal, InfoModal, ActionModal, Success, $q, Utils, exportCSV, Error) {
 
 
     var refreshUsers = function () {
@@ -122,4 +122,19 @@ controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ng
         });
     };
 
+    $scope.toggleItem = function(user){
+        ActionModal.show(
+            user.showCost?"Ascunde cost":"Arată cost",
+            user.showCost?"Sunteți sigur ca doriți sa ascundeți costul?":"Sunteți sigur ca doriți sa aratați costul?",
+            function(){
+                user.showCost = !user.showCost;
+                UserCostsService.users.update({id: user._id}, user).$promise.then(function(){
+                    refreshUsers();
+                }).catch(function(err){
+                    console.log(Error.getMessage(err));
+                });
+            },{
+                yes: "Da"
+            })
+    }
 }]);

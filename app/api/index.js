@@ -5368,7 +5368,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     }
                 });
             } else {
-                CostsList.find({userName: req.user.username}, function (err, list) {
+                CostsList.find({$and:[ {userName: req.user.username} , {showCost: true}]}, function (err, list) {
                     if(err) {
                         handleError(res, err);
                     }else{

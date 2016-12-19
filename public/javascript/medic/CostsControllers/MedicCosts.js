@@ -1,5 +1,5 @@
 /**
- * Created by paulsuceveanu on 17.05.2016.
+ * Created by paulsuceveanu on 12.12.2016.
  */
 controllers.controller('MedicCosts', ['$scope', '$rootScope', '$stateParams', '$state', '$timeout', 'Success', 'Error', 'ngTableParams', '$filter', 'medicCostsService', function($scope, $rootScope, $stateParams, $state, $timeout, Success, Error, ngTableParams, $filter, medicCostsService){
 

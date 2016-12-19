@@ -17,24 +17,11 @@ var schema = new Schema({
     meetingVenueCity: String,
     expenseID: Number,
     customerID: Number,
+    showCost: {type: Boolean, default: true},
     dateOfPayment: Date,
     meetingDate: Date,
     date_created: Date,
     last_modified: Date
 });
-
-
-//schema.pre('save', function (next) {
-//    this.last_modified = Date.now();
-//    ModelInfos.recordLastUpdate("medic_costs").then(function () {
-//        next();
-//    });
-//});
-//
-//schema.pre('remove', function (next) {
-//    ModelInfos.recordLastUpdate("medic_costs").then(function () {
-//        next();
-//    });
-//});
 
 module.exports = mongoose.model('medic_costs', schema);
