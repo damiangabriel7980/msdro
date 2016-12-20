@@ -8,6 +8,10 @@
             <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
         </div>
         <div class="form-group col-xs-12">
+            <label>Email:</label>
+            <input type="email" class="form-control" ng-model="user.userName">
+        </div>
+        <div class="form-group col-xs-12">
             <label>Name:</label>
             <input type="text" class="form-control" ng-model="user.name">
         </div>
@@ -34,6 +38,23 @@
         <div class="form-group col-xs-12">
             <label>ID baza de date:</label>
             <input type="text" class="form-control" ng-model="user.dbId">
+        </div>
+        <div class="form-group col-xs-12">
+            <label>Data platii</label>
+            <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy"
+                   data-ng-model="user.dateOfPayment">
+        </div>
+        <div class="form-group col-xs-12">
+            <label>Loc intalnire:</label>
+            <input type="text" class="form-control" ng-model="user.meetingVenue">
+        </div>
+        <div class="form-group col-xs-12">
+            <label>Oras intalnire:</label>
+            <input type="text" class="form-control" ng-model="user.meetingVenueCity">
+        </div>
+        <div class="form-group col-xs-12">
+            <label>Data intalnirii</label>
+            <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy" data-ng-model="user.meetingDate">
         </div>
     </div>
     <div class="modal-footer">
