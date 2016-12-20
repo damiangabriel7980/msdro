@@ -6,6 +6,7 @@ controllers.controller('MedicsNotFound', ['$scope', '$state', 'UserCostsService'
             var users = Success.getObject(resp);
             var usersNotFound = [];
             var foundUser = false;
+
             angular.forEach(importedUsers, function (importedUser) {
                 if(importedUser.userName) {
                     angular.forEach(users, function (user) {
@@ -26,6 +27,7 @@ controllers.controller('MedicsNotFound', ['$scope', '$state', 'UserCostsService'
                             duplicateUser = true;
                         }
                     }
+                    foundUser = false;
                 }
             });
 
@@ -82,10 +84,6 @@ controllers.controller('MedicsNotFound', ['$scope', '$state', 'UserCostsService'
         });
 
     });
-
-
-
-
 
     $scope.closeModal = function () {
         $modalInstance.close();
