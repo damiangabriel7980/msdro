@@ -32,15 +32,22 @@ schema.pre('save', checkMedicMail);
 function isUniqueExpenseID(next) {
     /* jshint validthis: true */
     var medicCosts = this;
-
-    mongoose.models['medic_costs']
-        .findOne({ expenseID: medicCosts.expenseID}, function(err, results) {
-            if (!!results && results.id != medicCosts.id) {
-                return next(new UniqueIDError(true));
-            } else {
-                return next();
-            }
-        });
+    if(!medicCosts.isNew) {
+        if(medicCosts.expenseID !== undefined) {
+            mongoose.models['medic_costs']
+                .findOne({ expenseID: medicCosts.expenseID}, function(err, results) {
+                    if (!!results && results.id != medicCosts.id) {
+                        return next(new UniqueIDError(true));
+                    } else {
+                        return next();
+                    }
+                });
+        } else {
+            return next();
+        }
+    } else {
+        return next();
+    }
 }
 
 function checkMedicMail(next) {
