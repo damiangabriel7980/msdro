@@ -1,70 +1,72 @@
-<div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal()">&times;</button>
-        <h3 class="modal-title">Modifica utilizator</h3>
+<form ng-submit="save()">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">&times;</button>
+            <h3 class="modal-title">Modifica utilizator</h3>
+        </div>
+        <div class="modal-body col-xs-12">
+            <div style="margin-bottom: 15px;">
+                <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Email:</label>
+                <input type="email" ng-required class="form-control" ng-model="user.userName">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Name:</label>
+                <input type="text" class="form-control" ng-model="user.name">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>City:</label>
+                <input type="text" class="form-control" ng-model="user.city">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Country:</label>
+                <input type="text" class="form-control" ng-model="user.country">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Amount:</label>
+                <input type="number" class="form-control" ng-model="user.amount">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Currency:</label>
+                <input type="text" class="form-control" ng-model="user.currency">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Purpose:</label>
+                <input type="text" class="form-control" ng-model="user.purpose">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>ID baza de date:</label>
+                <input type="text" class="form-control" ng-model="user.dbId">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Data platii</label>
+                <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy"
+                       data-ng-model="user.dateOfPayment">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Loc intalnire:</label>
+                <input type="text" class="form-control" ng-model="user.meetingVenue">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Oras intalnire:</label>
+                <input type="text" class="form-control" ng-model="user.meetingVenueCity">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Data intalnirii</label>
+                <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy" data-ng-model="user.meetingDate">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Expense ID</label>
+                <input type="text" class="form-control" ng-model="user.expenseID">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+                <button type="submit" class="btn btn-primary pull-right" type="submit">Salveaza</button>
+            </div>
+        </div>
     </div>
-    <div class="modal-body col-xs-12">
-        <div style="margin-bottom: 15px;">
-            <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Email:</label>
-            <input type="email" class="form-control" ng-model="user.userName">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Name:</label>
-            <input type="text" class="form-control" ng-model="user.name">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>City:</label>
-            <input type="text" class="form-control" ng-model="user.city">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Country:</label>
-            <input type="text" class="form-control" ng-model="user.country">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Amount:</label>
-            <input type="text" class="form-control" ng-model="user.amount">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Currency:</label>
-            <input type="text" class="form-control" ng-model="user.currency">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Purpose:</label>
-            <input type="text" class="form-control" ng-model="user.purpose">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>ID baza de date:</label>
-            <input type="text" class="form-control" ng-model="user.dbId">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Data platii</label>
-            <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy"
-                   data-ng-model="user.dateOfPayment">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Loc intalnire:</label>
-            <input type="text" class="form-control" ng-model="user.meetingVenue">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Oras intalnire:</label>
-            <input type="text" class="form-control" ng-model="user.meetingVenueCity">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Data intalnirii</label>
-            <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy" data-ng-model="user.meetingDate">
-        </div>
-        <div class="form-group col-xs-12">
-            <label>Expense ID</label>
-            <input type="text" class="form-control" ng-model="user.expenseID">
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="col-xs-12">
-            <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
-            <button type="submit" class="btn btn-primary pull-right" ng-click="save()">Salveaza</button>
-        </div>
-    </div>
-</div>
+</form>
