@@ -55,7 +55,8 @@ var errorCodes = {
     50: "Eroare la trimiterea email-ului!",
     52: "Numele si email-ul sunt obligatorii!",
     53: "Locul de munca este obligatoriu!",
-    54: "ID-ul cheltuielii este deja folosit"
+    54: "ID-ul cheltuielii este deja folosit",
+    55: "Nu exista niciun user cu acest email"
 };
 
 module.exports = function(logger){

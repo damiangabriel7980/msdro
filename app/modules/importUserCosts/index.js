@@ -80,13 +80,6 @@ function Capitalise(string, isName) {
         return DiacriticsToLetters(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
 }
 
-function lowerString(string) {
-    var newName = string;
-    newName = DiacriticsToLetters(newName, true);
-    newName = newName.toLowerCase().replace(/-/g, "").replace(/\s+/g, "");
-    return newName;
-}
-
 var insertUsers = function (arrayOfData) {
     var deferred = Q.defer();
 

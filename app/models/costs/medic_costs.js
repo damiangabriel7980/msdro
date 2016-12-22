@@ -22,19 +22,20 @@ var schema = new Schema({
     last_modified: Date
 });
 
-schema.pre('save', isUnique);
+schema.pre('save', isUniqueExpenseID);
+schema.pre('save', checkMedicMail);
 /**
  * Make sure that the expenseID is unique before editing the user
  * @param {function} next - go to next middleware
  * @param {function} done
  */
-function isUnique(next) {
+function isUniqueExpenseID(next) {
     /* jshint validthis: true */
     var medicCosts = this;
 
     mongoose.models['medic_costs']
         .findOne({ expenseID: medicCosts.expenseID}, function(err, results) {
-            if (!!results) {
+            if (!!results && results.id != medicCosts.id) {
                 return next(new UniqueIDError(true));
             } else {
                 return next();
@@ -42,10 +43,27 @@ function isUnique(next) {
         });
 }
 
+function checkMedicMail(next) {
+    var medicCosts = this;
+    mongoose.models['User']
+        .findOne({username: medicCosts.userName}, function (err, results) {
+            if(!!results) {
+                return next();
+            } else {
+                return next(new emailNotFoundError(true));
+            }
+        })
+}
+
+function emailNotFoundError(emailNotFound) {
+    this.emailNotFound = emailNotFound;
+}
+
 function UniqueIDError(isUnique) {
     this.isUnique = isUnique;
 }
 UniqueIDError.prototype = new Error();
+emailNotFoundError.prototype = new Error();
 
 
 module.exports = mongoose.model('medic_costs', schema);

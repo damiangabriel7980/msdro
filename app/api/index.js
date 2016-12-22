@@ -3508,6 +3508,8 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         if(err){
                             if(err.isUnique) {
                                 handleError(res, err, 400, 54);
+                            } else if (err.emailNotFound){
+                                handleError(res, err, 400, 55);
                             } else {
                                 handleError(res, err);
                             }
