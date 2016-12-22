@@ -26,6 +26,17 @@ var meetingDate = 'Meeting Date1';
 var expenseID = 'Meeting Expense ID';
 var customerID = 'Customer ID';
 
+var organizationName = 'Organization Name';
+var npiNumber = 'NPI number';
+var addressLine1 = 'Address Line1';
+var addressLine2 = 'Address Line2';
+var nature = 'Nature';
+var expenseRequestNumber = 'Expense Request number';
+var customerExpenseID = 'Customer Expense ID';
+var dataSourceID = 'Data Source ID';
+var companyID = 'Company ID';
+var meetingVenueName = 'Meeting Venue Name';
+
 var DiacriticsToLetters = function (input, anotherChar) {
     if (typeof input !== 'string') input = "";
     var defaultDiacriticsRemovalMap = [{
@@ -105,6 +116,18 @@ var insertUsers = function (arrayOfData) {
                 medicToCreate.meetingDate = item[meetingDate];
                 medicToCreate.expenseID = item[expenseID];
                 medicToCreate.customerID = item[customerID];
+                medicToCreate.organizationName = item[organizationName];
+                medicToCreate.npiNumber = item[npiNumber];
+                medicToCreate.addressLine1 = item[addressLine1];
+                medicToCreate.addressLine2 = item[addressLine2];
+                medicToCreate.nature = item[nature];
+                medicToCreate.expenseRequestNumber = item[expenseRequestNumber];
+                medicToCreate.customerExpenseID = item[customerExpenseID];
+                medicToCreate.dataSourceID = item[dataSourceID];
+                medicToCreate.companyID = item[companyID];
+                medicToCreate.meetingVenueName = item[meetingVenueName];
+
+
                 var medicCosts = new MedicsCosts(medicToCreate);
                 medicCosts.save(function (err, respMed) {
                     if (err) {

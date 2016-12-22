@@ -19,7 +19,17 @@ var schema = new Schema({
     dateOfPayment: Date,
     meetingDate: Date,
     date_created: Date,
-    last_modified: Date
+    last_modified: Date,
+    organizationName: String,
+    npiNumber: Number,
+    addressLine1: String,
+    addressLine2: String,
+    nature: String,
+    expenseRequestNumber: Number,
+    customerExpenseID: Number,
+    dataSourceID: String,
+    companyID: Number,
+    meetingVenueName: String
 });
 
 schema.pre('save', isUniqueExpenseID);
