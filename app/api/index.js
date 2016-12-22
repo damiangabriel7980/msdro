@@ -3506,7 +3506,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     _.extend(user, toEdit);
                     user.save(function (err, user) {
                         if(err){
-                            handleError(res, err);
+                            if(err.isUnique) {
+                                handleError(res, err, 400, 54);
+                            } else {
+                                handleError(res, err);
+                            }
                         }else{
                             handleSuccess(res, user);
                         }

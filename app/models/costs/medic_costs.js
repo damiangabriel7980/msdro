@@ -1,7 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var deepPopulate = require('mongoose-deep-populate');
-var ModelInfos = require('../../modules/modelInfos');
 
 var schema = new Schema({
     userName: String,
@@ -15,7 +13,7 @@ var schema = new Schema({
     meetingID: Number,
     meetingVenue: String,
     meetingVenueCity: String,
-    expenseID: Number,
+    expenseID: {type: Number, unique: true},
     customerID: Number,
     showCost: {type: Boolean, default: true},
     dateOfPayment: Date,
@@ -23,5 +21,31 @@ var schema = new Schema({
     date_created: Date,
     last_modified: Date
 });
+
+schema.pre('save', isUnique);
+/**
+ * Make sure that the expenseID is unique before editing the user
+ * @param {function} next - go to next middleware
+ * @param {function} done
+ */
+function isUnique(next) {
+    /* jshint validthis: true */
+    var medicCosts = this;
+
+    mongoose.models['medic_costs']
+        .findOne({ expenseID: medicCosts.expenseID}, function(err, results) {
+            if (!!results) {
+                return next(new UniqueIDError(true));
+            } else {
+                return next();
+            }
+        });
+}
+
+function UniqueIDError(isUnique) {
+    this.isUnique = isUnique;
+}
+UniqueIDError.prototype = new Error();
+
 
 module.exports = mongoose.model('medic_costs', schema);

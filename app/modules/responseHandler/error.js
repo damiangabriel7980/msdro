@@ -54,7 +54,8 @@ var errorCodes = {
     49: "Toate campurile sunt obligatorii!",
     50: "Eroare la trimiterea email-ului!",
     52: "Numele si email-ul sunt obligatorii!",
-    53: "Locul de munca este obligatoriu!"
+    53: "Locul de munca este obligatoriu!",
+    54: "ID-ul cheltuielii este deja folosit"
 };
 
 module.exports = function(logger){
