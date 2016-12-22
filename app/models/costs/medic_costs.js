@@ -45,6 +45,9 @@ function isUniqueExpenseID(next) {
 
 function checkMedicMail(next) {
     var medicCosts = this;
+    if (medicCosts.isNew) {
+        return next();
+    }
     mongoose.models['User']
         .findOne({username: medicCosts.userName}, function (err, results) {
             if(!!results) {
