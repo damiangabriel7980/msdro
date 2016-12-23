@@ -56,7 +56,8 @@ var errorCodes = {
     52: "Numele si email-ul sunt obligatorii!",
     53: "Locul de munca este obligatoriu!",
     54: "Acest meeting expense ID este folosit deja",
-    55: "Nu exista niciun user cu acest email"
+    55: "Nu exista niciun user cu acest email",
+    56: "Unul sau mai multe elemente din header nu corespund"
 };
 
 module.exports = function(logger){

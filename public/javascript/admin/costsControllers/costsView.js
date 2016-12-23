@@ -96,6 +96,8 @@ controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ng
                             controller: 'MedicsNotFound'
                         });
                         $state.reload();
+                    }, function (err) {
+                        InfoModal.show("Atentie", err.data.error);
                     })
                 }
             };

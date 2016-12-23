@@ -9,33 +9,34 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 var _ = require('underscore');
 
-var email = 'Email';
-var firstName = 'First Name';
-var lastName = 'Last Name';
-var city = 'City';
-var country = 'Country';
-var amount = 'Amount';
-var currency = 'Currency';
-var purpose = 'Purpose';
-var idBd = 'id baza date';
-var dateOfPayment = 'Date of Payment';
-var meetingID = 'Meeting ID';
-var meetingVenue = 'Meeting Venue Address Line 1';
-var meetingVenueCity = 'Meeting Venue City';
-var meetingDate = 'Meeting Date1';
-var expenseID = 'Meeting Expense ID';
-var customerID = 'Customer ID';
-
-var organizationName = 'Organization Name';
-var npiNumber = 'NPI number';
-var addressLine1 = 'Address Line1';
-var addressLine2 = 'Address Line2';
-var nature = 'Nature';
-var expenseRequestNumber = 'Expense Request number';
-var customerExpenseID = 'Customer Expense ID';
-var dataSourceID = 'Data Source ID';
-var companyID = 'Company ID';
-var meetingVenueName = 'Meeting Venue Name';
+var importedHeaders = {
+    email: 'Email',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    city: 'City',
+    country: 'Country',
+    amount: 'Amount',
+    currency: 'Currency',
+    purpose: 'Purpose',
+    idBd: 'id baza date',
+    dateOfPayment: 'Date of Payment',
+    meetingID: 'Meeting ID',
+    meetingVenue: 'Meeting Venue Address Line 1',
+    meetingVenueCity: 'Meeting Venue City',
+    meetingDate: 'Meeting Date1',
+    expenseID: 'Meeting Expense ID',
+    customerID: 'Customer ID',
+    organizationName: 'Organization Name',
+    npiNumber: 'NPI number',
+    addressLine1: 'Address Line1',
+    addressLine2: 'Address line2',
+    nature: 'Nature',
+    expenseRequestNumber: 'Expense Request number',
+    customerExpenseID: 'Customer Expense ID',
+    dataSourceID: 'Data Source ID',
+    companyID: 'Company ID',
+    meetingVenueName: 'Meeting Venue Name'
+};
 
 var DiacriticsToLetters = function (input, anotherChar) {
     if (typeof input !== 'string') input = "";
@@ -91,41 +92,50 @@ function Capitalise(string, isName) {
         return DiacriticsToLetters(string.charAt(0).toUpperCase() + string.slice(1).toLowerCase());
 }
 
-var insertUsers = function (arrayOfData) {
+var insertUsers = function (arrayOfData, headerRow) {
     var deferred = Q.defer();
-
+    for (var prop in importedHeaders) {
+        if(importedHeaders.hasOwnProperty(prop)) {
+            if (headerRow.indexOf(importedHeaders[prop]) === -1) {
+                setTimeout(function () {
+                    return deferred.reject({missingHeader: true});
+                }, 0);
+                return deferred.promise;
+            }
+        }
+    }
     async.eachSeries(arrayOfData, function (item, callback) {
-        MedicsCosts.findOne({expenseID: item[expenseID]}).exec(function (err, foundMedic) {
+        MedicsCosts.findOne({expenseID: importedHeaders.expenseID}).exec(function (err, foundMedic) {
             if (foundMedic && item[expenseID]) {
                 callback();
             } else {
                 var medicToCreate = {};
-                medicToCreate.userName = item[email];
-                medicToCreate.name = Capitalise((item[firstName] + ' ' + item[lastName]), true);
-                medicToCreate.city = item[city];
-                medicToCreate.country = item[country];
-                medicToCreate.amount = item[amount];
-                medicToCreate.currency = item[currency];
-                medicToCreate.purpose = item[purpose];
-                medicToCreate.dbId = item[idBd];
+                medicToCreate.userName = item[importedHeaders.email];
+                medicToCreate.name = Capitalise((item[importedHeaders.firstName] + ' ' + item[importedHeaders.lastName]), true);
+                medicToCreate.city = item[importedHeaders.city];
+                medicToCreate.country = item[importedHeaders.country];
+                medicToCreate.amount = item[importedHeaders.amount];
+                medicToCreate.currency = item[importedHeaders.currency];
+                medicToCreate.purpose = item[importedHeaders.purpose];
+                medicToCreate.dbId = item[importedHeaders.idBd];
 
-                medicToCreate.dateOfPayment = item[dateOfPayment];
-                medicToCreate.meetingID = item[meetingID];
-                medicToCreate.meetingVenue = item[meetingVenue];
-                medicToCreate.meetingVenueCity = item[meetingVenueCity];
-                medicToCreate.meetingDate = item[meetingDate];
-                medicToCreate.expenseID = item[expenseID];
-                medicToCreate.customerID = item[customerID];
-                medicToCreate.organizationName = item[organizationName];
-                medicToCreate.npiNumber = item[npiNumber];
-                medicToCreate.addressLine1 = item[addressLine1];
-                medicToCreate.addressLine2 = item[addressLine2];
-                medicToCreate.nature = item[nature];
-                medicToCreate.expenseRequestNumber = item[expenseRequestNumber];
-                medicToCreate.customerExpenseID = item[customerExpenseID];
-                medicToCreate.dataSourceID = item[dataSourceID];
-                medicToCreate.companyID = item[companyID];
-                medicToCreate.meetingVenueName = item[meetingVenueName];
+                medicToCreate.dateOfPayment = item[importedHeaders.dateOfPayment];
+                medicToCreate.meetingID = item[importedHeaders.meetingID];
+                medicToCreate.meetingVenue = item[importedHeaders.meetingVenue];
+                medicToCreate.meetingVenueCity = item[importedHeaders.meetingVenueCity];
+                medicToCreate.meetingDate = item[importedHeaders.meetingDate];
+                medicToCreate.expenseID = item[importedHeaders.expenseID];
+                medicToCreate.customerID = item[importedHeaders.customerID];
+                medicToCreate.organizationName = item[importedHeaders.organizationName];
+                medicToCreate.npiNumber = item[importedHeaders.npiNumber];
+                medicToCreate.addressLine1 = item[importedHeaders.addressLine1];
+                medicToCreate.addressLine2 = item[importedHeaders.addressLine2];
+                medicToCreate.nature = item[importedHeaders.nature];
+                medicToCreate.expenseRequestNumber = item[importedHeaders.expenseRequestNumber];
+                medicToCreate.customerExpenseID = item[importedHeaders.customerExpenseID];
+                medicToCreate.dataSourceID = item[importedHeaders.dataSourceID];
+                medicToCreate.companyID = item[importedHeaders.companyID];
+                medicToCreate.meetingVenueName = item[importedHeaders.meetingVenueName];
 
 
                 var medicCosts = new MedicsCosts(medicToCreate);
