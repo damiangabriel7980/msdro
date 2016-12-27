@@ -40,8 +40,11 @@
             <td data-title="'Purpose'" sortable="'purpose'">
                 {{user.purpose}}
             </td>
-            <td data-title="'ID baza de date'" filter="{ 'dbId': 'text' }" sortable="'dbId'">
+            <td data-title="'Database ID'" filter="{ 'dbId': 'text' }" sortable="'dbId'">
                 {{user.dbId}}
+            </td>
+            <td data-title="'Existing user'" sortable="'hasUser'">
+                {{user.hasUser}}
             </td>
             <td data-title="'Actiuni'">
                 <action-buttons item-enable-property="user.showCost" show-toggle-button="true" show-edit-button="true" show-delete-button="true" toggle-item="toggleItem(user)"

@@ -29,11 +29,14 @@ var schema = new Schema({
     customerExpenseID: Number,
     dataSourceID: String,
     companyID: Number,
-    meetingVenueName: String
+    meetingVenueName: String,
+    hasUser: {type: Boolean, default: false}
 });
 
 schema.pre('save', isUniqueExpenseID);
 schema.pre('save', checkMedicMail);
+schema.pre('save', flagFoundUsers);
+
 /**
  * Make sure that the expenseID is unique before editing the user
  * @param {function} next - go to next middleware
@@ -63,6 +66,20 @@ function checkMedicMail(next) {
                 return next();
             } else {
                 return next(new emailNotFoundError(true));
+            }
+        })
+}
+
+function flagFoundUsers(next) {
+    var medicCosts = this;
+    mongoose.models['User']
+        .findOne({username: medicCosts.userName}, function (err, results) {
+            if(!!results) {
+                medicCosts.hasUser = true;
+                next();
+            } else {
+                medicCosts.hasUser = false;
+                next();
             }
         })
 }
