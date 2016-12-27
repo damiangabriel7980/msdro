@@ -57,7 +57,8 @@ var errorCodes = {
     53: "Locul de munca este obligatoriu!",
     54: "Acest meeting expense ID este folosit deja",
     55: "Nu exista niciun user cu acest email",
-    56: "Unul sau mai multe elemente din header nu corespund"
+    56: "Unul sau mai multe elemente din header nu corespund. Fișierul nu a fost importat.",
+    57: "Exista mai multe înregistrări duplicat in fișierul Excel. Fișierul nu a fost importat."
 };
 
 module.exports = function(logger){

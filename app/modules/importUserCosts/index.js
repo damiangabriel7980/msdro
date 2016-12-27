@@ -104,56 +104,66 @@ var insertUsers = function (arrayOfData, headerRow) {
             }
         }
     }
-    async.eachSeries(arrayOfData, function (item, callback) {
-        MedicsCosts.findOne({expenseID: importedHeaders.expenseID}).exec(function (err, foundMedic) {
-            if (foundMedic && item[expenseID]) {
-                callback();
-            } else {
-                var medicToCreate = {};
-                medicToCreate.userName = item[importedHeaders.email];
-                medicToCreate.name = Capitalise((item[importedHeaders.firstName] + ' ' + item[importedHeaders.lastName]), true);
-                medicToCreate.city = item[importedHeaders.city];
-                medicToCreate.country = item[importedHeaders.country];
-                medicToCreate.amount = item[importedHeaders.amount];
-                medicToCreate.currency = item[importedHeaders.currency];
-                medicToCreate.purpose = item[importedHeaders.purpose];
-                medicToCreate.dbId = item[importedHeaders.idBd];
 
-                medicToCreate.dateOfPayment = item[importedHeaders.dateOfPayment];
-                medicToCreate.meetingID = item[importedHeaders.meetingID];
-                medicToCreate.meetingVenue = item[importedHeaders.meetingVenue];
-                medicToCreate.meetingVenueCity = item[importedHeaders.meetingVenueCity];
-                medicToCreate.meetingDate = item[importedHeaders.meetingDate];
-                medicToCreate.expenseID = item[importedHeaders.expenseID];
-                medicToCreate.customerID = item[importedHeaders.customerID];
-                medicToCreate.organizationName = item[importedHeaders.organizationName];
-                medicToCreate.npiNumber = item[importedHeaders.npiNumber];
-                medicToCreate.addressLine1 = item[importedHeaders.addressLine1];
-                medicToCreate.addressLine2 = item[importedHeaders.addressLine2];
-                medicToCreate.nature = item[importedHeaders.nature];
-                medicToCreate.expenseRequestNumber = item[importedHeaders.expenseRequestNumber];
-                medicToCreate.customerExpenseID = item[importedHeaders.customerExpenseID];
-                medicToCreate.dataSourceID = item[importedHeaders.dataSourceID];
-                medicToCreate.companyID = item[importedHeaders.companyID];
-                medicToCreate.meetingVenueName = item[importedHeaders.meetingVenueName];
-
-
-                var medicCosts = new MedicsCosts(medicToCreate);
-                medicCosts.save(function (err, respMed) {
-                    if (err) {
-                        return callback(err);
-                    }
-                    callback();
-                });
-            }
-        })
-    }, function (err) {
-        if (err) {
-            deferred.reject(err);
-        } else {
-            deferred.resolve();
+    function hasExpenseDuplicates(array, checkBy) {
+        var uniqueEntries = _.uniq(array, checkBy);
+        if (array.length != uniqueEntries.length) {
+            return true;
         }
-    });
+    }
+
+    if (!hasExpenseDuplicates(arrayOfData, importedHeaders.expenseID)) {
+        async.eachSeries(arrayOfData, function (item, callback) {
+            MedicsCosts.findOne({expenseID: item[importedHeaders.expenseID]}).exec(function (err, foundMedic) {
+                if (foundMedic && item[importedHeaders.expenseID]) {
+                    callback();
+                } else {
+                    var medicToCreate = {};
+                    medicToCreate.userName = item[importedHeaders.email];
+                    medicToCreate.name = Capitalise((item[importedHeaders.firstName] + ' ' + item[importedHeaders.lastName]), true);
+                    medicToCreate.city = item[importedHeaders.city];
+                    medicToCreate.country = item[importedHeaders.country];
+                    medicToCreate.amount = item[importedHeaders.amount];
+                    medicToCreate.currency = item[importedHeaders.currency];
+                    medicToCreate.purpose = item[importedHeaders.purpose];
+                    medicToCreate.dbId = item[importedHeaders.idBd];
+                    medicToCreate.dateOfPayment = item[importedHeaders.dateOfPayment];
+                    medicToCreate.meetingID = item[importedHeaders.meetingID];
+                    medicToCreate.meetingVenue = item[importedHeaders.meetingVenue];
+                    medicToCreate.meetingVenueCity = item[importedHeaders.meetingVenueCity];
+                    medicToCreate.meetingDate = item[importedHeaders.meetingDate];
+                    medicToCreate.expenseID = item[importedHeaders.expenseID];
+                    medicToCreate.customerID = item[importedHeaders.customerID];
+                    medicToCreate.organizationName = item[importedHeaders.organizationName];
+                    medicToCreate.npiNumber = item[importedHeaders.npiNumber];
+                    medicToCreate.addressLine1 = item[importedHeaders.addressLine1];
+                    medicToCreate.addressLine2 = item[importedHeaders.addressLine2];
+                    medicToCreate.nature = item[importedHeaders.nature];
+                    medicToCreate.expenseRequestNumber = item[importedHeaders.expenseRequestNumber];
+                    medicToCreate.customerExpenseID = item[importedHeaders.customerExpenseID];
+                    medicToCreate.dataSourceID = item[importedHeaders.dataSourceID];
+                    medicToCreate.companyID = item[importedHeaders.companyID];
+                    medicToCreate.meetingVenueName = item[importedHeaders.meetingVenueName];
+                    var medicCosts = new MedicsCosts(medicToCreate);
+
+                    medicCosts.save(function (err, respMed) {
+                        if (err) {
+                            return callback(err);
+                        }
+                        callback();
+                    });
+                }
+            })
+        }, function (err) {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve();
+            }
+        });
+    } else {
+        deferred.reject({hasDuplicates: true});
+    }
     return deferred.promise;
 };
 

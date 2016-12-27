@@ -3511,6 +3511,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             } else if (err.emailNotFound){
                                 handleError(res, err, 400, 55);
                             } else {
+                                console.log(err);
                                 handleError(res, err);
                             }
                         }else{
@@ -3576,6 +3577,10 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 function (err) {
                     if(err.missingHeader) {
                         handleError(res,err,400, 56);
+                    } else if(err.isUnique) {
+                        handleError(res,err, 400, 57);
+                    } else if(err.hasDuplicates) {
+                        handleError(res, err, 400, 57);
                     } else {
                         handleError(res,err,500);
                     }

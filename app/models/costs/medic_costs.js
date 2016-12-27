@@ -13,7 +13,7 @@ var schema = new Schema({
     meetingID: Number,
     meetingVenue: String,
     meetingVenueCity: String,
-    expenseID: {type: Number, unique: true},
+    expenseID: {type: Number},
     customerID: Number,
     showCost: {type: Boolean, default: true},
     dateOfPayment: Date,
@@ -47,7 +47,9 @@ function isUniqueExpenseID(next) {
     var medicCosts = this;
     mongoose.models['medic_costs']
         .findOne({expenseID: medicCosts.expenseID}, function (err, results) {
-            if (!!results && results.id != medicCosts.id) {
+            if(!!results && medicCosts.isNew && results.id != medicCosts.id) {
+                return next();
+            } else if (!!results && results.id != medicCosts.id) {
                 return next(new UniqueIDError(true));
             } else {
                 return next();
