@@ -14,7 +14,8 @@ app.config(['$controllerProvider', '$filterProvider', function ($controllerProvi
 }]);
 
 app.constant('TEMPLATECONST', {
-    'SIGNUPPOPOVERURL': 'partials/public/auth/popoverSignUp.html'
+    'SIGNUPPOPOVERURL': 'partials/public/auth/popoverSignUp.html',
+    'EXISTINGUSERURL': 'partials/admin/userCosts/popoverExistingEmail.html'
 });
 
 app.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -73,6 +74,7 @@ app.run(
 
             $rootScope.merckManualImage = $rootScope.pathAmazonResources+"merckManual.jpg";
             $rootScope.signUpPopoverTemplate = TEMPLATECONST.SIGNUPPOPOVERURL;
+            $rootScope.existingUserRequiredTemplate = TEMPLATECONST.EXISTINGUSERURL;
 
             $rootScope.defaultArticleImage = $rootScope.pathAmazonResources+"article.jpg";
             $rootScope.defaultVideoImage = $rootScope.pathAmazonResources+"video.png";
