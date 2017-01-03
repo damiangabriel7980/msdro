@@ -1633,6 +1633,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/specialProducts')
+        .get(function (req, res) {
+            specialProduct.find({}).sort({'dateCreated':'desc'}).exec(function (err, products) {
+                if (err) {
+                    handleError(res, err, 500);
+                } else {
+                    handleSuccess(res, products);
+                }
+            })
+        });
+
     router.route('/admin/content/specialProducts/products')
         .get(function (req, res) {
             var q = {};

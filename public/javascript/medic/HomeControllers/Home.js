@@ -72,6 +72,9 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
         HomeService.multimedia.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
             $scope.multimedia = Success.getObject(resp);
         });
+        HomeService.getSpecialProducts.query({}).$promise.then(function (resp) {
+            $scope.specialProducts = Success.getObject(resp);
+        });
 
         brochureService.sections.query({firstOnly: true}).$promise.then(function (resp) {
             $scope.brochure = Success.getObject(resp)[0];

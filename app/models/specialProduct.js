@@ -34,7 +34,8 @@ var specialProductSchema		= new Schema({
     productType: {type: String, enum: ["product", "resource"]},
     order_index: Number,
     show_sitemap_prescription: Boolean,
-    short_description: String
+    short_description: String,
+    dateCreated: {type: Date, default: Date.now}
 });
 
 specialProductSchema.plugin(deepPopulate, {
