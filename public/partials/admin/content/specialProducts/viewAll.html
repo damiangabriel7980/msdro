@@ -3,7 +3,6 @@
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialProduct()">Adauga pagina resursa/produs special</div></div>
 </div>
 <bulk-operations model="specialProducts" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
-<div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="product in $data">
             <td width="30">
@@ -31,4 +30,3 @@
             </td>
         </tr>
     </table>
-</div>
