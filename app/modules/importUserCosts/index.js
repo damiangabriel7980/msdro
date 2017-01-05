@@ -115,7 +115,7 @@ var insertUsers = function (arrayOfData, headerRow) {
     if (!hasExpenseDuplicates(arrayOfData, importedHeaders.expenseID)) {
         async.eachSeries(arrayOfData, function (item, callback) {
             MedicsCosts.findOne({expenseID: item[importedHeaders.expenseID]}).exec(function (err, foundMedic) {
-                if (foundMedic && item[importedHeaders.expenseID]) {
+                if (foundMedic && item[importedHeaders.expenseID] || !item[importedHeaders.email]) {
                     callback();
                 } else {
                     var medicToCreate = {};
