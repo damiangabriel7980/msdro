@@ -7702,16 +7702,16 @@ fieldset[disabled] .navbarMedic .profile .btn {
   border-top: 1px solid #eeeeee;
   background: #01877B;
   padding: 5px 0 5px 0;
-  display: block;
   width: 100%;
   float: left;
   position: relative;
   min-height: 35px;
+  display: flex;
+  align-items: center;
 }
 #footer .leftSection {
-  position: absolute;
-  left: 0;
-  top: 0;
+  padding-left: 10px;
+  position: relative;
   width: 80px;
 }
 #footer .leftSection img {
@@ -7721,10 +7721,12 @@ fieldset[disabled] .navbarMedic .profile .btn {
 }
 #footer .rightSection {
   padding: 0 0 0 80px;
+  position: absolute;
+  right: 0;
 }
-@media (max-width: 480px) {
+@media (max-width: 1080px) {
   #footer .rightSection {
-    padding: 0 0 0 60%;
+    position: relative;
   }
 }
 #footer .rightSection .link {
@@ -7732,6 +7734,17 @@ fieldset[disabled] .navbarMedic .profile .btn {
   float: right;
   padding: 0 15px 0 0;
   color: white;
+}
+#footer .footer-disclaimer {
+  color: #fff;
+  display: block;
+  padding-left: 20px;
+  position: relative;
+}
+@media all and (max-width: 534px) {
+  #footer .footer-disclaimer {
+    display: none;
+  }
 }
 .marginTop20 {
   margin-top: 20px;
