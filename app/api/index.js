@@ -1696,6 +1696,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 delete req.body.file_key;
                 delete req.body.file_path_prod;
             }
+            req.body.last_updated = Date.now();
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
                     console.log(err);
