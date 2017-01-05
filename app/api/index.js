@@ -1635,7 +1635,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
 
     router.route('/specialProducts')
         .get(function (req, res) {
-            specialProduct.find({enabled: true}).sort({'dateCreated':'desc'}).exec(function (err, products) {
+            specialProduct.find({enabled: true}).sort({'last_updated':'desc'}).exec(function (err, products) {
                 if (err) {
                     handleError(res, err, 500);
                 } else {
