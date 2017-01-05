@@ -36,7 +36,7 @@ var specialProductSchema		= new Schema({
     show_sitemap_prescription: Boolean,
     short_description: String,
     dateCreated: {type: Date, default: Date.now},
-    last_updated: {type: Date, default: '02/01/2017'}
+    last_updated: {type: Date, default: '01/02/2017'}
 });
 
 specialProductSchema.plugin(deepPopulate, {
