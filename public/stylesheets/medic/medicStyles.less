@@ -1334,13 +1334,37 @@ body {
     padding-left: 10px;
     position: relative;
     width: 80px;
+    @media all and (max-width: 534px) {
+      width: 70%;
+    }
     img {
       width: 65px;
       float: right;
       padding: 5px 0 5px 0;
     }
+    .disclaimer-text {
+      color: #fff;
+      display: block;
+      padding: 0 10px 0 5px;
+      position: relative;
+      @media all and (min-width: 534px) {
+        display: none;
+      }
+    }
+    .msd-logo {
+      @media all and (max-width: 534px) {
+        display: none;
+      }
+    }
   }
   .rightSection {
+    @media all and (max-width: 534px) {
+      width: 30%;
+      padding: 0 0 0 5px;
+      .link {
+        text-align: right;
+      }
+    }
     padding: 0 0 0 80px;
     position: absolute;
     right:0;

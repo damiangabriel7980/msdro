@@ -7714,15 +7714,45 @@ fieldset[disabled] .navbarMedic .profile .btn {
   position: relative;
   width: 80px;
 }
+@media all and (max-width: 534px) {
+  #footer .leftSection {
+    width: 70%;
+  }
+}
 #footer .leftSection img {
   width: 65px;
   float: right;
   padding: 5px 0 5px 0;
 }
+#footer .leftSection .disclaimer-text {
+  color: #fff;
+  display: block;
+  padding: 0 10px 0 5px;
+  position: relative;
+}
+@media all and (min-width: 534px) {
+  #footer .leftSection .disclaimer-text {
+    display: none;
+  }
+}
+@media all and (max-width: 534px) {
+  #footer .leftSection .msd-logo {
+    display: none;
+  }
+}
 #footer .rightSection {
   padding: 0 0 0 80px;
   position: absolute;
   right: 0;
+}
+@media all and (max-width: 534px) {
+  #footer .rightSection {
+    width: 30%;
+    padding: 0 0 0 5px;
+  }
+  #footer .rightSection .link {
+    text-align: right;
+  }
 }
 @media (max-width: 1080px) {
   #footer .rightSection {
