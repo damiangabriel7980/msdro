@@ -99,6 +99,7 @@ controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ng
                         });
                         $state.reload();
                     }, function (err) {
+                        $scope.importingUsers = false;
                         InfoModal.show("Atentie", err.data.error);
                     })
                 }
