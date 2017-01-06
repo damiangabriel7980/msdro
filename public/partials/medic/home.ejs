@@ -87,11 +87,14 @@
             <div class="col-xs-10 col-xs-offset-1">
                 <hr/>
             </div>
-            <div class="col-xs-12 Events">
+            <div class="col-xs-12 Content">
                 <div class="col-xs-12 Title">
                     <h3>RESURSE ȘI PRODUSE</h3>
                 </div>
                 <div class="col-xs-12 Wrapper" ng-repeat="product in specialProducts | limitTo: 3">
+                    <div class="iconWrapper">
+                        <i class="glyphicon glyphicon-briefcase"></i>
+                    </div>
                     <div class="col-xs-12 Content">
                         <div class="col-xs-12 mediaTitle" ng-click="navigateToProduct(product)">
                             <span>{{product.product_name}}</span>

@@ -7118,34 +7118,28 @@ body .btn {
 .homeStyles .rightSection .leftColumn {
   padding: 0;
 }
-.homeStyles .rightSection .leftColumn .Multimedia .Title {
-  padding: 0;
-}
-.homeStyles .rightSection .leftColumn .Multimedia .Wrapper {
-  padding: 0 0 0 40px;
-  margin-top: 20px !important;
-  position: relative;
-}
-.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .iconWrapper {
+.homeStyles .rightSection .leftColumn .iconWrapper {
   position: absolute;
   left: 0;
   top: 0;
   padding: 0;
 }
-.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .iconWrapper i {
+.homeStyles .rightSection .leftColumn .iconWrapper i {
   color: #aaaaaa;
 }
-.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .Content {
+.homeStyles .rightSection .leftColumn .Wrapper {
+  padding: 0 0 0 40px;
+  margin-top: 20px !important;
+  position: relative;
+}
+.homeStyles .rightSection .leftColumn .Wrapper .Content {
   padding: 0;
   text-align: justify;
 }
-.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .Content .mediaTitle {
+.homeStyles .rightSection .leftColumn .Wrapper .Content .description {
   padding: 0;
-  font-weight: bold;
-  color: #01877B;
-  cursor: pointer;
 }
-.homeStyles .rightSection .leftColumn .Multimedia .Wrapper .Content .description {
+.homeStyles .rightSection .leftColumn .Title {
   padding: 0;
 }
 .homeStyles .rightSection .leftColumn .Events .Title {
@@ -7200,6 +7194,12 @@ body .btn {
   padding: 0;
   margin-top: 5px;
   text-align: justify;
+}
+.homeStyles .rightSection .leftColumn .mediaTitle {
+  padding: 0;
+  font-weight: bold;
+  color: #01877B;
+  cursor: pointer;
 }
 .homeStyles .rightSection .rightColumn {
   padding: 0;
