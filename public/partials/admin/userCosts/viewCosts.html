@@ -10,7 +10,7 @@
         </div>
         <div class="col-xs-10 noPadding">
             <button class="btn btn-primary" ng-click="addUser()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</button>
-            <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
+            <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ng-disabled="importingUsers" ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
         </div>
     </div>
     <bulk-operations model="medic_costs" connected-entities="entities" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>

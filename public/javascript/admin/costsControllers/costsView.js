@@ -89,7 +89,9 @@ controllers.controller('costsView', ['$scope', '$state', 'UserCostsService', 'ng
             reader.onloadend = function(evt) {
                 if (evt.target.readyState == FileReader.DONE) { // DONE == 2
                     var data = evt.target.result;
+                    $scope.importingUsers = true;
                     UserCostsService.parseExcel.create({file: data}).$promise.then(function(resp){
+                        $scope.importingUsers = false;
                         $modal.open({
                             templateUrl: 'partials/admin/userCosts/medicsNotFound.html',
                             windowClass: 'fade',
