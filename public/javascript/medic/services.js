@@ -184,7 +184,10 @@ services.factory('HomeService', ['$resource', function($resource){
             query: { method: 'GET', isArray: false }
         }),
         getSearchResults: $resource('api/userHomeSearch/', {}, {
-            query: { method: 'GET', isArray: false }
+            query: {method: 'GET', isArray: false}
+        }),
+        getSpecialProducts: $resource('api/specialProducts/', {}, {
+            query: {method: 'GET', isArray: false}
         })
     }
 }]);

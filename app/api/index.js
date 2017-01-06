@@ -1633,6 +1633,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/specialProducts')
+        .get(function (req, res) {
+            specialProduct.find({enabled: true}).sort({'last_updated':'desc'}).exec(function (err, products) {
+                if (err) {
+                    handleError(res, err, 500);
+                } else {
+                    handleSuccess(res, products);
+                }
+            })
+        });
+
     router.route('/admin/content/specialProducts/products')
         .get(function (req, res) {
             var q = {};
@@ -1685,6 +1696,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 delete req.body.file_key;
                 delete req.body.file_path_prod;
             }
+            req.body.last_updated = Date.now();
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
                     console.log(err);
