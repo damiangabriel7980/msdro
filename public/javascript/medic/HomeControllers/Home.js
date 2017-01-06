@@ -44,6 +44,10 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
         }
     };
 
+    $scope.navigateToProduct = function (product) {
+        $state.go('groupSpecialProduct.menuItem', {product_id: product._id}, {inherit: false,reload: true});
+    };
+
     $scope.navigateToNews = function (article) {
         $state.go('noutati.articol', {articleType: article.type, articleId: article._id, fromHome: 1});
     };

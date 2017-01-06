@@ -93,7 +93,7 @@
                 </div>
                 <div class="col-xs-12 Wrapper" ng-repeat="product in specialProducts | limitTo: 3">
                     <div class="col-xs-12 Content">
-                        <div class="col-xs-12 mediaTitle">
+                        <div class="col-xs-12 mediaTitle" ng-click="navigateToProduct(product)">
                             <span>{{product.product_name}}</span>
                         </div>
 
