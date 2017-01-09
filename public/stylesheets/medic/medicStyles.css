@@ -7709,12 +7709,17 @@ fieldset[disabled] .navbarMedic .profile .btn {
   display: flex;
   align-items: center;
 }
+@media all and (max-width: 534px) {
+  #footer {
+    justify-content: space-between;
+  }
+}
 #footer .leftSection {
   padding-left: 10px;
   position: relative;
   width: 80px;
 }
-@media all and (max-width: 534px) {
+@media all and (max-width: 533px) {
   #footer .leftSection {
     width: 70%;
   }
@@ -7735,7 +7740,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
     display: none;
   }
 }
-@media all and (max-width: 534px) {
+@media all and (max-width: 533px) {
   #footer .leftSection .msd-logo {
     display: none;
   }
@@ -7771,7 +7776,7 @@ fieldset[disabled] .navbarMedic .profile .btn {
   padding-left: 20px;
   position: relative;
 }
-@media all and (max-width: 534px) {
+@media all and (max-width: 533px) {
   #footer .footer-disclaimer {
     display: none;
   }

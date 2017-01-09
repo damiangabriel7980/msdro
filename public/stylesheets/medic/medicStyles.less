@@ -1330,11 +1330,15 @@ body {
   min-height: 35px;
   display: flex;
   align-items: center;
-  .leftSection {
+  @media all and (max-width: 534px) {
+    justify-content: space-between;
+  }
+
+    .leftSection {
     padding-left: 10px;
     position: relative;
     width: 80px;
-    @media all and (max-width: 534px) {
+    @media all and (max-width: 533px) {
       width: 70%;
     }
     img {
@@ -1352,7 +1356,7 @@ body {
       }
     }
     .msd-logo {
-      @media all and (max-width: 534px) {
+      @media all and (max-width: 533px) {
         display: none;
       }
     }
@@ -1384,7 +1388,7 @@ body {
     display: block;
     padding-left: 20px;
     position: relative;
-    @media all and (max-width: 534px) {
+    @media all and (max-width: 533px) {
       display: none;
     }
   }
