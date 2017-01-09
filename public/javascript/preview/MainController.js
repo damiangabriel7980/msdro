@@ -1,10 +1,11 @@
 /**
  * Created by andrei.mirica on 24/08/16.
  */
-controllers.controller('MainController', ['$scope', '$state', 'PreviewService', 'Success', '$window', 'STATECONST', 'Utils', function ($scope, $state, PreviewService, Success, $window, STATECONST, Utils) {
+controllers.controller('MainController', ['$scope', '$state', 'PreviewService', 'Success', '$window', 'STATECONST', 'Utils', 'CookiesService', function ($scope, $state, PreviewService, Success, $window, STATECONST, Utils, CookiesService) {
     var queryParams = {
         type : $state.params.type
     };
+    CookiesService.setCookie('appCode', '234');
     $scope.urlPro = $state.params.urlPro;
     switch ($state.params.type) {
         case ('resource') :
