@@ -1,0 +1,55 @@
+<div class="col-md-12">
+    <div class="col-md-12 well">
+        <div class="col-md-9"><h3>Cheltuieli</h3></div>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="titleAndButton col-xs-12 noPadding">
+        <div class="col-xs-2 noPadding">
+            <h3>Utilizatori:</h3>
+        </div>
+        <div class="col-xs-10 noPadding">
+            <button class="btn btn-primary" ng-click="addUser()"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;Adauga</button>
+            <button class="btn btn-default" type="file" accept=".xlsx" ngf-select ng-disabled="importingUsers" ngf-change="fileSelected($files, $event)" ngf-multiple="false">Importa din Excel</button>
+        </div>
+    </div>
+    <bulk-operations model="medic_costs" connected-entities="entities" delete-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
+    <table ng-table="tableParams" show-filter="true" class="table table-bordered">
+        <tr ng-repeat="user in $data">
+            <td width="30">
+                <input type="checkbox" ng-click="addToSelectedItems(user._id)" ng-checked="checkValue(user._id)"/>
+            </td>
+            <td data-title="'Email'" filter="{ 'userName': 'text' }" sortable="'userName'">
+                {{user.userName}}
+            </td>
+            <td data-title="'Name'" filter="{ 'name': 'text' }" sortable="'name'">
+                {{user.name}}
+            </td>
+            <td data-title="'City'" sortable="'city'">
+                {{user.city}}
+            </td>
+            <td data-title="'Country'" sortable="'country'">
+                {{user.country}}
+            </td>
+            <td data-title="'Amount'" sortable="'amount'">
+                {{user.amount}}
+            </td>
+            <td data-title="'Currency'" sortable="'currency'">
+                {{user.currency}}
+            </td>
+            <td data-title="'Purpose'" sortable="'purpose'">
+                {{user.purpose}}
+            </td>
+            <td data-title="'Database ID'" filter="{ 'dbId': 'text' }" sortable="'dbId'">
+                {{user.dbId}}
+            </td>
+            <td data-title="'Existing user'" sortable="'hasUser'">
+                {{user.hasUser}}
+            </td>
+            <td data-title="'Actiuni'">
+                <action-buttons item-enable-property="user.showCost" show-toggle-button="true" show-edit-button="true" show-delete-button="true" toggle-item="toggleItem(user)"
+                                update-item="editUser(user._id)" delete-item="removeUser(user._id)"></action-buttons>
+            </td>
+        </tr>
+    </table>
+</div>

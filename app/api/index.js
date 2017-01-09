@@ -38,6 +38,7 @@ var pdf = require("html-pdf");
 var Pathologies = require('../models/pathologies');
 var brochureSection = require('../models/brochureSections');
 var Speciality = require('../models/specialty');
+var CostsList = require('../models/costs/medic_costs');
 
 var xlsx = require("xlsx");
 
@@ -52,6 +53,7 @@ var ModelInfos = require('../modules/modelInfos');
 var ContentVerifier = require('../modules/contentVerifier');
 var januviaImport = require('../modules/importJanuviaUsers');
 var searchIndex = require('../modules/mongoosasticIndex/index');
+var costsImport = require('../modules/importUserCosts');
 
 //special Products
 var specialProduct = require('../models/specialProduct');
@@ -1631,6 +1633,17 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
             });
         });
 
+    router.route('/specialProducts')
+        .get(function (req, res) {
+            specialProduct.find({enabled: true}).sort({'last_updated':'desc'}).exec(function (err, products) {
+                if (err) {
+                    handleError(res, err, 500);
+                } else {
+                    handleSuccess(res, products);
+                }
+            })
+        });
+
     router.route('/admin/content/specialProducts/products')
         .get(function (req, res) {
             var q = {};
@@ -1683,6 +1696,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 delete req.body.file_key;
                 delete req.body.file_path_prod;
             }
+            req.body.last_updated = Date.now();
             specialProduct.update({_id: req.query.id}, {$set: req.body}, function (err, wRes) {
                 if(err){
                     console.log(err);
@@ -3451,6 +3465,139 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleError(res, true, 409, 12, processedWithErrors);
                 }
             })
+        });
+
+    router.route('/admin/costs/')
+        .get(function (req, res) {
+            if(req.query.id) {
+                CostsList.findOne({_id: req.query.id}).populate("").exec(function (err, user) {
+                    if(err) {
+                        handleError(res, err);
+                    } else if (!user) {
+                        handleError(res, false, 401, 1);
+                    } else {
+                        handleSuccess(res, user);
+                    }
+                });
+            } else {
+                CostsList.find({}, function (err, list) {
+                    if(err) {
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, list);
+                    }
+                })
+            }
+        })
+        .post(function (req, res) {
+            var user = new CostsList({
+                name: "Untitled",
+                date_created: Date.now()
+            });
+            user.save(function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else{
+                    handleSuccess(res, user);
+                }
+            })
+        })
+        .put(function (req, res) {
+            try{
+                var idToEdit = ObjectId(req.query.id);
+            }catch(ex){
+                return handleError(res, err);
+            }
+            var toEdit = req.body;
+            CostsList.findOne({_id: idToEdit}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    _.extend(user, toEdit);
+                    user.save(function (err, user) {
+                        if(err){
+                            if(err.isUnique) {
+                                handleError(res, err, 400, 54);
+                            } else if (err.emailNotFound){
+                                handleError(res, err, 400, 55);
+                            } else {
+                                console.log(err);
+                                handleError(res, err);
+                            }
+                        }else{
+                            handleSuccess(res, user);
+                        }
+                    });
+                }
+            })
+        })
+        .delete(function (req, res) {
+            CostsList.findOne({_id: req.query.id}, function (err, user) {
+                if(err){
+                    handleError(res, err);
+                }else if(!user){
+                    handleError(res, false, 404, 1);
+                }else{
+                    user.remove(function (err, wres) {
+                        if(err){
+                            handleError(res, err);
+                        }else{
+                            //cascade delete associations
+                            CostsList.update({}, {$pull: {users_associated: user._id}}, {multi: true}).exec(function (err, wres) {
+                                if(err){
+                                    handleError(res, err);
+                                }else{
+                                    handleSuccess(res);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+    function get_header_row(sheet) {
+        var headers = [];
+        var range = xlsx.utils.decode_range(sheet['!ref']);
+        var C, R = range.s.r; /* start in the first row */
+        /* walk every column in the range */
+        for(C = range.s.c; C <= range.e.c; ++C) {
+            var cell = sheet[xlsx.utils.encode_cell({c:C, r:R})] /* find the cell in the first row */
+
+            var hdr = "UNKNOWN " + C; // <-- replace with your desired default
+            if(cell && cell.t) hdr = xlsx.utils.format_cell(cell);
+
+            headers.push(hdr);
+        }
+        return headers;
+    }
+
+    router.route('/admin/parseCostsExcel')
+        .post(function (req, res) {
+            var file = req.body.file;
+            var workbook = xlsx.read(file, {type: 'binary'});
+            var first_sheet_name = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[first_sheet_name];
+            var toJson = xlsx.utils.sheet_to_json(worksheet);
+            var headerRow = get_header_row(worksheet);
+            costsImport.insertUsers(toJson, headerRow).then(
+                function (success) {
+                    handleSuccess(res);
+                },
+                function (err) {
+                    if(err.missingHeader) {
+                        handleError(res,err,400, 56);
+                    } else if(err.isUnique) {
+                        handleError(res,err, 400, 57);
+                    } else if(err.hasDuplicates) {
+                        handleError(res, err, 400, 57);
+                    } else {
+                        handleError(res,err,500);
+                    }
+                }
+            );
         });
 
     router.route('/admin/applications/januvia/users')
@@ -5250,6 +5397,29 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     handleSuccess(res, brochureSections);
                 }
             });
+        });
+
+    router.route('/medicCosts')
+        .get(function (req, res) {
+            if(req.query.id) {
+                CostsList.findOne({_id: req.query.id}).populate("").exec(function (err, user) {
+                    if(err) {
+                        handleError(res, err);
+                    } else if (!user) {
+                        handleError(res, false, 401, 1);
+                    } else {
+                        handleSuccess(res, user);
+                    }
+                });
+            } else {
+                CostsList.find({$and:[ {userName: req.user.username} , {showCost: true}]}, function (err, list) {
+                    if(err) {
+                        handleError(res, err);
+                    }else{
+                        handleSuccess(res, list);
+                    }
+                })
+            }
         });
 
     router.route('/medicalCourses')

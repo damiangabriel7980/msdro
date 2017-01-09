@@ -1,0 +1,126 @@
+<form ng-submit="save()">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">&times;</button>
+            <h3 class="modal-title">Modifica utilizator</h3>
+        </div>
+        <div class="modal-body col-xs-12">
+            <div style="margin-bottom: 15px;">
+                <alert ng-if="alert.text" type="{{alert.type}}" close="!alert.text">{{alert.text}}</alert>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group col-xs-12">
+                    <label popover-template="'partials/admin/userCosts/popoverExistingEmail.html'" popover-trigger="mouseenter" popover-placement="bottom"
+                           style="visibility: visible; display: inline-block"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;Email<sup>*</sup>:</label>
+                    <input type="email" ng-required class="form-control" ng-model="user.userName">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Name:</label>
+                    <input type="text" class="form-control" ng-model="user.name">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Organization name</label>
+                    <input type="text" class="form-control" ng-model="user.organizationName">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Customer ID</label>
+                    <input type="text" class="form-control" ng-model="user.customerID">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>NPI number</label>
+                    <input type="text" class="form-control" ng-model="user.npiNumber">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Address line1</label>
+                    <input type="text" class="form-control" ng-model="user.addressLine1">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Address line2</label>
+                    <input type="text" class="form-control" ng-model="user.addressLine2">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>City:</label>
+                    <input type="text" class="form-control" ng-model="user.city">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Country:</label>
+                    <input type="text" class="form-control" ng-model="user.country">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Amount:</label>
+                    <input type="number" step="any" class="form-control" ng-model="user.amount">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Currency:</label>
+                    <input type="text" class="form-control" ng-model="user.currency">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Nature</label>
+                    <input type="text" class="form-control" ng-model="user.nature">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group col-xs-12">
+                    <label>Purpose:</label>
+                    <input type="text" class="form-control" ng-model="user.purpose">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Date of payment (dd-MM-yyyy)</label>
+                    <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy"
+                           data-ng-model="user.dateOfPayment">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Expense request number</label>
+                    <input type="text" class="form-control" ng-model="user.expenseRequestNumber">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Customer expense ID</label>
+                    <input type="text" class="form-control" ng-model="user.customerExpenseID">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Data source ID</label>
+                    <input type="text" class="form-control" ng-model="user.dataSourceID">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>User company ID</label>
+                    <input type="text" class="form-control" ng-model="user.companyID">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Meeting ID</label>
+                    <input type="text" class="form-control" ng-model="user.meetingID">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Meeting venue:</label>
+                    <input type="text" class="form-control" ng-model="user.meetingVenue">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Meeting venue name</label>
+                    <input type="text" class="form-control" ng-model="user.meetingVenueName">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Meeting venue city:</label>
+                    <input type="text" class="form-control" ng-model="user.meetingVenueCity">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Meeting date (dd-MM-yyyy)</label>
+                    <input type="text" class="form-control" datepicker-popup="dd-MM-yyyy" data-ng-model="user.meetingDate">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Meeting Expense ID<sup>*</sup>:</label>
+                    <input type="text" class="form-control" ng-model="user.expenseID">
+                </div>
+                <div class="form-group col-xs-12">
+                    <label>Database ID:</label>
+                    <input type="text" class="form-control" ng-model="user.dbId">
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="col-xs-12">
+                <button type="button" class="btn btn-default pull-left" ng-click="closeModal()">Inchide</button>
+                <button type="submit" class="btn btn-primary pull-right" type="submit">Salveaza</button>
+            </div>
+        </div>
+    </div>
+</form>
