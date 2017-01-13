@@ -39,6 +39,7 @@ module.exports = function(app, env, logger, sessionSecret, router) {
                     titleField = 'product_name';
                     break;
             }
+            console.log('queryObj', queryObject);
             contentToQuery.findOne(queryObject).select(fieldsToSelect).exec(function (err, resp) {
                 if(err){
                     handleError(res,err,500);

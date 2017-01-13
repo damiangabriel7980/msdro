@@ -1708,10 +1708,13 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             if(err){
                                 handleError(res,err,500);
                             }else{
+                                console.log('responseee',wRes, res);
                                 handleSuccess(res, {updated:wRes}, 3);
                             }
                         });
                     } else {
+                        console.log('responseee',wRes, res);
+
                         handleSuccess(res, {}, 3);
                     }
                 }
