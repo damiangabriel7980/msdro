@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', 'Success', 'Error', 'PathologiesService', 'tinyMCEConfig', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService,Success,Error, PathologiesService, tinyMCEConfig){
+controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService','$modalInstance','$state','AmazonService', 'idToEdit', 'GroupsService', 'Success', 'Error', 'PathologiesService', 'tinyMCEConfig', 'DivisionsService', function($scope,$rootScope,ContentService,$modalInstance,$state,AmazonService,idToEdit,GroupsService,Success,Error, PathologiesService, tinyMCEConfig, DivisionsService){
 
     $scope.myGroups = {
         selectedGroups: null
@@ -17,6 +17,10 @@ controllers.controller('EditArticles', ['$scope','$rootScope' ,'ContentService',
     $scope.statusAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlert = {newAlert:false, type:"", message:""};
     $scope.uploadAlertImages = {newAlert:false, type:"", message:""};
+
+    DivisionsService.divisions.query().$promise.then(function (resp) {
+        $scope.activationCodes =  Success.getObject(resp);
+    });
 
     ContentService.content.query({id: idToEdit}).$promise.then(function(response){
         $scope.article = Success.getObject(response);
