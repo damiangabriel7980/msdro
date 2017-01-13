@@ -5,7 +5,7 @@ controllers.controller('MainController', ['$scope', '$state', 'PreviewService', 
     var queryParams = {
         type : $state.params.type
     };
-    CookiesService.setCookie('appCode', '234');
+
     $scope.urlPro = $state.params.urlPro;
     switch ($state.params.type) {
         case ('resource') :
@@ -21,6 +21,7 @@ controllers.controller('MainController', ['$scope', '$state', 'PreviewService', 
     }
     PreviewService.retrieveContent.query(queryParams).$promise.then(function (resp) {
         $scope.contentToDisplay = Success.getObject(resp);
+        CookiesService.setCookie('appCode', $scope.contentToDisplay.activationCode);
         if($scope.contentToDisplay.menuItems){
             $scope.contentToDisplay.menuItems = Utils.bindAccordionToCollection($scope.contentToDisplay.menuItems, {open : false});
             var firstMenuItem = $scope.contentToDisplay.menuItems[0];
