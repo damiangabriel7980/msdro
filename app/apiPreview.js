@@ -25,17 +25,17 @@ module.exports = function(app, env, logger, sessionSecret, router) {
             switch (req.query.type) {
                 case ('resource') :
                     contentToQuery = Content;
-                    fieldsToSelect = 'title short_description';
+                    fieldsToSelect = 'title short_description activationCode';
                     titleField = 'title';
                     break;
                 case ('pathology') :
                     contentToQuery = Pathologies;
-                    fieldsToSelect = 'display_name header_image short_description';
+                    fieldsToSelect = 'display_name header_image short_description activationCode';
                     titleField = 'display_name';
                     break;
                 case ('product') :
                     contentToQuery = specialProduct;
-                    fieldsToSelect = 'header_image product_name short_description';
+                    fieldsToSelect = 'header_image product_name short_description activationCode';
                     titleField = 'product_name';
                     break;
             }
@@ -48,6 +48,7 @@ module.exports = function(app, env, logger, sessionSecret, router) {
                             _id : resp._id,
                             title : resp[titleField],
                             short_description: resp.short_description,
+                            activationCode: resp.activationCode,
                             header_image : resp.header_image ? resp.header_image : null
                         };
                         if(req.query.type === 'product'){
