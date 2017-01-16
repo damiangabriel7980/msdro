@@ -271,7 +271,14 @@ module.exports = function(app, logger, passport) {
                         req.logIn(user, function (err) {
                             if(err){
                                 return handleError(res, err);
-                            }else{
+                            } else if(user.temporaryAccount) {
+                                console.log(Date.now(), user.expiration_date);
+                                if(Date.now() > user.expiration_date) {
+
+                                } else {
+                                    console.log('altfel')
+                                }
+                            } else{
                                 if(user.state === "ACCEPTED"){
                                     if (req.body.remember===true) {
                                         req.session.cookie.maxAge = 3600000*24; // 24 hours

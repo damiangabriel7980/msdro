@@ -166,7 +166,7 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             var activation = req.body.activation || {};
 
             //make sure only the info provided in the form is updated
-            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','job']);
+            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','job', 'temp']);
             var userData = req.body.user;
             userData.groupsID = userData.groupsID || [];
 
@@ -228,16 +228,24 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                         //        }
                                         //    }
                                         //});
-                                        Divisions.findOne({code: SHA512(activation.value).toString()}).exec(function (err, division) {
+
+                                        Divisions.findOne({ $or: [ { code: SHA512(activation.value).toString()}, {code: activation.value}]}).exec(function (err, division) {
                                             if(err || !division){
                                                 handleError(res ,null, 400, 351);
                                             }else{
-                                                if(!activation.value || (SHA512(activation.value).toString() !== division.code)){
+                                                if(!activation.value || (SHA512(activation.value).toString() !== division.code && !req.body.user.temp.comesFromPreview) || (division.code !== activation.value && req.body.user.temp.comesFromPreview)){
                                                     handleError(res, null, 403, 351);
                                                 }else{
                                                     staywellUser.division = division;
                                                     staywellUser.state = "ACCEPTED";
+                                                    staywellUser.date_created = Date.now();
+                                                    staywellUser.expiration_date = new Date();
+                                                    staywellUser.expiration_date.setDate((new Date(staywellUser.date_created)).getDate() + 2);
                                                     req.staywellUser = mergeKeys(staywellUser, userData);
+                                                    if(req.body.user.temp.comesFromPreview) {
+                                                        staywellUser.temporaryAccount = true;
+                                                    }
+                                                    console.log('userr',staywellUser);
                                                     next();
                                                 }
                                             }

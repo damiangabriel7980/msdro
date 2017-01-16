@@ -1,4 +1,4 @@
-app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', function($scope, AuthService, $window, Utils, Success) {
+app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', 'CookiesService', function($scope, AuthService, $window, Utils, Success, CookiesService) {
 
     //================================================================================================== init variables
     $scope.user = {
@@ -7,11 +7,15 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
             infoMSD: true
         },
         temp: {
-            proofFile: null
+            proofFile: null,
         },
         registeredFrom: "Staywell"
     };
 
+    if(CookiesService.getCookie("appCode")) {
+        $scope.user.temp.activationCode = CookiesService.getCookie("appCode");
+        $scope.user.temp.comesFromPreview = true;
+    }
     $scope.nonUser = {};
 
     if($scope.modalData && $scope.modalData.username) $scope.user.username = $scope.modalData.username;
