@@ -241,11 +241,10 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                                     staywellUser.date_created = Date.now();
                                                     staywellUser.expiration_date = new Date();
                                                     staywellUser.expiration_date.setDate((new Date(staywellUser.date_created)).getDate() + 2);
-                                                    req.staywellUser = mergeKeys(staywellUser, userData);
                                                     if(req.body.user.temp.comesFromPreview) {
                                                         staywellUser.temporaryAccount = true;
                                                     }
-                                                    console.log('userr',staywellUser);
+                                                    req.staywellUser = mergeKeys(staywellUser, userData);
                                                     next();
                                                 }
                                             }
