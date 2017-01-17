@@ -25,7 +25,7 @@
                 </ul>
             </td>
             <td data-title="'Ultima modificare'" sortable="'last_updated'">
-                {{product.last_updated}}
+                {{product.last_updated | date}}
             </td>
             <td data-title="'Actiuni'">
                 <action-buttons item-enable-property="product.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
