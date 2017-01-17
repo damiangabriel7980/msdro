@@ -263,35 +263,30 @@ module.exports = function(app, logger, passport) {
             }else{
                 passport.authenticate('local-login', function (err, user, info) {
                     console.log(err);
-                    if(err){
+                    if (err) {
                         return handleError(res, err);
-                    }else if(!user){
+                    } else if (!user) {
                         return handleError(res, null, 403, info.code);
-                    }else{
+                    } else {
                         req.logIn(user, function (err) {
-                            if(err){
+                            if (err) {
                                 return handleError(res, err);
-                            } else if(user.temporaryAccount) {
-                                console.log(Date.now(), user.expiration_date);
-                                if(Date.now() > user.expiration_date) {
-
-                                } else {
-                                    console.log('altfel')
+                            } else {
+                                if (user.temporaryAccount) {
+                                    if (Date.now() < user.expiration_date) {
+                                        return handleError(res, null, 403, 17);
+                                    }
                                 }
-                            } else{
-                                if(user.state === "ACCEPTED"){
-                                    if (req.body.remember===true) {
-                                        req.session.cookie.maxAge = 3600000*24; // 24 hours
+                                if (user.state === "ACCEPTED") {
+                                    if (req.body.remember === true) {
+                                        req.session.cookie.maxAge = 3600000 * 24; // 24 hours
                                     } else {
                                         req.session.cookie.expires = false;
                                     }
-
-                                    {
-                                        return handleSuccess(res, {accepted: true});
-                                    }
-                                }else if(user.state === "PENDING"){
+                                    return handleSuccess(res, {accepted: true});
+                                } else if (user.state === "PENDING") {
                                     return handleSuccess(res, {accepted: false});
-                                }else{
+                                } else {
                                     //this final else should never be reached
                                     req.logout();
                                 }
@@ -328,6 +323,7 @@ module.exports = function(app, logger, passport) {
             }else{
                 user.enabled = true;
                 user.activationToken = null;
+                user.temporaryAccount = false;
                 user.save(function (err, user) {
                     if(err){
                         logger.error(err);
