@@ -182,6 +182,7 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
                 }else{
                     sendInfoSource(is);
                     if(resp.temporaryAccount) {
+                        CookiesService.deleteCookie('appCode');
                         $window.location.href = AuthService.getProHref();
                     } else if(resp.state === "ACCEPTED"){
                         //awaiting email activation; you will soon receive it

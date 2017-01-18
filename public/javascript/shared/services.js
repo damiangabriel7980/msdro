@@ -354,6 +354,9 @@ services.factory('CookiesService', function () {
                 if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
             }
             return "";
+        },
+        deleteCookie: function(name) {
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
     }
 });

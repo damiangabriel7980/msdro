@@ -21,7 +21,9 @@ controllers.controller('MainController', ['$scope', '$state', 'PreviewService', 
     }
     PreviewService.retrieveContent.query(queryParams).$promise.then(function (resp) {
         $scope.contentToDisplay = Success.getObject(resp);
-        CookiesService.setCookie('appCode', $scope.contentToDisplay.activationCode);
+        var expiration_date = new Date();
+        expiration_date.setHours((new Date(Date.now())).getHours() + 1);
+        CookiesService.setCookie('appCode', $scope.contentToDisplay.activationCode, expiration_date);
         if($scope.contentToDisplay.menuItems){
             $scope.contentToDisplay.menuItems = Utils.bindAccordionToCollection($scope.contentToDisplay.menuItems, {open : false});
             var firstMenuItem = $scope.contentToDisplay.menuItems[0];
