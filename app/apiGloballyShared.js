@@ -8,7 +8,7 @@ var Parameters = require('./models/parameters');
 var Divisions = require('./models/divisions/divisions');
 var Speciality = require('./models/specialty');
 var Job = require('./models/jobs');
-
+var passport = require('passport');
 var mongoose = require('mongoose');
 var validator = require('validator');
 var crypto   = require('crypto');
@@ -18,6 +18,12 @@ var SHA512   = require('crypto-js/sha512');
 var MailerModule = require('./modules/mailer');
 var UtilsModule = require('./modules/utils');
 var Config = require('../config/environment');
+
+//configure winston logger
+var logger = require('../config/winston');
+
+//passport
+require('../config/passport')(passport, logger); // pass passport for configuration
 
 const activationPrefixStaywell = function (hostname) {
     return 'http://' + hostname + '/activateAccountStaywell/';
@@ -166,8 +172,10 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
             var activation = req.body.activation || {};
 
             //make sure only the info provided in the form is updated
-            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','job', 'temp']);
+            UtilsModule.allowFields(req.body.user, ['profession','groupsID','practiceType','address','citiesID','phone','subscriptions','specialty','job', 'temp', 'password']);
+            req.body.password = req.body.user.password;
             var userData = req.body.user;
+            delete userData.password;
             userData.groupsID = userData.groupsID || [];
 
             var phonePatt = UtilsModule.regexes.phone;
@@ -365,52 +373,133 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
     };
 
     router.route('/createAccountStaywell')
-        .post(validateCreateAccount, validateCompleteProfile, createAccount, uploadProof, function (req, res) {
+        .post(validateCreateAccount, validateCompleteProfile, createAccount, uploadProof, function (req, res, next) {
             var info = {
                 error: false,
                 type: "success",
                 user: req.staywellUser.username,
                 state: req.staywellUser.state
             };
-            handleSuccess(res, info);
-            notifyAdmin(req.staywellUser._id);
 
-            if(req.staywellUser.state === "ACCEPTED"){
-                generateToken(req.staywellUser.username, function (err, activationToken) {
-                    var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
-                    var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
+            if(req.staywellUser.temporaryAccount) {
+                req.body.email = info.user;
+                passport.authenticate('local-login', function (err, user, info) {
+                    console.log(err);
+                    if (err) {
+                        return handleError(res, err);
+                    } else if (!user) {
+                        return handleError(res, null, 403, info.code);
+                    } else {
 
-                    MailerModule.send(
-                        Config().createAccountTemplate,
-                        [
-                            {
-                                "name": "title",
-                                "content": new User({title: req.staywellUser.title}).getEmailTitle()
-                            },
-                            {
-                                "name": "name",
-                                "content": req.staywellUser.name
-                            },
+                        req.logIn(user, function (err) {
+                            if (err) {
+                                return handleError(res, err);
+                            } else {
+                                if (user.temporaryAccount) {
+                                    if (Date.now() > user.expiration_date) {
+                                        return handleError(res, null, 403, 17);
+                                    }
+                                }
+
+                                notifyAdmin(req.staywellUser._id);
+
+                                if(req.staywellUser.state === "ACCEPTED"){
+                                    generateToken(req.staywellUser.username, function (err, activationToken) {
+                                        var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
+                                        var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
+
+                                        MailerModule.send(
+                                            Config().createAccountTemplate,
+                                            [
+                                                {
+                                                    "name": "title",
+                                                    "content": new User({title: req.staywellUser.title}).getEmailTitle()
+                                                },
+                                                {
+                                                    "name": "name",
+                                                    "content": req.staywellUser.name
+                                                },
+                                                {
+                                                    "name": "activationLink",
+                                                    "content": activationLink
+                                                }
+                                            ],
+                                            emailTo,
+                                            'Activare cont MSD',
+                                            {
+                                                "name": "activationLink",
+                                                "content": activationLink
+                                            }
+                                        ).then(
+                                            function (success) {
+                                                //do nothing
+                                            },
+                                            function (err) {
+                                                logger.error(err);
+                                            }
+                                        );
+                                    });
+                                }
+
+                                if (user.state === "ACCEPTED") {
+                                    if (req.body.remember === true) {
+                                        req.session.cookie.maxAge = 3600000 * 24; // 24 hours
+                                    } else {
+                                        req.session.cookie.expires = false;
+                                    }
+                                    return handleSuccess(res, user);
+                                } else if (user.state === "PENDING") {
+                                    return handleSuccess(res, {accepted: false});
+                                } else {
+                                    //this final else should never be reached
+                                    req.logout();
+                                }
+                            }
+                        })
+
+                    }
+                })(req, res, next);
+            } else {
+                handleSuccess(res, info);
+                notifyAdmin(req.staywellUser._id);
+
+                if(req.staywellUser.state === "ACCEPTED"){
+                    generateToken(req.staywellUser.username, function (err, activationToken) {
+                        var activationLink = activationPrefixStaywell(req.headers.host) + activationToken;
+                        var emailTo = [{email: req.staywellUser.username, name: req.staywellUser.name}];
+
+                        MailerModule.send(
+                            Config().createAccountTemplate,
+                            [
+                                {
+                                    "name": "title",
+                                    "content": new User({title: req.staywellUser.title}).getEmailTitle()
+                                },
+                                {
+                                    "name": "name",
+                                    "content": req.staywellUser.name
+                                },
+                                {
+                                    "name": "activationLink",
+                                    "content": activationLink
+                                }
+                            ],
+                            emailTo,
+                            'Activare cont MSD',
                             {
                                 "name": "activationLink",
                                 "content": activationLink
                             }
-                        ],
-                        emailTo,
-                        'Activare cont MSD',
-                        {
-                            "name": "activationLink",
-                            "content": activationLink
-                        }
-                    ).then(
-                        function (success) {
-                            //do nothing
-                        },
-                        function (err) {
-                            logger.error(err);
-                        }
-                    );
-                });
+                        ).then(
+                            function (success) {
+                                //do nothing
+                            },
+                            function (err) {
+                                logger.error(err);
+                            }
+                        );
+                    });
+                }
             }
         });
 

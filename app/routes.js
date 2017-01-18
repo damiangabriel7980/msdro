@@ -273,7 +273,7 @@ module.exports = function(app, logger, passport) {
                                 return handleError(res, err);
                             } else {
                                 if (user.temporaryAccount) {
-                                    if (Date.now() < user.expiration_date) {
+                                    if (Date.now() > user.expiration_date) {
                                         return handleError(res, null, 403, 17);
                                     }
                                 }
