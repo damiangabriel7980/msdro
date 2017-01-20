@@ -247,8 +247,11 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                                     staywellUser.division = division;
                                                     staywellUser.state = "ACCEPTED";
                                                     staywellUser.date_created = Date.now();
-                                                    staywellUser.expiration_date = new Date();
-                                                    staywellUser.expiration_date.setDate((new Date(staywellUser.date_created)).getDate() + 2);
+                                                    //staywellUser.expiration_date = new Date();
+                                                    //staywellUser.expiration_date.setDate((new Date(staywellUser.date_created)).getDate() + 2);
+                                                    var creationDate = new Date(staywellUser.date_created);
+                                                    staywellUser.expiration_date = addMinutes(creationDate, 5);
+                                                    console.log('data baa',staywellUser.expiration_date);
                                                     if(req.body.user.temp.comesFromPreview) {
                                                         staywellUser.temporaryAccount = true;
                                                     }
@@ -286,6 +289,10 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
         }else{
             return true;
         }
+    }
+
+    function addMinutes(date, minutes) {
+        return new Date(date.getTime() + minutes*60000);
     }
 
     var uploadProof = function (req, res, next) {
