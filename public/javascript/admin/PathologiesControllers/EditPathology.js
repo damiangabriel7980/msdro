@@ -1,7 +1,7 @@
 /**
  * Created by miricaandrei23 on 27.11.2014.
  */
-controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesService','$modalInstance','$state','AmazonService', 'idToEdit', 'Success', 'Error', 'SpecialAppsService', 'tinyMCEConfig', function($scope,$rootScope,PathologiesService,$modalInstance,$state,AmazonService,idToEdit,Success,Error, SpecialAppsService, tinyMCEConfig){
+controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesService','$modalInstance','$state','AmazonService', 'idToEdit', 'Success', 'Error', 'SpecialAppsService', 'tinyMCEConfig', 'DivisionsService', function($scope,$rootScope,PathologiesService,$modalInstance,$state,AmazonService,idToEdit,Success,Error, SpecialAppsService, tinyMCEConfig, DivisionsService){
 
     $scope.pathology = {};
 
@@ -19,6 +19,10 @@ controllers.controller('EditPathology', ['$scope','$rootScope' ,'PathologiesServ
     $scope.myApps = {
         selectedApps: null
     };
+
+    DivisionsService.divisions.query().$promise.then(function (resp) {
+        $scope.activationCodes =  Success.getObject(resp);
+    });
 
     PathologiesService.pathologies.query({id: idToEdit}).$promise.then(function(response){
         $scope.pathology = Success.getObject(response);

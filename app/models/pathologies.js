@@ -14,7 +14,8 @@ var PathologiesSchema		= new Schema({
     enabled: Boolean,
     order_index: Number,
     specialApps: [{type: Schema.Types.ObjectId, ref: 'groupsApplications'}],
-    short_description: String
+    short_description: String,
+    activationCode: String
 });
 
 module.exports = mongoose.model('pathologies', PathologiesSchema, 'pathologies');

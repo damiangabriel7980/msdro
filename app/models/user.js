@@ -17,6 +17,8 @@ var userSchema = new Schema({
     jobsID: {type: [{type: Schema.Types.ObjectId, ref: 'Job'}], select: false},
     language: String,
     last_updated: Date,
+    date_created: Date,
+    expiration_date: Date,
     name: String,
     showPresentation: Boolean,
     phone: {type: String, select: false},
@@ -52,7 +54,8 @@ var userSchema = new Schema({
     registeredFrom: String,
     elearning: {
         slide: Object
-    }
+    },
+    temporaryAccount: Boolean
 });
 
 userSchema.statics.findAndModify = function (query, sort, doc, options, callback) {
