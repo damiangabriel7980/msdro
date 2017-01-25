@@ -35,7 +35,7 @@ module.exports = function(passport, logger) {
                     if (!user.validPassword(password))
                         return done(null, false, {code: 16});
 
-                    if(!user.enabled || user.account_locked || user.account_expired || user.state === "REJECTED")
+                    if((!user.enabled || user.account_locked || user.account_expired || user.state === "REJECTED") && (!user.temporaryAccount))
                         return done(null, false, {code: 17});
 
                     if(user.state === "PENDING" && user.proof_path){

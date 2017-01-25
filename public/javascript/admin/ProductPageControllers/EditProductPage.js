@@ -1,10 +1,14 @@
-controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', 'PathologiesService', 'Utils', 'tinyMCEConfig', function($scope, SpecialProductsService, AmazonService, Success, Error, PathologiesService, Utils, tinyMCEConfig) {
+controllers.controller('EditProductPage', ['$scope', 'SpecialProductsService', 'AmazonService', 'Success', 'Error', 'PathologiesService', 'Utils', 'tinyMCEConfig', 'DivisionsService', function($scope, SpecialProductsService, AmazonService, Success, Error, PathologiesService, Utils, tinyMCEConfig, DivisionsService) {
 
     //console.log($scope.sessionData);
     //$scope.resetAlert("success", "works");
 
     PathologiesService.pathologies.query().$promise.then(function(result){
         $scope.pathologies = Success.getObject(result);
+    });
+
+    DivisionsService.divisions.query().$promise.then(function (resp) {
+       $scope.activationCodes =  Success.getObject(resp);
     });
 
     SpecialProductsService.products.query({id: $scope.sessionData.idToEdit}).$promise.then(function (resp) {
