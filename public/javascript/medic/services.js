@@ -149,6 +149,9 @@ services.factory('ProfileService', ['$resource', function($resource){
         }),
         changePassword: $resource('api/changePassword', {}, {
             save: { method: 'POST'}
+        }),
+        sendActivation: $resource('api/sendActivation', {}, {
+            save: { method: 'POST', isArray: false}
         })
     }
 }]);

@@ -1,5 +1,5 @@
 controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'ProfileService', 'Success', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, ProfileService, Success) {
-
+    $rootScope.temporaryAccount = false;
     ProfileService.UserData.query().$promise.then(function (resp) {
         $rootScope.temporaryAccount = Success.getObject(resp).temporaryAccount;
     });
@@ -94,5 +94,11 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
         $scope.closeNavbar();
     });
+    $scope.resendActivationEmail = function () {
+        ProfileService.sendActivation.save({}).$promise.then(function (resp) {
 
+        }).catch(function(err){
+
+        });
+    };
 }]);

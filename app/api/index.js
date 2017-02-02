@@ -39,7 +39,7 @@ var Pathologies = require('../models/pathologies');
 var brochureSection = require('../models/brochureSections');
 var Speciality = require('../models/specialty');
 var CostsList = require('../models/costs/medic_costs');
-
+var RegistrationHelper = require('../modules/auth/registrationHelper.js');
 var xlsx = require("xlsx");
 
 
@@ -5013,6 +5013,15 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                 }
             });
         }
+        });
+
+    router.route('/sendActivation')
+        .post(Auth.isLoggedIn, function (req, res) {
+            RegistrationHelper.sendActivationCode(req).then(function(success) {
+                handleSuccess(res, {message: 'Mailul a fost retrimis'});
+            }, function (error) {
+                handleError(res,error,500);
+            })
         });
 
     router.route('/changePassword')

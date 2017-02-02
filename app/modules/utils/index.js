@@ -1,5 +1,7 @@
 var Q = require('q');
 var async = require('async');
+var crypto   = require('crypto');
+
 
 var XRegExp  = require('xregexp').XRegExp;
 
@@ -12,6 +14,54 @@ var discardFields = function(obj, fieldsArray) {
         if(fieldsArray.indexOf(key) >=0) delete obj[key];
     }
 };
+
+var validationStrings = {
+    name: {
+        str: '^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\-\\s]{3,100}$'
+    },
+    phone: {
+        str: '^[0-9]{10,20}$'
+    },
+    jobName: {
+        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$'
+    },
+    jobNumber: {
+        str: '^[a-zA-Z0-9\\-\\s]{1,5}$'
+    },
+    authorAndTitle: {
+        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$'
+    },
+    streetName: {
+        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1}[a-zA-Zs0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/\\s]{1,50}$',
+        options: "i"
+    },
+    nickname: {
+        str: '^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$',
+        options: "i"
+    },
+    email: {
+        str: RFC822,
+        stringified: RFC822.toString()
+    }
+};
+
+var regexes = {
+    name: new XRegExp(validationStrings.name.str),
+    phone: new XRegExp(validationStrings.phone.str),
+    jobName: new XRegExp(validationStrings.jobName.str),
+    jobNumber: new XRegExp(validationStrings.jobNumber.str),
+    authorAndTitle: new XRegExp(validationStrings.authorAndTitle.str),
+    streetName: new XRegExp(validationStrings.streetName.str,validationStrings.streetName.options),
+    nickname: new XRegExp(validationStrings.nickname.str,validationStrings.nickname.options),
+    email: new XRegExp(validationStrings.email.str),
+    emailQuery: function (email) {
+        return {$regex: "^" + (email || "").replace(/\+/g,"\\+") + "$", $options: "i"};
+    },
+    startsWithLetter: function (letter) {
+        return new XRegExp("^" + letter, "i");
+    }
+};
+
 exports.discardFields = discardFields;
 exports.allowFields = function(obj, fieldsArray) {
     fieldsArray = fieldsArray || [];
@@ -53,35 +103,7 @@ exports.getIds = function (arr, convertToString) {
     });
     return deferred.promise;
 };
-var validationStrings = {
-    name: {
-        str: '^[a-zA-ZĂăÂâÎîȘșŞşȚțŢţ\\-\\s]{3,100}$'
-    },
-    phone: {
-        str: '^[0-9]{10,20}$'
-    },
-    jobName: {
-        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\s]{3,30}$'
-    },
-    jobNumber: {
-        str: '^[a-zA-Z0-9\\-\\s]{1,5}$'
-    },
-    authorAndTitle: {
-        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\s]{3,100}$'
-    },
-    streetName: {
-        str: '^[a-zA-Z0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/]{1}[a-zA-Zs0-9ĂăÂâÎîȘșŞşȚțŢţ\\.\\+\\)\\(\\-\\_\\"\\;\\,\\/\\s]{1,50}$',
-        options: "i"
-    },
-    nickname: {
-        str: '^[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>]{1}[a-zĂăÂâÎîȘșŞşȚțŢţ0-9\\.\\?\\+\\*\\^\\$\\)\\[\\]\\{\\}\\|\\!\\@\\#\\%||&\\^\\(\\-\\_\\=\\+\\:\\"\\;\\/\\,\\<\\>\\-_]{1,50}$',
-        options: "i"
-    },
-    email: {
-        str: RFC822,
-        stringified: RFC822.toString()
-    }
-};
+
 exports.validationStrings  = validationStrings;
 
 
@@ -97,19 +119,26 @@ exports.validateEmail = function(str){
     return new XRegExp(validationStrings.email.str).test(str);
 }
 
-exports.regexes = {
-    name: new XRegExp(validationStrings.name.str),
-    phone: new XRegExp(validationStrings.phone.str),
-    jobName: new XRegExp(validationStrings.jobName.str),
-    jobNumber: new XRegExp(validationStrings.jobNumber.str),
-    authorAndTitle: new XRegExp(validationStrings.authorAndTitle.str),
-    streetName: new XRegExp(validationStrings.streetName.str,validationStrings.streetName.options),
-    nickname: new XRegExp(validationStrings.nickname.str,validationStrings.nickname.options),
-    email: new XRegExp(validationStrings.email.str),
-    emailQuery: function (email) {
-        return {$regex: "^" + (email || "").replace(/\+/g,"\\+") + "$", $options: "i"};
-    },
-    startsWithLetter: function (letter) {
-        return new XRegExp("^" + letter, "i");
-    }
+exports.regexes = regexes;
+
+exports.generateToken = function (username, callback) {
+    crypto.randomBytes(40, function(err, buf) {
+        if(err){
+            callback(err);
+        }else{
+            var User = require('../../models/user');
+            var activationToken = buf.toString('hex');
+            User.update({username: regexes.emailQuery(username)}, {$set: {activationToken: activationToken}}, function (err, wres) {
+                if(err){
+                    callback(err);
+                }else{
+                    callback(null, activationToken);
+                }
+            });
+        }
+    });
+};
+
+exports.activationPrefixStaywell = function (hostname) {
+    return 'http://' + hostname + '/activateAccountStaywell/';
 };
