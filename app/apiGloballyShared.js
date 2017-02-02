@@ -251,7 +251,6 @@ module.exports = function(app, env, logger, amazon, sessionSecret, router) {
                                                     //staywellUser.expiration_date.setDate((new Date(staywellUser.date_created)).getDate() + 2);
                                                     var creationDate = new Date(staywellUser.date_created);
                                                     staywellUser.expiration_date = addMinutes(creationDate, 5);
-                                                    console.log('data baa',staywellUser.expiration_date);
                                                     if(req.body.user.temp.comesFromPreview) {
                                                         staywellUser.temporaryAccount = true;
                                                     }

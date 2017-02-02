@@ -1,5 +1,8 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'ProfileService', 'Success', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, ProfileService, Success) {
 
+    ProfileService.UserData.query().$promise.then(function (resp) {
+        $rootScope.temporaryAccount = Success.getObject(resp).temporaryAccount;
+    });
     //===================================================================== navigation
     $scope.goToMerckSite=function(){
         $window.open('http://www.merckmanuals.com/','_blank');
