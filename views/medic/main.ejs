@@ -96,6 +96,10 @@
 
 </head>
 <body ng-controller="MainController">
+<div ng-if="temporaryAccount" class="alert alert-info temporary-label" style="z-index: 9999;">
+    <strong>Atentie!</strong> Contul este temporar
+    <!--<button class="resend-btn" ng-click="resendActivationEmail()">Retrimite</button>-->
+</div>
 <div class="col-xs-12 cookieBar" collapse="isCollapsed">
     <div class="col-xs-12 pull-left">
         Acest site folose&#351;te cookie-uri. Prin continuarea navig&#259;rii &#238;n site accepta&#539;i modul &#238;n care folosim aceste informa&#539;ii!
