@@ -323,6 +323,9 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
             query: { method: 'GET', isArray: false }
 
         }),
+        sendActivation: $resource('api/sendActivation', {}, {
+            save: { method: 'POST', isArray: false}
+        }),
         createAccount: function (thiz, callback) {
             var formData = getFormData(thiz);
             var options = getDefaultOptions(thiz);

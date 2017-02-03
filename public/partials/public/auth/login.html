@@ -4,7 +4,7 @@
         <div class="modal-title "><h3><span class="fa fa-sign-in"></span>&nbsp;Login</h3></div>
     </div>
     <div class="modal-body">
-        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}</alert>
+        <alert type="{{alert.type}}" ng-if="alert.show">{{alert.text}}<a style="padding-left: 3px;" ng-if="showResendButton" ng-click="resendActivationEmail()">Retrimite</a></alert>
         <div class="form-group-sm">
             <label>Email</label>
             <input type="email" class="form-control" ng-model="email" name="email">

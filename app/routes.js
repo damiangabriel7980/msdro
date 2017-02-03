@@ -274,7 +274,8 @@ module.exports = function(app, logger, passport) {
                             } else {
                                 if (user.temporaryAccount) {
                                     if (Date.now() > user.expiration_date) {
-                                        return handleError(res, null, 403, 17);
+                                        var data = {showResendButton : true };
+                                        return handleError(res, err, 403, 58, data);
                                     }
                                 }
                                 if (user.state === "ACCEPTED") {
