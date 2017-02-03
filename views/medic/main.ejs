@@ -96,9 +96,9 @@
 
 </head>
 <body ng-controller="MainController">
-<div ng-class="{'display-block' : temporaryAccount}" class="alert alert-info temporary-label" style="display: none; z-index: 9999;">
-    <strong>Atentie!</strong> Contul este temporar
-    <button class="resend-btn" ng-click="resendActivationEmail()">Retrimite</button>
+<div ng-class="{'display-block' : temporaryAccount}" class="alert alert-info temporary-label" style="display: none; z-index: 1;">
+    <strong>Atentie!</strong> Contul este temporar.
+    <a class="resend-btn" ng-click="resendActivationEmail()">Retrimite mailul de activare</a>
 </div>
 <div class="col-xs-12 cookieBar" collapse="isCollapsed">
     <div class="col-xs-12 pull-left">
