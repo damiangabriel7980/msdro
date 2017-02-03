@@ -54,8 +54,10 @@ app.controllerProvider.register('AuthModal', ['$scope', '$rootScope', '$modalIns
                     });
                 }
             }).catch(function (resp) {
-                if(resp.data.data.showResendButton) {
-                    $scope.showResendButton = true;
+                if(resp.data) {
+                    if(resp.data.data.showResendButton) {
+                        $scope.showResendButton = true;
+                    }
                 }
                 $scope.resetAlert("danger", Error.getMessage(resp));
             });
@@ -64,7 +66,7 @@ app.controllerProvider.register('AuthModal', ['$scope', '$rootScope', '$modalIns
 
     $scope.resendActivationEmail = function () {
         AuthService.sendActivation.save({}).$promise.then(function (resp) {
-
+            $scope.showResendButton = false;
         }).catch(function(err){
 
         });
