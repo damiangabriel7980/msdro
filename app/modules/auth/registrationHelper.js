@@ -8,6 +8,7 @@ var UtilsModule = require('../utils');
 var Q = require('q');
 var registrationHelper = module.exports = {};
 var Config = require('../../../config/environment');
+var User = require('../../models/user');
 
 registrationHelper.sendActivationCode = function (req) {
     var deferred = Q.defer();
@@ -21,7 +22,7 @@ registrationHelper.sendActivationCode = function (req) {
                 [
                     {
                         "name": "title",
-                        "content": "Email Title"
+                        "content": new User({title: req.user.title}).getEmailTitle()
                     },
                     {
                         "name": "name",
