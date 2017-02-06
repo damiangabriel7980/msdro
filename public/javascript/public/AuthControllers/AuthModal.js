@@ -54,7 +54,7 @@ app.controllerProvider.register('AuthModal', ['$scope', '$rootScope', '$modalIns
                     });
                 }
             }).catch(function (resp) {
-                if(resp.data) {
+                if(resp.data.data) {
                     if(resp.data.data.showResendButton) {
                         $scope.showResendButton = true;
                     }
