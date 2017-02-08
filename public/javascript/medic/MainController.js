@@ -1,5 +1,6 @@
-controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'ProfileService', 'Success', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, ProfileService, Success) {
+controllers.controller('MainController', ['$scope', '$state', '$modal','$rootScope','$window','$cookies','Utils', 'CookiesService', 'ProfileService', 'Success', '$timeout', function ($scope, $state, $modal,$rootScope,$window,$cookies,Utils, CookiesService, ProfileService, Success, $timeout) {
     $rootScope.temporaryAccount = false;
+    $scope.showResendButton = true;
     ProfileService.UserData.query().$promise.then(function (resp) {
         $rootScope.temporaryAccount = Success.getObject(resp).temporaryAccount;
     });
@@ -96,7 +97,11 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     });
     $scope.resendActivationEmail = function () {
         ProfileService.sendActivation.save({}).$promise.then(function (resp) {
-
+            $scope.showResendButton = false;
+            $scope.showConfirmation = true;
+            $timeout(function(){
+                $scope.showConfirmation = false;
+            },3000);
         }).catch(function(err){
 
         });
