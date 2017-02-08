@@ -4,7 +4,7 @@ var PublicCategories = require('./models/publicCategories');
 var Events = require('./models/events');
 var TherapeuticAreas = require('./models/therapeutic_areas');
 var UserGroup = require('./models/userGroup');
-
+var RegistrationHelper = require('./modules/auth/registrationHelper.js');
 var ObjectId = require('mongoose').Types.ObjectId;
 var async = require('async');
 
@@ -116,6 +116,16 @@ module.exports = function(app, logger, router) {
                 }else{
                     handleSuccess(res,resp);
                 }
+            })
+        });
+
+    router.route('/checkSendActivation')
+        .post(function (req, res) {
+            req.user = req.body;
+            RegistrationHelper.sendActivationCode(req).then(function(success) {
+                handleSuccess(res, {message: 'Mailul a fost retrimis'});
+            }, function (error) {
+                handleError(res,error,500);
             })
         });
 
