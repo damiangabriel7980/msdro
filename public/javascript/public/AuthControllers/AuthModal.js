@@ -1,4 +1,4 @@
-app.controllerProvider.register('AuthModal', ['$scope', '$rootScope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', 'Utils', 'Success', 'Error', function($scope, $rootScope, $modalInstance, intent, $sce, AuthService, $window, Utils, Success, Error) {
+app.controllerProvider.register('AuthModal', ['$scope', '$rootScope', '$modalInstance', 'intent', '$sce', 'AuthService', '$window', 'Utils', 'Success', 'Error', 'PublicService', function($scope, $rootScope, $modalInstance, intent, $sce, AuthService, $window, Utils, Success, Error, PublicService) {
 
     $scope.resetAlert = function (type, text) {
         if(Utils.isMobile() && text){
@@ -53,9 +53,23 @@ app.controllerProvider.register('AuthModal', ['$scope', '$rootScope', '$modalIns
                     });
                 }
             }).catch(function (resp) {
+                if(resp.data.data) {
+                    $scope.userData = resp.data.data.user;
+                    if(resp.data.data.showResendButton) {
+                        $scope.showResendButton = true;
+                    }
+                }
                 $scope.resetAlert("danger", Error.getMessage(resp));
             });
         }
+    };
+
+    $scope.resendActivationEmail = function () {
+        PublicService.checkSendActivation.save($scope.userData).$promise.then(function (resp) {
+            $scope.showResendButton = false;
+        }).catch(function(err){
+
+        });
     };
 
     $scope.reset = function () {

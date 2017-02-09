@@ -1,4 +1,4 @@
-app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', function($scope, AuthService, $window, Utils, Success) {
+app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', 'Utils', 'Success', 'CookiesService', '$state', function($scope, AuthService, $window, Utils, Success, CookiesService, $state) {
 
     //================================================================================================== init variables
     $scope.user = {
@@ -7,11 +7,15 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
             infoMSD: true
         },
         temp: {
-            proofFile: null
+            proofFile: null,
         },
         registeredFrom: "Staywell"
     };
 
+    if(CookiesService.getCookie("appCode")) {
+        $scope.user.temp.activationCode = CookiesService.getCookie("appCode");
+        $scope.user.temp.comesFromPreview = true;
+    }
     $scope.nonUser = {};
 
     if($scope.modalData && $scope.modalData.username) $scope.user.username = $scope.modalData.username;
@@ -177,10 +181,13 @@ app.controllerProvider.register('Signup', ['$scope', 'AuthService', '$window', '
                     $scope.resetAlert("danger", resp.message);
                 }else{
                     sendInfoSource(is);
-                    if(resp.state === "ACCEPTED"){
+                    if(resp.temporaryAccount) {
+                        CookiesService.deleteCookie('appCode');
+                        $window.location.href = AuthService.getProHref();
+                    } else if(resp.state === "ACCEPTED"){
                         //awaiting email activation; you will soon receive it
                         $scope.renderView("awaitingEmailActivation", {registeredAddress: resp.user});
-                    }else{
+                    } else{
                         //awaiting proof acceptance (48 h)
                         $scope.renderView("awaitingProofAcceptance", {registeredAddress: resp.user, title: "Creare cont"});
                     }

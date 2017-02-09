@@ -3,7 +3,6 @@
     <div class="col-md-3"><div class="btn btn-default pull-right" ng-click="addSpecialProduct()">Adauga pagina resursa/produs special</div></div>
 </div>
 <bulk-operations model="specialProducts" delete-button modify-button items-set="selectedItems" filtered-array="resultData" ></bulk-operations>
-<div class="col-md-12">
     <table ng-table="tableParams" show-filter="true" class="table table-bordered">
         <tr ng-repeat="product in $data">
             <td width="30">
@@ -25,10 +24,12 @@
                     </li>
                 </ul>
             </td>
+            <td data-title="'Ultima modificare'" sortable="'last_updated'">
+                {{product.last_updated | date}}
+            </td>
             <td data-title="'Actiuni'">
                 <action-buttons item-enable-property="product.enabled" show-toggle-button="true" show-edit-button="true" show-delete-button="true"
                                 toggle-item="toggleSpecialProduct(product._id,product.enabled)" delete-item="deleteSpecialProduct(product._id)" update-item="editSpecialProduct(product._id, product.productType)"></action-buttons>
             </td>
         </tr>
     </table>
-</div>

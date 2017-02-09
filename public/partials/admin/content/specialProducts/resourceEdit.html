@@ -31,6 +31,13 @@
                                     output="notUsed"></my-multiple-select>
             </div>
         </div>
+        <div class="col-md-12">
+            <label>Divizie:</label><br>
+            <select title="activationCode" ng-model="newProductPage.activationCode" class="select-code">
+                <option disabled selected value> Selectati o divizie </option>
+                <option ng-repeat="item in activationCodes" value="{{item.code}}">{{item.name}}</option>
+            </select>
+        </div>
         <div class="col-md-12 marginTop20">
             <button class="btn btn-default" type="file" ngf-select ngf-change="fileSelected($files, 'header')" ngf-multiple="false"
                     ngf-accept="'image/*'"><i class="glyphicon glyphicon-camera"></i>&nbsp;Incarca header</button>

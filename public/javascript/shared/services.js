@@ -354,6 +354,9 @@ services.factory('CookiesService', function () {
                 if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
             }
             return "";
+        },
+        deleteCookie: function(name) {
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
     }
 });
@@ -435,7 +438,7 @@ services.factory('customOrder', function() {
         }
     }
 });
-services.factory('exportCSV', function(){
+services.factory('exportCSV', [function(){
     var formatArrayCSV = function(arrayOfObjects, arrayOfProperties, arrayOfPropertiesToStringify, arrayOfPropertyObjectsToAccess){
         var arrayToReturn = [];
         angular.forEach(arrayOfObjects, function(arrayItem, keyOfItem){
@@ -482,4 +485,4 @@ services.factory('exportCSV', function(){
     return {
         formatArrayCSV: formatArrayCSV
     }
-});
+}]);

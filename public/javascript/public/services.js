@@ -116,8 +116,11 @@ services.factory('StateService', ['$state', function ($state) {
     }
 }]);
 
-services.factory('PublicService', function () {
+services.factory('PublicService', ['$resource',  function ($resource) {
     return {
+        checkSendActivation: $resource('apiPublic/checkSendActivation', {}, {
+            save: { method: 'POST', isArray: false }
+        }),
         getSref: function (content) {
             switch(content.type){
                 case 1: return 'stiri.detail'; break;
@@ -128,7 +131,7 @@ services.factory('PublicService', function () {
             }
         }
     }
-});
+}]);
 
 services.factory('RootService', ['$resource', function ($resource) {
     return {
@@ -322,6 +325,9 @@ services.factory('AuthService', ['$resource', 'Utils', 'Error', 'Success', funct
         specialty: $resource('apiGloballyShared/accountActivation/specialty',{},{
             query: { method: 'GET', isArray: false }
 
+        }),
+        sendActivation: $resource('api/sendActivation', {}, {
+            save: { method: 'POST', isArray: false}
         }),
         createAccount: function (thiz, callback) {
             var formData = getFormData(thiz);

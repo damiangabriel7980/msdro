@@ -1,0 +1,36 @@
+<div class="row-fluid specialProductMainWrapper col-md-offset-2 col-xs-offset-0">
+    <div class="col-md-10 col-xs-12" id="descriptionDiv">
+        <div class="col-xs-12 well well-lg DescriptionWrapper">
+            <div class="col-xs-12">
+                <img class="col-xs-12 noPadding" ng-if="brochureHeader" no-cache-src="{{brochureHeader}}" />
+            </div>
+            <div class="col-md-12" style="padding-top: 20px; overflow: auto;">
+                <table ng-table="tableParams" show-filter="false" class="table table-bordered">
+                    <tr ng-repeat="user in $data">
+                        <td data-title="'Suma'" sortable="'amount'">
+                            {{user.amount}}
+                        </td>
+                        <td data-title="'Moneda'" sortable="'currency'">
+                            {{user.currency}}
+                        </td>
+                        <td data-title="'Scop calatorie'" sortable="'purpose'">
+                            {{user.purpose}}
+                        </td>
+                        <td data-title="'Data platii'" sortable="'dateOfPayment'">
+                            {{user.dateOfPayment | date}}
+                        </td>
+                        <td data-title="'Locul intalnirii'" sortable="'meetingVenue'">
+                            {{user.meetingVenue}}
+                        </td>
+                        <td data-title="'Orasul intalnirii'" sortable="'meetingVenueCity'">
+                            {{user.meetingVenueCity}}
+                        </td>
+                        <td data-title="'Data intalnirii'" sortable="'meetingDate'">
+                            {{user.meetingDate | date}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

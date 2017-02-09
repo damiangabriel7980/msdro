@@ -299,6 +299,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             templateUrl: 'partials/admin/applications/januvia/viewUsers.html',
             controller: 'JanuviaUsersView'
         })
+        .state('costs', {
+            url: '/costs',
+            templateUrl: 'partials/admin/userCosts/viewCosts.html',
+            controller: 'costsView'
+        })
         .state('applications.guideLines',{
             url:'/guidelines',
             templateUrl:'partials/admin/applications/guideLines/root.html'

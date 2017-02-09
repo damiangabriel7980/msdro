@@ -17,6 +17,8 @@ var userSchema = new Schema({
     jobsID: {type: [{type: Schema.Types.ObjectId, ref: 'Job'}], select: false},
     language: String,
     last_updated: Date,
+    date_created: Date,
+    expiration_date: Date,
     name: String,
     showPresentation: Boolean,
     phone: {type: String, select: false},
@@ -48,11 +50,12 @@ var userSchema = new Schema({
     routing_role: {type: String, enum: ["admin", "manager", "reprezentant"], select: false},
     address: {type: String, select: false},
     practiceType: {type: Number, select: false}, // 1 = Public , 2 = Private
-    title: {type: Number, select: false}, // 1 = Dl, 2 = Dna, 3 = Prof, 4 = Dr
+    title: {type: Number, select: true}, // 1 = Dl, 2 = Dna, 3 = Prof, 4 = Dr
     registeredFrom: String,
     elearning: {
         slide: Object
-    }
+    },
+    temporaryAccount: Boolean
 });
 
 userSchema.statics.findAndModify = function (query, sort, doc, options, callback) {

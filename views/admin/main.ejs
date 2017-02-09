@@ -138,7 +138,10 @@
     <script src="javascript/admin/applicationsControllers/DPOC/AddDeviceDPOC.js"></script>
     <script src="javascript/admin/applicationsControllers/DPOC/ImportDevicesDPOC.js"></script>
     <script src="javascript/admin/applicationsControllers/januvia/JanuviaUsersView.js"></script>
+    <script src="javascript/admin/costsControllers/costsView.js"></script>
+    <script src="javascript/admin/costsControllers/medicsNotFound.js"></script>
     <script src="javascript/admin/applicationsControllers/januvia/JanuviaUserEdit.js"></script>
+    <script src="javascript/admin/costsControllers/costsEdit.js"></script>
     <script src="javascript/admin/applicationsControllers/AppUpdate/AppUpdateController.js"></script>
     <script src="javascript/admin/applicationsControllers/AppUpdate/AppUpdateEditController.js"></script>
     <script src="javascript/admin/applicationsControllers/guideLine/guideLineCategoryController.js"></script>
@@ -274,6 +277,7 @@
                 </li>
                 <li ng-class="{'active': $state.includes('ariiTerapeutice')}"><a ui-sref="ariiTerapeutice"> Arii terapeutice </a></li>
                 <li ng-class="{'active': $state.includes('pathologies')}"><a ui-sref="pathologies"> Patologii </a></li>
+                <li ng-class="{'active': $state.includes('costs')}"><a ui-sref="costs"> Cheltuieli </a></li>
                 <li ng-class="{'active': $state.includes('brochure')}"><a ui-sref="brochure"> Brosura </a></li>
                 <li class="dropdown" ng-class="{'active': $state.includes('applications')}">
                     <a class="dropdown-toggle" data-toggle="dropdown"> Aplicatii <b class="caret"></b></a>

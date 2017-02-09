@@ -18,6 +18,14 @@
         </div>
     </div>
             <div class="col-md-12 noPadding marginTop20">
+                <div class="col-md-12 noPaddingLeft">
+                    <label>Divizie:</label><br>
+                    <select title="activationCode" ng-model="pathology.activationCode" class="select-code">
+                        <option disabled selected value> Selectati o divizie </option>
+                        <option ng-repeat="item in activationCodes" value="{{item.code}}">{{item.name}}</option>
+                    </select>
+                </div>
+
                 <div class="col-md-12 noPadding">
                     <single-upload-manager label="imagine header" on-complete-function="headerIntroChanged(key)"
                                                 bucket="{{amazonBucket}}" on-delete-function="headerIntroChanged(key, true)"

@@ -6,7 +6,7 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
     $scope.glycemizerURL = $sce.trustAsResourceUrl('partials/medic/widgets/Glycemizer.html');
     $scope.immunologyURL = $sce.trustAsResourceUrl('partials/medic/widgets/Immunology.html');
     $scope.univadisURL = $sce.trustAsResourceUrl('partials/medic/widgets/Univadis.html');
-    $scope.myInterval = 10;
+    $scope.myInterval = 5;
     $scope.HomeCarousel = [];
     $scope.selectedIndexCarousel = 0;
     $scope.setSlideCarousel = function(index)
@@ -44,6 +44,10 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
         }
     };
 
+    $scope.navigateToProduct = function (product) {
+        $state.go('groupSpecialProduct.menuItem', {product_id: product._id}, {inherit: false,reload: true});
+    };
+
     $scope.navigateToNews = function (article) {
         $state.go('noutati.articol', {articleType: article.type, articleId: article._id, fromHome: 1});
     };
@@ -71,6 +75,9 @@ app.controllerProvider.register('Home', ['$scope', '$rootScope', 'HomeService', 
         });
         HomeService.multimedia.query({specialGroupSelected: specialGroupSelected?specialGroupSelected._id.toString():null}).$promise.then(function (resp) {
             $scope.multimedia = Success.getObject(resp);
+        });
+        HomeService.getSpecialProducts.query({}).$promise.then(function (resp) {
+            $scope.specialProducts = Success.getObject(resp);
         });
 
         brochureService.sections.query({firstOnly: true}).$promise.then(function (resp) {

@@ -54,7 +54,12 @@ var errorCodes = {
     49: "Toate campurile sunt obligatorii!",
     50: "Eroare la trimiterea email-ului!",
     52: "Numele si email-ul sunt obligatorii!",
-    53: "Locul de munca este obligatoriu!"
+    53: "Locul de munca este obligatoriu!",
+    54: "Nu se poate salva un Meeting Expense ID folosit deja sau unul gol.",
+    55: "Va rugam sa completati o adresa de email a unui utilizator existent",
+    56: "Unul sau mai multe elemente din header nu corespund. Fișierul nu a fost importat.",
+    57: "Exista mai multe înregistrări duplicat in fișierul Excel. Fișierul nu a fost importat.",
+    58: "Contul dvs nu este activ. Va rugam sa va confirmati adresa de email prin accesarea link-ului primit prin email."
 };
 
 module.exports = function(logger){

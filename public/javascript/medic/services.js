@@ -149,6 +149,9 @@ services.factory('ProfileService', ['$resource', function($resource){
         }),
         changePassword: $resource('api/changePassword', {}, {
             save: { method: 'POST'}
+        }),
+        sendActivation: $resource('api/sendActivation', {}, {
+            save: { method: 'POST', isArray: false}
         })
     }
 }]);
@@ -184,7 +187,10 @@ services.factory('HomeService', ['$resource', function($resource){
             query: { method: 'GET', isArray: false }
         }),
         getSearchResults: $resource('api/userHomeSearch/', {}, {
-            query: { method: 'GET', isArray: false }
+            query: {method: 'GET', isArray: false}
+        }),
+        getSpecialProducts: $resource('api/specialProducts/', {}, {
+            query: {method: 'GET', isArray: false}
         })
     }
 }]);
@@ -208,6 +214,14 @@ services.factory('PathologiesService', ['$resource', function($resource){
 services.factory('brochureService', ['$resource', function($resource){
     return {
         sections: $resource('api/brochure', {}, {
+            query: { method: 'GET', isArray: false }
+        })
+    }
+}]);
+
+services.factory('medicCostsService', ['$resource', function($resource){
+    return {
+        users: $resource('api/medicCosts', {}, {
             query: { method: 'GET', isArray: false }
         })
     }

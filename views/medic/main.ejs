@@ -60,6 +60,7 @@
 
     <!--Widgets-->
     <link rel="stylesheet" href="modules/mobile_content_list/mobile_content_list.css">
+    <script src="components/ng-table/dist/ng-table.js"></script>
     <script src="modules/mobile_content_list/mobile_content_list.js"></script>
     <script src="modules/sticky-footer-fixed/footer_responsive.js"></script>
     <link rel="stylesheet" href="modules/horizontal-content-list/styles.css">
@@ -83,6 +84,8 @@
     <script src="javascript/medic/MainController.js"></script>
     <script src="javascript/medic/SpecialGroupsControllers/DisplayFeatures.js"></script>
     <script src="javascript/medic/SpecialGroupsControllers/SpecialGroupsMenu.js"></script>
+    <script src="javascript/medic/CostsControllers/MedicCosts.js"></script>
+
     <link rel="stylesheet" href="modules/bootstrap-search/bootstrap_search.css">
     <script src="modules/bootstrap-search/bootstrap_search.js"></script>
     <link rel="stylesheet" href="modules/bootstrap-special-header/bootstrap-special-header.css">
@@ -93,6 +96,13 @@
 
 </head>
 <body ng-controller="MainController">
+<div ng-class="{'display-block' : temporaryAccount}" class="alert alert-info temporary-label" style="display: none; z-index: 1;">
+    Pentru a putea avea acces in continuare la platforma Staywell.ro va rugam sa va confirmati adresa de email prin accesarea link-ului primit in email.
+    <a ng-if="showResendButton" class="resend-btn" ng-click="resendActivationEmail()">Retrimite</a>
+</div>
+<div ng-class="{'display-block' : temporaryAccount}" ng-if="showConfirmation" class="alert alert-info temporary-label" style="display: none; z-index: 1;">
+    Mailul de activare a fost retrimis.
+</div>
 <div class="col-xs-12 cookieBar" collapse="isCollapsed">
     <div class="col-xs-12 pull-left">
         Acest site folose&#351;te cookie-uri. Prin continuarea navig&#259;rii &#238;n site accepta&#539;i modul &#238;n care folosim aceste informa&#539;ii!
@@ -175,6 +185,7 @@
                         <li ng-click="closeNavbar(); $state.go('elearning.multimedia.multimediaByArea',{'idArea': 0})"><a>&nbsp;Multimedia</a></li>
                     </ul>
                 </li>
+                <li ng-if="medicCosts" ng-class="{'active': $state.includes('cheltuieli')}"><a ui-sref="cheltuieli"> Cheltuieli </a></li>
                 <li class="mobileLink dividerTop" ng-class="{'active': $state.includes('profileMobile')}" ng-click="showProfile();closeNavbar()"><a>Contul meu</a></li>
                 <li class="mobileLink" ng-click="logoutUser()"><a>Sign out</a></li>
             </ul>
