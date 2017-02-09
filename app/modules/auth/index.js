@@ -30,6 +30,13 @@ module.exports = function (logger, sessionSecret) {
         }
     };
 
+    var accountNotExpired = function (req, res, next) {
+        if(req.user.temporaryAccount && Date.now() > req.user.expiration_date) {
+            return handleError(res,true,403,58);
+        }
+        next();
+    };
+
     var hasAdminRights = function(req, res, next) {
 
         try{
@@ -83,7 +90,8 @@ module.exports = function (logger, sessionSecret) {
 
     return {
         isLoggedIn: isLoggedIn,
-        hasAdminRights: hasAdminRights
+        hasAdminRights: hasAdminRights,
+        accountNotExpired: accountNotExpired
     };
 
 };
