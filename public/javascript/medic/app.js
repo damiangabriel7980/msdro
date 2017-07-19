@@ -660,7 +660,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'STATECONST', function ($sta
             }
         })
         .state(STATECONST.MEDICALCOURSES, {
-            url: '/accessMedicalCourses'
+            url: '/accessMedicalCourses/:courseID'
         })
 }]);
 
@@ -740,6 +740,9 @@ app.run(
                             windowClass: 'fade',
                             controller: 'medicalCourses',
                             resolve: {
+                                courseID: function () {
+                                    return toParams.courseID ? toParams.courseID : null;
+                                },
                                 loadDeps: loadStateDeps(['leaveStaywell'])
                             }
                         });
