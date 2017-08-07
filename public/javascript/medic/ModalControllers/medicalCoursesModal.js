@@ -1,7 +1,7 @@
 /**
  * Created by andrei.mirica on 02/08/16.
  */
-app.controllerProvider.register('medicalCourses', ['$scope', '$rootScope', '$sce', '$modal','$timeout','$state','$modalInstance','coursesService', 'Success', 'Error', function($scope, $rootScope, $sce, $modal,$timeout,$state,$modalInstance,coursesService,Success,Error) {
+app.controllerProvider.register('medicalCourses', ['$scope', '$rootScope', '$sce', '$modal','$timeout','$state','$modalInstance','coursesService', 'Success', 'Error', 'courseID', function($scope, $rootScope, $sce, $modal,$timeout,$state,$modalInstance,coursesService,Success,Error,courseID) {
 
     $scope.resetAlert = function (message, type) {
         $scope.modalAlert = {
@@ -11,7 +11,7 @@ app.controllerProvider.register('medicalCourses', ['$scope', '$rootScope', '$sce
         };
     };
 
-    coursesService.requestToken.query().$promise.then(function (response) {
+    coursesService.requestToken.query({courseID: courseID}).$promise.then(function (response) {
         $scope.medicalCoursesUrl = Success.getObject(response);
     }).catch(function(err){
         $scope.resetAlert(Error.getMessage(err));
