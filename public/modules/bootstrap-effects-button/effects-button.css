@@ -109,3 +109,59 @@
   visibility: visible;
   background-color: #9D0025;
 }
+
+
+.specialEffectsButtonGreen {
+  cursor: pointer;
+}
+
+.specialEffectsButtonGreen .mainButton {
+  padding: 0 5px !important;
+  color: #00042C;
+  height: 85px;
+  background-size: 200%;
+  background-image: linear-gradient(to right, #F4F3F3 50%, #327f3e 50%);
+  background-attachment: fixed;
+  -webkit-transition: background-position 0.5s, color 0.5s;
+  -moz-transition: background-position 0.5s, color 0.5s;
+  transition: background-position 0.5s, color 0.5s;
+  text-align: center;
+  font-size: 17px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.specialEffectsButtonGreen .mainButton strong,
+.specialEffectsButtonGreen .mainButton b {
+  padding: 0 5px;
+}
+.specialEffectsButtonGreen .readMoreButton {
+  padding: 0 5px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #F4F3F3;
+  height: 85px;
+  font-size: 12px;
+  background-color: #F4F3F3;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+  flex-wrap: wrap;
+}
+.specialEffectsButtonGreen .buttonsWrapper {
+  border-left: 10px solid #327f3e;
+  height: 85px;
+}
+.specialEffectsButtonGreen .buttonsWrapper:hover .mainButton {
+  color: white;
+  border-left: 2px solid #143a1d;
+  background-position: -100%;
+}
+.specialEffectsButtonGreen .buttonsWrapper:hover .readMoreButton {
+  color: white !important;
+  visibility: visible;
+  background-color: #143a1d;
+}
