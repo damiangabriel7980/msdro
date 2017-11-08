@@ -19,7 +19,7 @@ module.exports = function(){
                 resetPasswordTemplate: "Staywell_requestedReset_V2",
                 completedResetTemplate: "Staywell_completedReset_V2",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
-                onlineCoursesTokenUrl: "http://cursurimedicale.ro/staywell/token",
+                onlineCoursesTokenUrl: "https://www.medichub.ro/staywell/token",
                 onlineCoursesRedirectUrl : "http://cursurimedicale.ro/inregistrare",
                 newsletter: {
                     scheduleInterval: 'everyMinute',
@@ -68,7 +68,7 @@ module.exports = function(){
                 resetPasswordTemplate: "Staywell_requestedReset_V2",
                 completedResetTemplate: "Staywell_completedReset_V2",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
-                onlineCoursesTokenUrl: "http://cursurimedicale.ro/staywell/token",
+                onlineCoursesTokenUrl: "https://www.medichub.ro/staywell/token",
                 onlineCoursesRedirectUrl : "http://cursurimedicale.ro/inregistrare",
                 newsletter: {
                     scheduleInterval: 'everyMinute',
@@ -189,7 +189,7 @@ module.exports = function(){
                 resetPasswordTemplate: "Staywell_requestedReset_V2",
                 completedResetTemplate: "Staywell_completedReset_V2",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
-                onlineCoursesTokenUrl: "http://cursurimedicale.ro/staywell/token",
+                onlineCoursesTokenUrl: "https://www.medichub.ro/staywell/token",
                 onlineCoursesRedirectUrl : "http://cursurimedicale.ro/inregistrare",
                 newsletter: {
                     scheduleInterval: 'everyMinute',
@@ -234,7 +234,7 @@ module.exports = function(){
                 resetPasswordTemplate: "Staywell_requestedReset_V2",
                 completedResetTemplate: "Staywell_completedReset_V2",
                 tokenSecret: "d0nt3ventry2takeMyTooKEn0rillWhoopYoAss",
-                onlineCoursesTokenUrl: "http://cursurimedicale.ro/staywell/token",
+                onlineCoursesTokenUrl: "https://www.medichub.ro/staywell/token",
                 onlineCoursesRedirectUrl : "http://cursurimedicale.ro/inregistrare",
                 newsletter: {
                     scheduleInterval: 'everyHour',
