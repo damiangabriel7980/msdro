@@ -5448,10 +5448,11 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                     var requestEndpoint =  { url: Config().onlineCoursesTokenUrl, method: "POST", form: dataToSend };
                     if(req.query.courseID){
                         requestEndpoint.form.course_id = req.query.courseID;
-                        if (req.query.courseID === 2) {
+                        if (req.query.courseID === "2") {
                             requestEndpoint.url = Config().medicalCoursesTokenUrl;
                         }
                     }
+                    console.log("requestEndpoint", requestEndpoint);
                     request(requestEndpoint, function (error, message, response) {
                         if(error){
                             handleError(res,error,500);
