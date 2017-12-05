@@ -5445,7 +5445,7 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                         judet: foundUser.citiesID && foundUser.citiesID[0] ? foundUser.citiesID[0].county.name : null,
                         profesia: foundUser.profession ? foundUser.profession.display_name : null
                     };
-                    var requestEndpoint =  { url: Config().onlineCoursesTokenUrl, method: "POST", form: dataToSend } };
+                    var requestEndpoint =  { url: Config().onlineCoursesTokenUrl, method: "POST", form: dataToSend };
                     if(req.query.courseID){
                         requestEndpoint.form.course_id = req.query.courseID;
                         if (req.query.courseID === 2) {
