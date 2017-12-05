@@ -5452,7 +5452,6 @@ module.exports = function(app, env, sessionSecret, logger, amazon, router) {
                             requestEndpoint.url = Config().medicalCoursesTokenUrl;
                         }
                     }
-                    console.log("requestEndpoint", requestEndpoint);
                     request(requestEndpoint, function (error, message, response) {
                         if(error){
                             handleError(res,error,500);
