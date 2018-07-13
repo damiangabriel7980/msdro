@@ -8,8 +8,8 @@ controllers.controller('MainController', ['$scope', '$state', '$modal','$rootSco
     $scope.goToMerckSite=function(){
         $window.open('http://www.merckmanuals.com/','_blank');
     };
-    $scope.goToUnivadisSite=function(){
-        $window.open('http://www.univadis.ro/','_blank');
+   $scope.goToUnivadisSite=function(){
+        $window.open('https://www.univadis.ro/register?licenseNumber2=Univadis2018','_blank');
     };
     $scope.logoutUser=function(){
         $window.location.href='logout';
